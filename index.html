@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Official Executive Platform for 24INFS7101 NLP and Text Analytics in Business. Master NLP pipelines, feature engineering, sentiment analysis, embeddings, BERT, and exam preparation.">
+  <meta name="author" content="NLP & Text Analytics Subject Matter Experts">
+  <title>24INFS7101 NLP & Text Analytics in Business</title>
+
+  <!-- Google Fonts - Inter & JetBrains Mono for Sony Executive Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Monochrome Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sticky Black Header -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="#" class="brand-logo">
+        <span style="font-size: 1.1rem; border: 2px solid #fff; padding: 2px 8px; font-weight: 900;">24INFS7101</span>
+        <span>NLP & TEXT ANALYTICS</span>
+        <span class="brand-badge">EXECUTIVE COURSE</span>
+      </a>
+
+      <div class="header-actions">
+        <div class="search-box">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input type="text" id="global-search" placeholder="SEARCH TOPICS, TOOLS, ROADMAP, MCQS...">
+        </div>
+
+        <div class="stat-pill" id="progress-stat">
+          QUIZ PROGRESS: 0/10 (0%)
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <h1 class="hero-title">NLP & TEXT ANALYTICS IN BUSINESS</h1>
+      <p class="hero-subtitle">
+        COURSE CODE: <strong>24INFS7101</strong> &bull; MBA PROGRAMME & EXECUTIVE ANALYTICS<br>
+        Master text preprocessing, sentiment mining, topic modeling, transformers (BERT), and enterprise AI governance with conceptual explanations, visual tool diagrams, and an interactive implementation roadmap.
+      </p>
+      
+      <div class="hero-badges">
+        <span class="badge">NLP IMPLEMENTATION ROADMAP</span>
+        <span class="badge">VISUAL TOOL DIAGRAMS</span>
+        <span class="badge">CONCEPT LESSONS & ELI5</span>
+        <span class="badge">4 INTERACTIVE PLAYGROUNDS</span>
+        <span class="badge">EXAM PREP SUITES</span>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+      <button class="nav-tab active" data-tab="roadmap">ROADMAP & ARCHITECTURE</button>
+      <button class="nav-tab" data-tab="curriculum">CURRICULUM & ELI5</button>
+      <button class="nav-tab" data-tab="playgrounds">NLP PLAYGROUNDS</button>
+      <button class="nav-tab" data-tab="quizzes">DIAGNOSTIC MCQS</button>
+      <button class="nav-tab" data-tab="examprep">EXAM PREP & CAPSTONE</button>
+    </nav>
+
+    <!-- Tab 0: Interactive NLP Implementation Roadmap & Visual Tools -->
+    <section id="roadmap-tab" class="tab-content active">
+      <div style="margin-bottom: 3rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">Enterprise NLP Implementation Roadmap</h2>
+          <span class="badge" style="background: #fff; color: #000; font-weight: 900;">5-STAGE PIPELINE</span>
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.7;">
+          This visual roadmap outlines the end-to-end journey of transforming unstructured business text (emails, reviews, financial reports) into production-grade AI models, dashboards, and explainable insights.
+        </p>
+
+        <!-- Master Technical Architecture Diagram Image -->
+        <div style="background: #080808; border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin-bottom: 2.5rem;">
+          <h4 style="color: var(--text-white); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem;">System Architecture Diagram & Technical Roadmap</h4>
+          <img src="roadmap_diagram.png" alt="Enterprise NLP Implementation Roadmap Diagram" style="max-width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+        </div>
+
+        <!-- 5-Stage Interactive Timeline Roadmap -->
+        <div class="card-grid">
+          
+          <div class="card">
+            <div class="card-header">
+              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 1</span>
+              <span class="badge">INGESTION</span>
+            </div>
+            <h3 class="card-title">1. Text Data Ingestion & Sources</h3>
+            <p class="card-desc">Collecting raw, unstructured business text from multi-channel streams: Customer Reviews (Amazon/Zomato), Support Emails, Social Media (Twitter/X), Financial SEC Filings, and HR Exit Interviews.</p>
+            <div class="biz-box">
+              <div class="biz-header">PRIMARY TOOLS</div>
+              <div class="biz-text">Python `requests`, `BeautifulSoup`, `tweepy`, AWS S3, Apache Kafka.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 2</span>
+              <span class="badge">PREPROCESSING</span>
+            </div>
+            <h3 class="card-title">2. Text Cleaning & Normalization</h3>
+            <p class="card-desc">Removing HTML noise, lowercasing, word tokenization, stripping low-information stop words ('the', 'is'), stemming, and dictionary-based lemmatization.</p>
+            <div class="biz-box">
+              <div class="biz-header">PRIMARY TOOLS</div>
+              <div class="biz-text">NLTK (`word_tokenize`, `PorterStemmer`), spaCy (`en_core_web_sm`), Regex.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 3</span>
+              <span class="badge">VECTORIZATION</span>
+            </div>
+            <h3 class="card-title">3. Feature Engineering & Vectorization</h3>
+            <p class="card-desc">Converting text into numerical matrices using Bag of Words (BoW), N-grams ('customer support'), and TF-IDF (Term Frequency-Inverse Document Frequency) scoring.</p>
+            <div class="biz-box">
+              <div class="biz-header">PRIMARY TOOLS</div>
+              <div class="biz-text">Scikit-Learn (`TfidfVectorizer`, `CountVectorizer`), Gensim.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 4</span>
+              <span class="badge">MODELING</span>
+            </div>
+            <h3 class="card-title">4. Mining, Embeddings & Transformers</h3>
+            <p class="card-desc">Extracting sentiments (VADER/ML), LDA Topic Modeling, Named Entity Recognition (NER), Word2Vec 3D vector embeddings, and BERT bidirectional contextual transformers.</p>
+            <div class="biz-box">
+              <div class="biz-header">PRIMARY TOOLS</div>
+              <div class="biz-text">HuggingFace `transformers`, PyTorch, Word2Vec, spaCy NER, VADER.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 5</span>
+              <span class="badge">GOVERNANCE</span>
+            </div>
+            <h3 class="card-title">5. AI Governance, XAI & Dashboards</h3>
+            <p class="card-desc">Measuring financial ROI, logging Explainable AI attributions (SHAP/LIME) for regulators, monitoring model drift, and embedding insights into PowerBI/Tableau dashboards.</p>
+            <div class="biz-box">
+              <div class="biz-header">PRIMARY TOOLS</div>
+              <div class="biz-text">LIME, SHAP, PowerBI, MLflow, FastAPI, Streamlit.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 1: Curriculum & ELI5 Lessons -->
+    <section id="curriculum-tab" class="tab-content">
+      <div id="curriculum-container"></div>
+    </section>
+
+    <!-- Tab 2: Interactive NLP Playgrounds -->
+    <section id="playgrounds-tab" class="tab-content">
+      
+      <!-- Playground 1: Tokenizer & Cleaner -->
+      <div class="playground-container">
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 1: Text Tokenizer & Cleaner</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Execute live tokenization, stopword removal, and Porter stemming in pure black & white format.</p>
+        
+        <div class="input-group">
+          <label for="cleaner-input">Input Raw Business Text:</label>
+          <textarea id="cleaner-input" class="text-area-custom" placeholder="Example: The e-commerce customer support team is working hard to resolve delayed delivery complaints fast!">The e-commerce customer support team is working hard to resolve delayed delivery complaints fast!</textarea>
+        </div>
+        <button class="btn btn-primary" id="run-cleaner-btn">RUN TOKENIZATION & CLEANING</button>
+
+        <div class="results-box" id="cleaner-output">
+          <p style="color: var(--text-muted);">Click button to run live text cleaning processor.</p>
+        </div>
+
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; text-align: center;">
+          <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Visual Preprocessing Workflow Diagram</h4>
+          <img src="preprocessing_diagram.png" alt="Text Preprocessing Workflow Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+        </div>
+      </div>
+
+      <!-- Playground 2: Sentiment & Emotion Meter -->
+      <div class="playground-container">
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 2: Sentiment & Emotion Scanner</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Analyze customer reviews or employee feedback to measure emotional tone scores.</p>
+        
+        <div class="input-group">
+          <label for="sent-input">Customer Review Text:</label>
+          <textarea id="sent-input" class="text-area-custom" placeholder="Example: Excellent product quality and awesome delivery speed! I love shopping here.">Excellent product quality and awesome delivery speed! I love shopping here.</textarea>
+        </div>
+        <button class="btn btn-primary" id="run-sent-btn">DETECT SENTIMENT SCORE</button>
+
+        <div class="results-box" id="sent-output">
+          <p style="color: var(--text-muted);">Click button to compute polarity score.</p>
+        </div>
+      </div>
+
+      <!-- Playground 3: Named Entity Recognition (NER) & Vector Embeddings -->
+      <div class="playground-container">
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 3: Named Entity Recognition (NER)</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Extract Organizations, Persons, Locations, Monetary Amounts, and Dates.</p>
+        
+        <div class="input-group">
+          <label for="ner-input">Enterprise Text Paragraph:</label>
+          <textarea id="ner-input" class="text-area-custom" placeholder="Example: Sundar Pichai announced that Google invested $100 Million in New York in 2026.">Sundar Pichai announced that Google invested $100 Million in New York in 2026.</textarea>
+        </div>
+        <button class="btn btn-primary" id="run-ner-btn">EXTRACT NAMED ENTITIES</button>
+
+        <div class="results-box" id="ner-output">
+          <p style="color: var(--text-muted);">Click button to highlight named entities.</p>
+        </div>
+
+        <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; text-align: center;">
+          <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Vector Embeddings & Transformer Concept Diagram</h4>
+          <img src="embeddings_diagram.png" alt="Vector Embeddings & BERT Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Tab 3: Diagnostic MCQs -->
+    <section id="quizzes-tab" class="tab-content">
+      <div id="quiz-container"></div>
+    </section>
+
+    <!-- Tab 4: Exam Prep & Capstones -->
+    <section id="examprep-tab" class="tab-content">
+      <div id="examprep-container"></div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border-subtle); padding: 2.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+    <div class="container">
+      <p>Course Code 24INFS7101: Natural Language Processing & Text Analytics in Business</p>
+      <p style="margin-top: 0.4rem; color: var(--text-dim);">Academic Year 2026–2027</p>
+    </div>
+  </footer>
+
+  <!-- Data & Application Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
