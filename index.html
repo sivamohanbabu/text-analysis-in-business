@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,14 @@
 </head>
 <body>
 
-  <!-- Sticky Black Header -->
+  <!-- Dynamic Theme Transition Overlay -->
+  <div id="theme-ripple" class="theme-ripple"></div>
+
+  <!-- Top Navigation Bar -->
   <header>
-    <div class="container nav-wrapper">
+    <div class="nav-wrapper">
       <a href="#" class="brand-logo">
-        <span style="font-size: 1.1rem; border: 2px solid #fff; padding: 2px 8px; font-weight: 900;">24INFS7101</span>
+        <span style="font-size: 1.1rem; border: 2px solid var(--text-white); padding: 2px 8px; font-weight: 900;">24INFS7101</span>
         <span>NLP & TEXT ANALYTICS</span>
         <span class="brand-badge">EXECUTIVE COURSE</span>
       </a>
@@ -32,6 +35,12 @@
           <input type="text" id="global-search" placeholder="SEARCH TOPICS, TOOLS, ROADMAP, MCQS...">
         </div>
 
+        <!-- Dynamic Theme Toggle Button -->
+        <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme(event)">
+          <span class="theme-btn-dot"></span>
+          <span id="theme-btn-text">THEME: DARK</span>
+        </button>
+
         <div class="stat-pill" id="progress-stat">
           QUIZ PROGRESS: 0/10 (0%)
         </div>
@@ -39,50 +48,79 @@
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+  <!-- W3Schools Style Left Sidebar Navigation -->
+  <aside class="w3-sidebar" id="w3-sidebar">
+    
+    <div class="sidebar-category">MAIN NAVIGATION</div>
+    <a class="sidebar-item active" onclick="switchSection('roadmap', this)">ROADMAP & ARCHITECTURE</a>
+    <a class="sidebar-item" onclick="switchSection('study', this)">STUDENT REVISION & FLASHCARDS</a>
+    <a class="sidebar-item" onclick="switchSection('curriculum', this)">FULL SYLLABUS & ELI5</a>
+    <a class="sidebar-item" onclick="switchSection('playgrounds', this)">NLP INTERACTIVE PLAYGROUNDS</a>
+    <a class="sidebar-item" onclick="switchSection('quizzes', this)">UNIT DIAGNOSTIC MCQS</a>
+    <a class="sidebar-item" onclick="switchSection('examprep', this)">EXAM PREP & CAPSTONES</a>
+
+    <div class="sidebar-category">UNIT 1: FOUNDATIONS OF NLP</div>
+    <a class="sidebar-item" onclick="jumpToTopic('t1-1')">1.1 Nature of Text & Structured Data</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t1-2')">1.2 NLP Business Pipeline</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t1-3')">1.3 Data Sources, Ethics & Cloud APIs</a>
+
+    <div class="sidebar-category">UNIT 2: PREPROCESSING & FEATURES</div>
+    <a class="sidebar-item" onclick="jumpToTopic('t2-1')">2.1 Tokenization & Stopwords</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t2-2')">2.2 Stemming, Lemmatization & N-grams</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t2-3')">2.3 Bag of Words & TF-IDF</a>
+
+    <div class="sidebar-category">UNIT 3: MINING & INSIGHTS</div>
+    <a class="sidebar-item" onclick="jumpToTopic('t3-1')">3.1 Sentiment Analysis & Opinion Mining</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t3-2')">3.2 Topic Modeling (LDA)</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t3-3')">3.3 Named Entity Recognition (NER)</a>
+
+    <div class="sidebar-category">UNIT 4: ADVANCED NLP & BERT</div>
+    <a class="sidebar-item" onclick="jumpToTopic('t4-1')">4.1 Word Embeddings (Word2Vec)</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t4-2')">4.2 Transformers & BERT</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t4-3')">4.3 Chatbots & Conversational AI</a>
+
+    <div class="sidebar-category">UNIT 5: STRATEGY & GOVERNANCE</div>
+    <a class="sidebar-item" onclick="jumpToTopic('t5-1')">5.1 NLP Project Lifecycle</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t5-2')">5.2 ROI & Explainable AI (XAI)</a>
+    <a class="sidebar-item" onclick="jumpToTopic('t5-3')">5.3 Legal, Ethical & AI Governance</a>
+
+  </aside>
+
+  <!-- Main Content Area (Offset by W3Sidebar Width) -->
+  <main class="main-content">
 
     <!-- Hero Banner -->
     <div class="hero-banner">
       <h1 class="hero-title">NLP & TEXT ANALYTICS IN BUSINESS</h1>
       <p class="hero-subtitle">
         COURSE CODE: <strong>24INFS7101</strong> &bull; MBA PROGRAMME & EXECUTIVE ANALYTICS<br>
-        Master text preprocessing, sentiment mining, topic modeling, transformers (BERT), and enterprise AI governance with conceptual explanations, visual tool diagrams, and an interactive implementation roadmap.
+        Master text preprocessing, sentiment mining, topic modeling, transformers (BERT), and enterprise AI governance with W3Schools-style sidebar navigation, student interactive flashcards, and live code playgrounds.
       </p>
       
       <div class="hero-badges">
+        <span class="badge">W3SCHOOLS SIDEBAR NAV</span>
+        <span class="badge">STUDENT REVISION FLASHCARDS</span>
         <span class="badge">NLP IMPLEMENTATION ROADMAP</span>
         <span class="badge">VISUAL TOOL DIAGRAMS</span>
-        <span class="badge">CONCEPT LESSONS & ELI5</span>
-        <span class="badge">4 INTERACTIVE PLAYGROUNDS</span>
-        <span class="badge">EXAM PREP SUITES</span>
+        <span class="badge">4 LIVE PLAYGROUNDS</span>
       </div>
     </div>
 
-    <!-- Tab Navigation -->
-    <nav class="tab-nav">
-      <button class="nav-tab active" data-tab="roadmap">ROADMAP & ARCHITECTURE</button>
-      <button class="nav-tab" data-tab="curriculum">CURRICULUM & ELI5</button>
-      <button class="nav-tab" data-tab="playgrounds">NLP PLAYGROUNDS</button>
-      <button class="nav-tab" data-tab="quizzes">DIAGNOSTIC MCQS</button>
-      <button class="nav-tab" data-tab="examprep">EXAM PREP & CAPSTONE</button>
-    </nav>
-
-    <!-- Tab 0: Interactive NLP Implementation Roadmap & Visual Tools -->
+    <!-- Section 0: Implementation Roadmap -->
     <section id="roadmap-tab" class="tab-content active">
       <div style="margin-bottom: 3rem;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
-          <h2 style="font-size: 1.8rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">Enterprise NLP Implementation Roadmap</h2>
-          <span class="badge" style="background: #fff; color: #000; font-weight: 900;">5-STAGE PIPELINE</span>
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px;">Enterprise NLP Implementation Roadmap</h2>
+          <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">5-STAGE PIPELINE</span>
         </div>
         <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.7;">
           This visual roadmap outlines the end-to-end journey of transforming unstructured business text (emails, reviews, financial reports) into production-grade AI models, dashboards, and explainable insights.
         </p>
 
         <!-- Master Technical Architecture Diagram Image -->
-        <div style="background: #080808; border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin-bottom: 2.5rem;">
+        <div style="background: var(--bg-card); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; margin-bottom: 2.5rem;">
           <h4 style="color: var(--text-white); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem;">System Architecture Diagram & Technical Roadmap</h4>
-          <img src="roadmap_diagram.png" alt="Enterprise NLP Implementation Roadmap Diagram" style="max-width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+          <img src="roadmap_diagram.png" alt="Enterprise NLP Implementation Roadmap Diagram" style="max-width: 100%; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-medium);">
         </div>
 
         <!-- 5-Stage Interactive Timeline Roadmap -->
@@ -90,7 +128,7 @@
           
           <div class="card">
             <div class="card-header">
-              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 1</span>
+              <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">STAGE 1</span>
               <span class="badge">INGESTION</span>
             </div>
             <h3 class="card-title">1. Text Data Ingestion & Sources</h3>
@@ -103,7 +141,7 @@
 
           <div class="card">
             <div class="card-header">
-              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 2</span>
+              <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">STAGE 2</span>
               <span class="badge">PREPROCESSING</span>
             </div>
             <h3 class="card-title">2. Text Cleaning & Normalization</h3>
@@ -116,7 +154,7 @@
 
           <div class="card">
             <div class="card-header">
-              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 3</span>
+              <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">STAGE 3</span>
               <span class="badge">VECTORIZATION</span>
             </div>
             <h3 class="card-title">3. Feature Engineering & Vectorization</h3>
@@ -129,7 +167,7 @@
 
           <div class="card">
             <div class="card-header">
-              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 4</span>
+              <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">STAGE 4</span>
               <span class="badge">MODELING</span>
             </div>
             <h3 class="card-title">4. Mining, Embeddings & Transformers</h3>
@@ -142,7 +180,7 @@
 
           <div class="card">
             <div class="card-header">
-              <span class="badge" style="background: #fff; color: #000; font-weight: 900;">STAGE 5</span>
+              <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">STAGE 5</span>
               <span class="badge">GOVERNANCE</span>
             </div>
             <h3 class="card-title">5. AI Governance, XAI & Dashboards</h3>
@@ -157,17 +195,111 @@
       </div>
     </section>
 
-    <!-- Tab 1: Curriculum & ELI5 Lessons -->
+    <!-- Section 1: Student Interactive Study & Flashcards Mode -->
+    <section id="study-tab" class="tab-content">
+      <div style="margin-bottom: 3rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px;">Student Interactive Flashcards & Self-Assessment</h2>
+          <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">REVISION MODE</span>
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.7;">
+          Click any flashcard to flip and reveal key formula definitions, algorithm details, and ELI5 answers for quick exam recall!
+        </p>
+
+        <!-- Flashcards Grid -->
+        <h3 style="color: var(--text-white); font-size: 1rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem;">Click to Flip Flashcards:</h3>
+        <div class="card-grid" style="margin-bottom: 3rem;">
+          
+          <div class="flashcard-box" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-front">
+              What is TF-IDF Formula?
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">[Click to flip answer]</div>
+            </div>
+            <div class="flashcard-back">
+              <strong>TF-IDF = TF(t, d) * log(N / DF(t))</strong><br>
+              Term Frequency multiplied by Inverse Document Frequency. Gives high score to rare clue words!
+            </div>
+          </div>
+
+          <div class="flashcard-box" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-front">
+              Stemming vs. Lemmatization?
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">[Click to flip answer]</div>
+            </div>
+            <div class="flashcard-back">
+              Stemming chops endings with crude rules ('running' -> 'runn'). Lemmatization uses WordNet dictionary to find true root ('better' -> 'good').
+            </div>
+          </div>
+
+          <div class="flashcard-box" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-front">
+              What does BERT stand for?
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">[Click to flip answer]</div>
+            </div>
+            <div class="flashcard-back">
+              <strong>Bidirectional Encoder Representations from Transformers</strong>.<br>
+              Reads surrounding text left & right to generate contextual word vectors.
+            </div>
+          </div>
+
+          <div class="flashcard-box" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-front">
+              Word2Vec Analogy Formula?
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">[Click to flip answer]</div>
+            </div>
+            <div class="flashcard-back">
+              <strong>Vector('King') - Vector('Man') + Vector('Woman') = Vector('Queen')</strong>.<br>
+              Demonstrates 3D semantic vector space relationships.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Student Self-Assessment Checklist -->
+        <h3 style="color: var(--text-white); font-size: 1rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1rem;">Personal Exam Preparation Checklist:</h3>
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); padding: 1.5rem; border-radius: var(--radius-md);">
+          
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" id="chk-u1">
+            <label for="chk-u1" class="checklist-label">Unit I: I can differentiate Structured vs Unstructured text & draw the NLP Pipeline.</label>
+          </div>
+
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" id="chk-u2">
+            <label for="chk-u2" class="checklist-label">Unit II: I can perform Tokenization, Stopwords removal, and calculate TF-IDF term weights.</label>
+          </div>
+
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" id="chk-u3">
+            <label for="chk-u3" class="checklist-label">Unit III: I understand Sentiment Analysis, LDA Topic Modeling, and Named Entity Recognition (NER).</label>
+          </div>
+
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" id="chk-u4">
+            <label for="chk-u4" class="checklist-label">Unit IV: I can explain Word2Vec vector spaces and BERT Transformer attention mechanisms.</label>
+          </div>
+
+          <div class="checklist-item">
+            <input type="checkbox" class="checklist-checkbox" id="chk-u5">
+            <label for="chk-u5" class="checklist-label">Unit V: I know how to calculate NLP ROI, use SHAP/LIME for XAI, and navigate AI Governance.</label>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Curriculum & ELI5 Lessons -->
     <section id="curriculum-tab" class="tab-content">
       <div id="curriculum-container"></div>
     </section>
 
-    <!-- Tab 2: Interactive NLP Playgrounds -->
+    <!-- Section 3: Interactive NLP Playgrounds -->
     <section id="playgrounds-tab" class="tab-content">
       
       <!-- Playground 1: Tokenizer & Cleaner -->
       <div class="playground-container">
-        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 1: Text Tokenizer & Cleaner</h2>
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--text-white); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 1: Text Tokenizer & Cleaner</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Execute live tokenization, stopword removal, and Porter stemming in pure black & white format.</p>
         
         <div class="input-group">
@@ -182,13 +314,13 @@
 
         <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; text-align: center;">
           <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Visual Preprocessing Workflow Diagram</h4>
-          <img src="preprocessing_diagram.png" alt="Text Preprocessing Workflow Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+          <img src="preprocessing_diagram.png" alt="Text Preprocessing Workflow Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-medium);">
         </div>
       </div>
 
       <!-- Playground 2: Sentiment & Emotion Meter -->
       <div class="playground-container">
-        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 2: Sentiment & Emotion Scanner</h2>
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--text-white); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 2: Sentiment & Emotion Scanner</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Analyze customer reviews or employee feedback to measure emotional tone scores.</p>
         
         <div class="input-group">
@@ -204,7 +336,7 @@
 
       <!-- Playground 3: Named Entity Recognition (NER) & Vector Embeddings -->
       <div class="playground-container">
-        <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 3: Named Entity Recognition (NER)</h2>
+        <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--text-white); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px;">Playground 3: Named Entity Recognition (NER)</h2>
         <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Extract Organizations, Persons, Locations, Monetary Amounts, and Dates.</p>
         
         <div class="input-group">
@@ -219,31 +351,23 @@
 
         <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.5rem; text-align: center;">
           <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem;">Vector Embeddings & Transformer Concept Diagram</h4>
-          <img src="embeddings_diagram.png" alt="Vector Embeddings & BERT Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid #333;">
+          <img src="embeddings_diagram.png" alt="Vector Embeddings & BERT Diagram" style="max-width: 100%; max-height: 400px; height: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-medium);">
         </div>
       </div>
 
     </section>
 
-    <!-- Tab 3: Diagnostic MCQs -->
+    <!-- Section 4: Diagnostic MCQs -->
     <section id="quizzes-tab" class="tab-content">
       <div id="quiz-container"></div>
     </section>
 
-    <!-- Tab 4: Exam Prep & Capstones -->
+    <!-- Section 5: Exam Prep & Capstones -->
     <section id="examprep-tab" class="tab-content">
       <div id="examprep-container"></div>
     </section>
 
   </main>
-
-  <!-- Footer -->
-  <footer style="border-top: 1px solid var(--border-subtle); padding: 2.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
-    <div class="container">
-      <p>Course Code 24INFS7101: Natural Language Processing & Text Analytics in Business</p>
-      <p style="margin-top: 0.4rem; color: var(--text-dim);">Academic Year 2026–2027</p>
-    </div>
-  </footer>
 
   <!-- Data & Application Scripts -->
   <script src="data.js"></script>

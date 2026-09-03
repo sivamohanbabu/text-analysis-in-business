@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NLP GENIUS: BUSINESS TEXT ANALYTICS - MONOCHROME ENGINE
+   NLP GENIUS: BUSINESS TEXT ANALYTICS - W3SCHOOLS SIDEBAR & INTERACTIVE ENGINE
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,13 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // App State
 const state = {
   currentTab: 'roadmap',
+  theme: localStorage.getItem('nlp_theme') || 'dark',
   completedQuizzes: JSON.parse(localStorage.getItem('nlp_completed_quizzes') || '{}'),
   quizScores: JSON.parse(localStorage.getItem('nlp_quiz_scores') || '{}'),
   searchQuery: ''
 };
 
 function initApp() {
-  setupNavigation();
+  applyStoredTheme();
   renderCurriculum();
   renderQuizzes();
   renderExamPrep();
@@ -25,23 +26,78 @@ function initApp() {
 }
 
 /* --------------------------------------------------------------------------
-   NAVIGATION & TABS
+   W3SCHOOLS SIDEBAR & SECTION SWITCHER
    -------------------------------------------------------------------------- */
-function setupNavigation() {
-  const tabs = document.querySelectorAll('.nav-tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
+window.switchSection = function(targetId, sidebarElem) {
+  document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+  if (sidebarElem) {
+    sidebarElem.classList.add('active');
+  }
 
-      const targetId = tab.dataset.tab;
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.getElementById(`${targetId}-tab`).classList.add('active');
-      state.currentTab = targetId;
-    });
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
   });
+
+  const targetSection = document.getElementById(`${targetId}-tab`);
+  if (targetSection) {
+    targetSection.classList.add('active');
+    state.currentTab = targetId;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.jumpToTopic = function(topicId) {
+  switchSection('curriculum');
+  setTimeout(() => {
+    const elem = document.getElementById(topicId);
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      elem.style.borderColor = 'var(--text-white)';
+      setTimeout(() => { elem.style.borderColor = 'var(--border-subtle)'; }, 2000);
+    }
+  }, 100);
+};
+
+/* --------------------------------------------------------------------------
+   DYNAMIC DARK & LIGHT THEME SWITCHER
+   -------------------------------------------------------------------------- */
+function applyStoredTheme() {
+  const html = document.documentElement;
+  html.setAttribute('data-theme', state.theme);
+  updateThemeButtonText();
+}
+
+window.toggleTheme = function(event) {
+  const html = document.documentElement;
+  const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+  state.theme = newTheme;
+  localStorage.setItem('nlp_theme', newTheme);
+
+  // Dynamic Ripple Visual Feedback
+  const ripple = document.getElementById('theme-ripple');
+  if (ripple && event) {
+    const x = event.clientX || window.innerWidth / 2;
+    const y = event.clientY || window.innerHeight / 2;
+
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.style.background = newTheme === 'light' ? '#ffffff' : '#000000';
+    
+    ripple.classList.remove('active');
+    void ripple.offsetWidth; // Trigger reflow
+    ripple.classList.add('active');
+  }
+
+  // Switch Theme Attribute
+  html.setAttribute('data-theme', newTheme);
+  updateThemeButtonText();
+};
+
+function updateThemeButtonText() {
+  const btnText = document.getElementById('theme-btn-text');
+  if (btnText) {
+    btnText.innerText = `THEME: ${state.theme.toUpperCase()}`;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -57,10 +113,10 @@ function renderCurriculum() {
       <div class="unit-section" style="margin-bottom: 3.5rem;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
           <div>
-            <span class="badge" style="font-size: 0.8rem; background: #fff; color: #000; font-weight: 900;">${unit.number}</span>
-            <h2 style="font-size: 1.6rem; font-weight: 900; color: #fff; display: inline-block; margin-left: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">${unit.title}</h2>
+            <span class="badge" style="font-size: 0.8rem; background: var(--text-white); color: var(--text-inverse); font-weight: 900;">${unit.number}</span>
+            <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-white); display: inline-block; margin-left: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">${unit.title}</h2>
           </div>
-          <span class="badge" style="border-color: #525252;">${unit.hours}</span>
+          <span class="badge" style="border-color: var(--border-medium);">${unit.hours}</span>
         </div>
         <p style="color: var(--text-secondary); margin-bottom: 1.75rem; max-width: 900px; font-size: 1rem; line-height: 1.7;">${unit.summary}</p>
         
@@ -68,7 +124,7 @@ function renderCurriculum() {
           ${unit.topics.map(topic => `
             <div class="card" id="${topic.id}">
               <div class="card-header">
-                <span class="badge" style="background: #ffffff; color: #000000; font-weight: 900;">CONCEPT LESSON</span>
+                <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">CONCEPT LESSON</span>
               </div>
               <h3 class="card-title">${topic.title}</h3>
               <p class="card-desc">${topic.concept}</p>
@@ -93,7 +149,7 @@ function renderCurriculum() {
               <div style="margin-top: 1.25rem;">
                 <span style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Key Terms:</span>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem;">
-                  ${topic.keyTerms.map(kt => `<span class="badge" style="background: #0f0f0f; border-color: #333;" title="${kt.def}">${kt.term}</span>`).join('')}
+                  ${topic.keyTerms.map(kt => `<span class="badge" style="background: var(--bg-dark); border-color: var(--border-medium);" title="${kt.def}">${kt.term}</span>`).join('')}
                 </div>
               </div>
             </div>
@@ -135,11 +191,11 @@ function setupPlaygrounds() {
         </div>
         <div style="margin-bottom: 1.25rem;">
           <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Clean Vocabulary (${cleanTokens.length} terms):</h4>
-          <div>${cleanTokens.map(w => `<span class="token-chip" style="background: #ffffff; color: #000000; font-weight: 700;">${w}</span>`).join('')}</div>
+          <div>${cleanTokens.map(w => `<span class="token-chip" style="background: var(--text-white); color: var(--text-inverse); font-weight: 700;">${w}</span>`).join('')}</div>
         </div>
         <div>
           <h4 style="color: var(--text-secondary); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Stemmed Roots (Porter Algorithm Simulation):</h4>
-          <div>${stemmed.map(w => `<span class="token-chip" style="background: #1f1f1f; border-color: #525252;">${w}</span>`).join('')}</div>
+          <div>${stemmed.map(w => `<span class="token-chip" style="background: var(--bg-subtle); border-color: var(--border-medium);">${w}</span>`).join('')}</div>
         </div>
       `;
     });
@@ -168,16 +224,16 @@ function setupPlaygrounds() {
 
       document.getElementById('sent-output').innerHTML = `
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-          <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 900; letter-spacing: 1px;">TONE RESULT: ${label}</h3>
-          <span class="badge" style="background: #ffffff; color: #000000; font-weight: 900;">SCORE: ${score.toFixed(2)}</span>
+          <h3 style="color: var(--text-white); font-size: 1.25rem; font-weight: 900; letter-spacing: 1px;">TONE RESULT: ${label}</h3>
+          <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">SCORE: ${score.toFixed(2)}</span>
         </div>
-        <div style="background: #1f1f1f; height: 10px; border-radius: 2px; overflow: hidden; margin-bottom: 1.25rem; border: 1px solid #404040;">
-          <div style="width: ${pct}%; height: 100%; background: #ffffff; transition: var(--transition);"></div>
+        <div style="background: var(--bg-subtle); height: 10px; border-radius: 2px; overflow: hidden; margin-bottom: 1.25rem; border: 1px solid var(--border-medium);">
+          <div style="width: ${pct}%; height: 100%; background: var(--text-white); transition: var(--transition);"></div>
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; font-size: 0.8rem; text-align: center; text-transform: uppercase; letter-spacing: 1px;">
-          <div style="background: #0f0f0f; border: 1px solid #333; padding: 0.6rem; border-radius: 4px;">Joy: ${score > 0 ? Math.round(score * 100) : 10}%</div>
-          <div style="background: #0f0f0f; border: 1px solid #333; padding: 0.6rem; border-radius: 4px;">Frustration: ${score < 0 ? Math.round(Math.abs(score) * 100) : 5}%</div>
-          <div style="background: #0f0f0f; border: 1px solid #333; padding: 0.6rem; border-radius: 4px;">Confidence: 92%</div>
+          <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 0.6rem; border-radius: 4px; color: var(--text-white);">Joy: ${score > 0 ? Math.round(score * 100) : 10}%</div>
+          <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 0.6rem; border-radius: 4px; color: var(--text-white);">Frustration: ${score < 0 ? Math.round(Math.abs(score) * 100) : 5}%</div>
+          <div style="background: var(--bg-card); border: 1px solid var(--border-medium); padding: 0.6rem; border-radius: 4px; color: var(--text-white);">Confidence: 92%</div>
         </div>
       `;
     });
@@ -194,10 +250,8 @@ function setupPlaygrounds() {
         { word: "Google", type: "ORG", cls: "entity-org" },
         { word: "Amazon", type: "ORG", cls: "entity-org" },
         { word: "Tesla", type: "ORG", cls: "entity-org" },
-        { word: "GITAM", type: "ORG", cls: "entity-org" },
         { word: "Sundar Pichai", type: "PERSON", cls: "entity-person" },
         { word: "Elon Musk", type: "PERSON", cls: "entity-person" },
-        { word: "Dr. Kamakshaiah", type: "PERSON", cls: "entity-person" },
         { word: "New York", type: "LOCATION", cls: "entity-gpe" },
         { word: "India", type: "LOCATION", cls: "entity-gpe" },
         { word: "Texas", type: "LOCATION", cls: "entity-gpe" },
@@ -215,7 +269,7 @@ function setupPlaygrounds() {
 
       document.getElementById('ner-output').innerHTML = `
         <h4 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Tagged Entities Result:</h4>
-        <div style="font-size: 1.05rem; line-height: 2; background: #080808; border: 1px solid #333; padding: 1.25rem; border-radius: 4px;">
+        <div style="font-size: 1.05rem; line-height: 2; background: var(--bg-card); border: 1px solid var(--border-medium); padding: 1.25rem; border-radius: 4px; color: var(--text-white);">
           ${taggedText}
         </div>
       `;
@@ -232,7 +286,7 @@ function renderQuizzes() {
 
   let html = `
     <div style="margin-bottom: 2.5rem;">
-      <h2 style="font-size: 1.6rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Diagnostic Assessment MCQs</h2>
+      <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Diagnostic Assessment MCQs</h2>
       <p style="color: var(--text-secondary);">Test your comprehension of each NLP unit. Instant feedback with ELI5 explanations is provided for every question.</p>
     </div>
   `;
@@ -241,15 +295,15 @@ function renderQuizzes() {
     html += `
       <div class="quiz-card" id="quiz-card-${q.id}">
         <div class="quiz-header">
-          <span class="badge" style="background: #fff; color: #000; font-weight: 800;">QUESTION ${index + 1} OF ${NLP_DATA.quizzes.length}</span>
-          <span class="badge" style="border-color: #525252;">${q.unitId.toUpperCase()}</span>
+          <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 800;">QUESTION ${index + 1} OF ${NLP_DATA.quizzes.length}</span>
+          <span class="badge" style="border-color: var(--border-medium);">${q.unitId.toUpperCase()}</span>
         </div>
         <div class="quiz-question">${q.question}</div>
         
         <div class="options-list" id="options-${q.id}">
           ${q.options.map((opt, optIdx) => `
             <button class="option-btn" onclick="selectQuizOption('${q.id}', ${optIdx}, ${q.correctIndex})">
-              <span style="font-weight: 800; width: 24px; height: 24px; border-radius: 2px; background: #262626; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+              <span style="font-weight: 800; width: 24px; height: 24px; border-radius: 2px; background: var(--bg-subtle); color: var(--text-white); display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">
                 ${String.fromCharCode(65 + optIdx)}
               </span>
               <span>${opt}</span>
@@ -290,9 +344,9 @@ window.selectQuizOption = function(quizId, selectedIdx, correctIdx) {
   localStorage.setItem('nlp_quiz_scores', JSON.stringify(state.quizScores));
 
   feedbackBox.style.display = 'block';
-  feedbackBox.style.borderColor = isCorrect ? '#ffffff' : '#737373';
+  feedbackBox.style.borderColor = isCorrect ? 'var(--text-white)' : 'var(--border-medium)';
   feedbackBox.innerHTML = `
-    <div style="font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; color: ${isCorrect ? '#ffffff' : '#a3a3a3'}; margin-bottom: 0.5rem;">
+    <div style="font-weight: 900; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-white); margin-bottom: 0.5rem;">
       ${isCorrect ? '✓ CORRECT RESPONSE' : '✕ INCORRECT SELECTION'}
     </div>
     <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">${quiz.explanation}</div>
@@ -314,8 +368,8 @@ function renderExamPrep() {
     <!-- Mid Exam Prep Section -->
     <div style="margin-bottom: 3.5rem;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
-        <h2 style="font-size: 1.6rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">Mid-Semester Exam Prep (Assessment A1)</h2>
-        <span class="badge" style="background: #fff; color: #000; font-weight: 900;">${ep.midExam.weightage}</span>
+        <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px;">Mid-Semester Exam Prep (Assessment A1)</h2>
+        <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">${ep.midExam.weightage}</span>
       </div>
       
       <h3 style="color: var(--text-white); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; margin: 1.5rem 0 1rem;">Section A: Short Answer Questions & Model Answers</h3>
@@ -326,7 +380,7 @@ function renderExamPrep() {
             <span style="color: var(--text-white); font-weight: 800; font-family: var(--font-code);">[ + ]</span>
           </div>
           <div class="accordion-content">
-            <p style="color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin-bottom: 0.5rem;">Model Answer:</p>
+            <p style="color: var(--text-white); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin-bottom: 0.5rem;">Model Answer:</p>
             <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">${sa.a}</p>
           </div>
         </div>
@@ -337,7 +391,7 @@ function renderExamPrep() {
         <div class="card">
           <h4 style="font-size: 1.15rem; color: var(--text-white); font-weight: 800; margin-bottom: 0.5rem;">${an.title}</h4>
           <p style="color: var(--text-secondary); margin-bottom: 1.25rem;"><strong>Problem Statement:</strong> ${an.problem}</p>
-          <div style="background: #000000; border: 1px solid var(--border-medium); padding: 1.25rem; border-radius: 4px;">
+          <div style="background: var(--bg-dark); border: 1px solid var(--border-medium); padding: 1.25rem; border-radius: 4px;">
             <h5 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Recommended Solution Pipeline:</h5>
             ${an.solutionSteps.map(step => `<div style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.95rem;">${step}</div>`).join('')}
           </div>
@@ -348,8 +402,8 @@ function renderExamPrep() {
     <!-- End Exam Prep Section -->
     <div style="margin-bottom: 3.5rem;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
-        <h2 style="font-size: 1.6rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">End-Semester Theory Exam Prep (Assessment A3)</h2>
-        <span class="badge" style="background: #fff; color: #000; font-weight: 900;">${ep.endExam.weightage}</span>
+        <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px;">End-Semester Theory Exam Prep (Assessment A3)</h2>
+        <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">${ep.endExam.weightage}</span>
       </div>
 
       <h3 style="color: var(--text-white); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1.5px; margin: 1.5rem 0 1rem;">Part A: Theory Foundations</h3>
@@ -360,7 +414,7 @@ function renderExamPrep() {
             <span style="color: var(--text-white); font-weight: 800; font-family: var(--font-code);">[ + ]</span>
           </div>
           <div class="accordion-content">
-            <p style="color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin-bottom: 0.5rem;">Model Answer:</p>
+            <p style="color: var(--text-white); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin-bottom: 0.5rem;">Model Answer:</p>
             <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">${pa.a}</p>
           </div>
         </div>
@@ -371,7 +425,7 @@ function renderExamPrep() {
         <div class="card">
           <h4 style="font-size: 1.15rem; color: var(--text-white); font-weight: 800; margin-bottom: 0.5rem;">${pb.title}</h4>
           <p style="color: var(--text-secondary); margin-bottom: 1.25rem;"><strong>Scenario:</strong> ${pb.problem}</p>
-          <div style="background: #000000; border: 1px solid var(--border-medium); padding: 1.25rem; border-radius: 4px;">
+          <div style="background: var(--bg-dark); border: 1px solid var(--border-medium); padding: 1.25rem; border-radius: 4px;">
             <h5 style="color: var(--text-white); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Enterprise Architecture Blueprint:</h5>
             ${pb.architecturalBlocks.map(block => `<div style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.95rem;">${block}</div>`).join('')}
           </div>
@@ -382,8 +436,8 @@ function renderExamPrep() {
     <!-- Capstone Projects Hub -->
     <div id="capstone-hub">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.75rem;">
-        <h2 style="font-size: 1.6rem; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: 1px;">Capstone Project Hub (Assessment A2)</h2>
-        <span class="badge" style="background: #fff; color: #000; font-weight: 900;">${ep.capstone.weightage}</span>
+        <h2 style="font-size: 1.6rem; font-weight: 900; color: var(--text-white); text-transform: uppercase; letter-spacing: 1px;">Capstone Project Hub (Assessment A2)</h2>
+        <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">${ep.capstone.weightage}</span>
       </div>
       <div class="card-grid">
         ${ep.capstone.options.map(cap => `
