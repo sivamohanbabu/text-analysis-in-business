@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Business text data sources, ethical NLP case study, and text analytics software demonstration framework.">
+  <title>Business Text Sources & Ethics | 24INFS7101</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="detail-page">
+  <div id="theme-ripple" class="theme-ripple"></div>
+
+  <header>
+    <div class="nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <span style="font-size: 1.1rem; border: 2px solid var(--text-white); padding: 2px 8px; font-weight: 900;">24INFS7101</span>
+        <span>NLP & TEXT ANALYTICS</span>
+        <span class="brand-badge">REFERENCE PAGE</span>
+      </a>
+      <div class="header-actions">
+        <button class="theme-btn" id="theme-toggle-btn" type="button" onclick="toggleTheme(event)">
+          <span class="theme-btn-dot"></span>
+          <span id="theme-btn-text">THEME: DARK</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <aside class="w3-sidebar">
+    <div class="sidebar-category">PAGE NAVIGATION</div>
+    <a class="sidebar-item" href="index.html">COURSE DASHBOARD</a>
+    <a class="sidebar-item active" href="#sources">TEXT DATA SOURCES</a>
+    <a class="sidebar-item" href="#ethics">ETHICAL CASE STUDY</a>
+    <a class="sidebar-item" href="#demo">SOFTWARE DEMO PIPELINE</a>
+
+    <div class="sidebar-category">RELATED UNITS</div>
+    <a class="sidebar-item" href="index.html#curriculum-tab">UNIT 1: FOUNDATIONS</a>
+    <a class="sidebar-item" href="index.html#curriculum-tab">UNIT 3: MINING & INSIGHTS</a>
+    <a class="sidebar-item" href="index.html#curriculum-tab">UNIT 5: GOVERNANCE</a>
+  </aside>
+
+  <main class="main-content">
+    <section class="detail-hero">
+      <div>
+        <div class="detail-kicker">UNIT 1.3 / BUSINESS REFERENCE</div>
+        <h1>Where Business Text Becomes Evidence</h1>
+        <p>Map the language of customers, employees, and markets to the decisions that matter. This field guide covers the source landscape, the risks of automated judgment, and the pipeline behind a modern text analytics demo.</p>
+      </div>
+      <div class="detail-index">
+        <strong>03</strong>
+        <span class="detail-label">Business domains</span>
+        <p>Marketing & Sales<br>Human Resources<br>Finance & Accounting</p>
+      </div>
+    </section>
+
+    <section id="sources" class="detail-section">
+      <div class="detail-section-heading">
+        <div>
+          <div class="detail-label">01 / Source landscape</div>
+          <h2>Text data by business domain</h2>
+        </div>
+        <span class="badge">UNSTRUCTURED INPUT</span>
+      </div>
+      <p class="detail-intro">Unstructured text is often where customer intent, employee experience, and market signals appear first. The same language tools can surface different decisions depending on the department that owns the text.</p>
+
+      <div class="source-grid" style="margin-top: 1.5rem;">
+        <article class="source-card">
+          <div class="detail-label">MARKETING & SALES</div>
+          <h3>Listen to the market</h3>
+          <p>Capture how customers describe the brand, product, and service experience in their own words.</p>
+          <ul class="source-list">
+            <li>Customer reviews from e-commerce, Google Maps, and Trustpilot</li>
+            <li>Social posts, captions, hashtags, and brand mentions</li>
+            <li>Live chat transcripts, chatbot logs, and support emails</li>
+            <li>Open-ended surveys and focus group transcripts</li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <div class="detail-label">HUMAN RESOURCES</div>
+          <h3>Understand the employee journey</h3>
+          <p>Turn qualitative feedback into signals about engagement, talent, performance, and retention.</p>
+          <ul class="source-list">
+            <li>Anonymous pulse surveys and town hall Q&A logs</li>
+            <li>Candidate resumes, cover letters, and recruiter notes</li>
+            <li>Performance review comments and manager feedback</li>
+            <li>Exit interview notes and lifecycle documentation</li>
+          </ul>
+        </article>
+
+        <article class="source-card">
+          <div class="detail-label">FINANCE & ACCOUNTING</div>
+          <h3>Read the market narrative</h3>
+          <p>Combine formal disclosures with external commentary to monitor risk, confidence, and expectations.</p>
+          <ul class="source-list">
+            <li>SEC filings, 10-K and 10-Q reports, and shareholder letters</li>
+            <li>Earnings call transcripts and analyst Q&A</li>
+            <li>Financial news and analyst reports</li>
+            <li>Macroeconomic research notes and market commentary</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="ethics" class="detail-section">
+      <div class="detail-section-heading">
+        <div>
+          <div class="detail-label">02 / Ethical debate</div>
+          <h2>When efficiency learns from history</h2>
+        </div>
+        <span class="badge">HR CASE STUDY</span>
+      </div>
+      <div class="case-study">
+        <article class="case-panel">
+          <div class="detail-label">THE CONTEXT</div>
+          <h3>AI-driven resume screening</h3>
+          <p class="debate-copy">A multinational financial firm deploys NLP software to parse thousands of resumes and rank candidates. The model is trained on ten years of historical hiring data.</p>
+          <ul>
+            <li><strong>Goal:</strong> reduce time-to-hire while applying a consistent screening process.</li>
+            <li><strong>Finding:</strong> an audit shows systematic downgrading of terms linked to female candidates.</li>
+            <li><strong>Examples:</strong> women's colleges, women's clubs, and gender-coded phrasing.</li>
+          </ul>
+        </article>
+        <article class="case-panel risk-panel">
+          <div class="detail-label">THE DECISION TENSION</div>
+          <h3>Consistency is not the same as fairness</h3>
+          <p class="debate-copy">Supporters point to scale, reduced fatigue, and repeatable logic. Critics show that historical hiring patterns can encode past discrimination into future recommendations.</p>
+          <ul>
+            <li><strong>Pro-innovation:</strong> automate high-volume review and free recruiters for deeper evaluation.</li>
+            <li><strong>Ethical core:</strong> test for disparate impact, explain rankings, and preserve human accountability.</li>
+            <li><strong>Governance response:</strong> audit training data, monitor outcomes, document overrides, and provide candidate recourse.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="demo" class="detail-section">
+      <div class="detail-section-heading">
+        <div>
+          <div class="detail-label">03 / Software demonstration</div>
+          <h2>From raw text to a decision dashboard</h2>
+        </div>
+        <span class="badge">FOUR-STAGE FLOW</span>
+      </div>
+      <p class="detail-intro">A useful platform demo makes the operational path visible. It shows where data enters, how language is normalized, which analysis modules are applied, and how a decision-maker receives the result.</p>
+
+      <div class="pipeline-grid" style="margin-top: 1.5rem;">
+        <article class="pipeline-step">
+          <span class="pipeline-number">01</span>
+          <h3>Ingestion</h3>
+          <p>Connect live sources or upload documents into a controlled workspace.</p>
+          <ul>
+            <li>Support chat API feeds</li>
+            <li>PDF earnings reports</li>
+            <li>Survey and review exports</li>
+          </ul>
+        </article>
+        <article class="pipeline-step">
+          <span class="pipeline-number">02</span>
+          <h3>Preprocessing</h3>
+          <p>Clean the language so downstream models can compare text consistently.</p>
+          <ul>
+            <li>Tokenization</li>
+            <li>Stop-word removal</li>
+            <li>Lemmatization: running, ran &rarr; run</li>
+          </ul>
+        </article>
+        <article class="pipeline-step">
+          <span class="pipeline-number">03</span>
+          <h3>Analysis modules</h3>
+          <p>Apply models that answer a business question rather than simply producing scores.</p>
+          <ul>
+            <li>Sentiment: positive, neutral, negative</li>
+            <li>NER: people, firms, places, money</li>
+            <li>Topic modeling: recurring themes</li>
+          </ul>
+        </article>
+        <article class="pipeline-step">
+          <span class="pipeline-number">04</span>
+          <h3>Dashboard</h3>
+          <p>Turn model output into a view that supports action and oversight.</p>
+          <ul>
+            <li>Sentiment trend lines</li>
+            <li>Topic and keyword views</li>
+            <li>Risk matrices and audit trails</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <p class="detail-footer">24INFS7101 / TEXT ANALYTICS IN BUSINESS / READ THE DATA, QUESTION THE MODEL</p>
+  </main>
+
+  <script>
+    const savedTheme = localStorage.getItem('nlp_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('theme-btn-text').textContent = `THEME: ${savedTheme.toUpperCase()}`;
+
+    function toggleTheme(event) {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      localStorage.setItem('nlp_theme', nextTheme);
+      document.getElementById('theme-btn-text').textContent = `THEME: ${nextTheme.toUpperCase()}`;
+
+      const ripple = document.getElementById('theme-ripple');
+      ripple.style.left = `${event.clientX || window.innerWidth / 2}px`;
+      ripple.style.top = `${event.clientY || window.innerHeight / 2}px`;
+      ripple.style.background = nextTheme === 'light' ? '#ffffff' : '#000000';
+      ripple.classList.remove('active');
+      void ripple.offsetWidth;
+      ripple.classList.add('active');
+    }
+  </script>
+</body>
+</html>

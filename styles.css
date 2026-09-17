@@ -745,3 +745,208 @@ pre {
     padding: 1.5rem;
   }
 }
+
+/* Business Text Sources detail page */
+.detail-page .main-content {
+  max-width: 1280px;
+}
+
+.detail-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.7fr);
+  gap: 2rem;
+  align-items: end;
+  padding: 3.5rem;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-subtle) 100%);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  margin-bottom: 2.5rem;
+}
+
+.detail-kicker,
+.detail-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.detail-kicker { margin-bottom: 1rem; }
+
+.detail-hero h1 {
+  max-width: 780px;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.detail-hero p,
+.detail-intro,
+.source-card p,
+.pipeline-step p,
+.debate-copy {
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.detail-index {
+  border-left: 3px solid var(--text-white);
+  padding: 1rem 0 1rem 1.25rem;
+}
+
+.detail-index strong {
+  display: block;
+  font-size: 2.8rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.detail-section { margin-bottom: 3.5rem; }
+
+.detail-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: end;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.25rem;
+}
+
+.detail-section-heading h2 {
+  font-size: 1.75rem;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.source-grid,
+.pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.source-card,
+.pipeline-step {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.source-card:hover,
+.pipeline-step:hover { border-color: var(--text-white); }
+
+.source-card h3,
+.pipeline-step h3 {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  margin: 0.7rem 0;
+}
+
+.source-list {
+  list-style: none;
+  margin-top: 1.25rem;
+}
+
+.source-list li {
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.85rem 0;
+  color: var(--text-white);
+  font-size: 0.9rem;
+}
+
+.source-list li::before {
+  content: '↳';
+  color: var(--text-muted);
+  margin-right: 0.6rem;
+}
+
+.case-study {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+}
+
+.case-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+}
+
+.case-panel h3 { margin: 0.65rem 0 1rem; font-size: 1.35rem; }
+
+.case-panel ul { list-style: none; margin-top: 1.25rem; }
+
+.case-panel li {
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.85rem 0;
+  color: var(--text-secondary);
+}
+
+.case-panel li strong { color: var(--text-white); }
+
+.risk-panel {
+  background: var(--text-white);
+  color: var(--text-inverse);
+  border-color: var(--text-white);
+}
+
+.risk-panel .detail-label,
+.risk-panel .debate-copy { color: var(--text-inverse); }
+
+.pipeline-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+.pipeline-number {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--text-white);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  font-family: var(--font-code);
+  font-weight: 900;
+}
+
+.pipeline-step ul { list-style: none; margin-top: 1rem; }
+
+.pipeline-step li {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 0.4rem 0;
+}
+
+.pipeline-step li::before {
+  content: '•';
+  color: var(--text-white);
+  margin-right: 0.5rem;
+}
+
+.detail-footer {
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  padding-top: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .detail-hero,
+  .case-study { grid-template-columns: 1fr; }
+  .source-grid,
+  .pipeline-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-hero { padding: 2rem; }
+}
+
+@media (max-width: 560px) {
+  .source-grid,
+  .pipeline-grid { grid-template-columns: 1fr; }
+  .detail-section-heading { align-items: start; flex-direction: column; }
+}
