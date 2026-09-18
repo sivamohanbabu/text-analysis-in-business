@@ -62,7 +62,7 @@ const NLP_DATA = {
       number: "Unit II",
       title: "Text Preparation and Feature Engineering",
       hours: "6 Hours",
-      summary: "Learn how to clean noisy text, slice sentences into token candies, remove boring stop words, shrink words to their roots, and turn text into numbers with Bag of Words and TF-IDF.",
+      summary: "Learn how to clean noisy text, detect word phrases, count real word frequencies, build Bag of Words features, apply TF-IDF weighting, and extract the most important business keywords from review and support data.",
       topics: [
         {
           id: "t2-1",
@@ -77,26 +77,53 @@ const NLP_DATA = {
         },
         {
           id: "t2-2",
-          title: "Stemming vs. Lemmatization & N-Grams",
-          concept: "Stemming chops word endings using crude rules (Porter Stemmer: 'running' -> 'runn'). Lemmatization uses vocabulary and grammatical context (WordNet: 'better' -> 'good', 'running' -> 'run'). N-grams combine adjacent words (Unigram: 'customer', Bigram: 'customer support', Trigram: 'bad customer support').",
-          eli5: "Stemming is like chopping a tree branch with a quick axe—sometimes it cuts too much off! Lemmatization is like a botanist carefully looking up a plant in a textbook to find its true root. N-grams are like holding hands with your friends: one kid is a Unigram, two kids holding hands make a Bigram!",
-          bizValue: "Bigrams like 'not happy' capture crucial context that single words like 'happy' miss completely!",
+          title: "Stemming, Lemmatization & Phrase Detection (N-Grams)",
+          concept: "Stemming chops word endings using crude rules (Porter Stemmer: 'running' -> 'runn'). Lemmatization uses vocabulary and grammatical context (WordNet: 'better' -> 'good', 'running' -> 'run'). N-grams capture phrases: Unigram = 'delivery', Bigram = 'delivery delay', Trigram = 'late delivery delay complaint'. Phrase detection matters because 'not satisfied' means something different from 'satisfied'.",
+          eli5: "Stemming is like chopping a tree branch with a quick axe—sometimes it cuts too much off! Lemmatization is like a botanist carefully looking up a plant in a textbook to find its true root. N-grams are like looking at pairs or groups of words together, because 'high quality' is not the same as 'quality' alone!",
+          bizValue: "Phrase detection helps identify complaints like 'late delivery' or 'poor customer service' that single words can miss.",
           keyTerms: [
             { term: "Stemming", def: "Fast, rule-based chopping of word suffixes to get crude word roots." },
             { term: "Lemmatization", def: "Morphological analysis returning dictionary root forms (lemmas)." },
-            { term: "N-gram", def: "A contiguous sequence of N items from a given sample of text." }
+            { term: "N-gram", def: "A contiguous sequence of N items from a given sample of text." },
+            { term: "Phrase Detection", def: "Finding multi-word expressions that carry more meaning than isolated words." }
           ]
         },
         {
           id: "t2-3",
-          title: "Bag of Words (BoW) & TF-IDF (Term Frequency - Inverse Document Frequency)",
-          concept: "Computers only understand numbers! BoW counts word frequencies in documents. TF-IDF improves on BoW by penalizing words that appear everywhere across all documents and rewarding rare, distinctive words.",
-          eli5: "Imagine every word is a clue in a mystery game. If the word 'the' appears 100 times in every book, it gives zero clues. But if the word 'superhero' appears in only one book, that word is super special! TF-IDF gives superhero words gold stars and common words bronze stars!",
-          bizValue: "Helps search engines rank relevant documents and extracts key topics from thousands of customer support tickets.",
+          title: "Bag of Words (BoW) & Word Frequency",
+          concept: "Bag of Words represents a document as a count vector. Each position corresponds to a word in the vocabulary and the value is the frequency of that word. Word frequency helps reveal dominant terms in reviews or support tickets.",
+          eli5: "Imagine a bag full of hundreds of toy blocks, where each block is a word. The bag does not care about sentence order—it only counts how many times each word appears. If 'delay' appears 12 times in support tickets, that is a strong business signal!",
+          bizValue: "A company can quickly see that 'refund', 'delay', and 'delivery' are the most frequent issues after a shipping forecast problem.",
+          keyTerms: [
+            { term: "Bag of Words (BoW)", def: "A document representation based on word counts without preserving word order." },
+            { term: "Word Frequency", def: "The count of how many times a word appears in a document or corpus." }
+          ],
+          example: "Document A: 'The delivery was delayed and the product arrived late.' -> {'delivery': 1, 'was': 1, 'delayed': 1, 'product': 1, 'arrived': 1, 'late': 1}. Document B: 'Delivery delay is a serious issue.' -> {'delivery': 1, 'delay': 1, 'is': 1, 'a': 1, 'serious': 1, 'issue': 1}."
+        },
+        {
+          id: "t2-4",
+          title: "TF-IDF (Term Frequency - Inverse Document Frequency)",
+          concept: "TF-IDF weights terms by how often they appear in a document and discounts words that appear in many documents. This helps highlight distinctive, high-signal words such as 'refund', 'battery', or 'fraud' in a large text corpus.",
+          eli5: "If a word appears in almost every review, it is not useful. But if 'battery drainage' appears only in a few reviews, it becomes a very important clue. TF-IDF gives rare and distinctive phrases a bigger score!",
+          bizValue: "Helps search and recommendation systems surface the most relevant support tickets and customer complaints from thousands of documents.",
           keyTerms: [
             { term: "Term Frequency (TF)", def: "How often a word appears in a single document." },
-            { term: "Inverse Document Frequency (IDF)", def: "Logarithmic scale penalizing words that appear across many documents." }
-          ]
+            { term: "Inverse Document Frequency (IDF)", def: "Logarithmic scaling that penalizes common words across the corpus." },
+            { term: "TF-IDF Score", def: "A numeric score representing a word's importance in one document relative to the whole collection." }
+          ],
+          example: "Review 1: 'Battery drains very fast after update.' Review 2: 'The app is very fast and stable.' The word 'battery' is more important in Review 1 because it appears in fewer documents than 'fast' and is more specific."
+        },
+        {
+          id: "t2-5",
+          title: "Keyword Extraction & Keyphrase Detection",
+          concept: "Keyword extraction identifies the most informative words or phrases in a document. In business contexts, this may mean extracting 'late delivery', 'poor customer service', or 'refund request' from large volumes of customer feedback and support tickets.",
+          eli5: "Keyword extraction is like choosing the 3 most important clues from a huge detective file. If the file says, 'The package arrived late, the app crashed, and customer support was slow', then the key clues are 'late package', 'app crash', and 'slow support'.",
+          bizValue: "Companies can detect urgent issues faster: e.g., trending complaints such as 'billing error', 'login failure', or 'delivery delay' are turned into operational dashboards.",
+          keyTerms: [
+            { term: "Keyword Extraction", def: "Selecting the most informative terms from text." },
+            { term: "Keyphrase Detection", def: "Finding important multi-word expressions that summarize a document." }
+          ],
+          example: "Customer review: 'The delivery was late, the app kept crashing, and the support team was unhelpful.' Extracted keywords: 'late delivery', 'app crashing', 'unhelpful support'."
         }
       ]
     },
