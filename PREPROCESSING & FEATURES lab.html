@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,8 +22,14 @@
       --shadow: 0 18px 48px rgba(24, 35, 34, .08);
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       color: var(--ink);
@@ -30,154 +37,802 @@
       font-family: Manrope, sans-serif;
       line-height: 1.55;
     }
+
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
       opacity: .34;
-      background-image: linear-gradient(rgba(33,107,87,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(33,107,87,.035) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(33, 107, 87, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(33, 107, 87, .035) 1px, transparent 1px);
       background-size: 28px 28px;
       mask-image: linear-gradient(to bottom, black, transparent 82%);
     }
-    a { color: inherit; }
-    button, textarea, select { font: inherit; }
-    button { cursor: pointer; }
-    .wrap { width: min(1160px, calc(100% - 40px)); margin: auto; }
 
-    header { padding: 24px 0 72px; position: relative; overflow: hidden; }
-    nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.04em; }
-    .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; background: var(--orange); color: white; border-radius: 8px; font: 500 15px 'DM Mono', monospace; transform: rotate(-7deg); }
-    .nav-links { display: flex; gap: 24px; color: var(--muted); font-size: 13px; font-weight: 700; }
-    .nav-links a { text-decoration: none; }
-    .nav-links a:hover { color: var(--green); }
-    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 80px; align-items: end; padding-top: 90px; }
-    .eyebrow { color: var(--green); font: 500 12px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .12em; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { max-width: 700px; margin: 15px 0 22px; font-size: clamp(42px, 7vw, 82px); line-height: .98; letter-spacing: -.075em; }
-    .hero-copy { max-width: 530px; font-size: 18px; color: var(--muted); }
-    .hero-note { border-top: 1px solid var(--ink); padding-top: 14px; font-size: 13px; color: var(--muted); }
-    .hero-note strong { display: block; color: var(--ink); font-size: 24px; letter-spacing: -.05em; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; border: 1px solid var(--line); border-radius: 99px; background: rgba(255,253,248,.6); color: var(--muted); font-size: 12px; font-weight: 700; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--orange); }
-
-    .section { padding: 52px 0; }
-    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
-    h2 { margin-bottom: 5px; font-size: clamp(27px, 4vw, 42px); line-height: 1; letter-spacing: -.06em; }
-    .section-heading p { margin: 0; max-width: 480px; color: var(--muted); font-size: 14px; }
-    .pipeline { display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
-    .stage { position: relative; min-height: 150px; padding: 18px 15px; border-right: 1px solid var(--line); }
-    .stage:last-child { border: 0; }
-    .stage-number { font: 500 12px 'DM Mono', monospace; color: var(--orange); }
-    .stage h3 { margin: 35px 0 4px; font-size: 15px; letter-spacing: -.03em; }
-    .stage p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
-    .stage::after { content: "->"; position: absolute; right: -12px; top: 58px; z-index: 1; color: var(--green); background: var(--paper); padding: 2px; font: 500 16px 'DM Mono', monospace; }
-    .stage:last-child::after { display: none; }
-
-    .lab-shell { display: grid; grid-template-columns: .85fr 1.15fr; gap: 18px; }
-    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
-    .editor, .output { padding: 24px; }
-    label { display: block; margin-bottom: 8px; color: var(--muted); font: 500 11px 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
-    textarea { width: 100%; min-height: 210px; resize: vertical; border: 1px solid var(--line); border-radius: 6px; padding: 14px; background: #fbfaf5; color: var(--ink); outline: none; font: 14px/1.65 'DM Mono', monospace; }
-    textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(33,107,87,.12); }
-    .preset-row { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 20px; }
-    .preset, .reset-btn { border: 1px solid var(--line); border-radius: 5px; padding: 7px 9px; background: transparent; color: var(--muted); font-size: 11px; font-weight: 700; }
-    .preset:hover, .reset-btn:hover { color: var(--green); border-color: var(--green); }
-    .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .control { display: flex; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid var(--line); border-radius: 6px; padding: 10px; font-size: 12px; }
-    .control label { margin: 0; color: var(--ink); font: 600 12px Manrope, sans-serif; text-transform: none; letter-spacing: 0; }
-    input[type="checkbox"] { accent-color: var(--green); width: 17px; height: 17px; }
-    .output-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
-    .output-top h3 { margin: 0; font-size: 16px; }
-    .counter { color: var(--muted); font: 12px 'DM Mono', monospace; }
-    .output-box { min-height: 210px; padding: 18px; border-radius: 6px; background: #20322f; color: #eff9ee; font: 14px/1.9 'DM Mono', monospace; }
-    .token { display: inline-block; margin: 3px 4px 3px 0; padding: 2px 7px; border: 1px solid rgba(185,234,208,.3); border-radius: 4px; background: rgba(185,234,208,.1); }
-    .token.removed { color: #8aa19a; text-decoration: line-through; border-color: rgba(233,130,73,.3); background: rgba(233,130,73,.08); }
-    .empty { color: #8aa19a; }
-    .explain { margin: 16px 0 0; color: var(--muted); font-size: 12px; }
-    .explain strong { color: var(--green); }
-
-    .topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .topic { padding: 22px; min-height: 205px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,253,248,.72); }
-    .topic:nth-child(2) { background: var(--mint); }
-    .topic:nth-child(3) { background: var(--yellow); }
-    .topic:nth-child(4) { background: var(--blue); }
-    .topic:nth-child(5) { background: #f4c8af; }
-    .topic:nth-child(6) { background: #d6d4ee; }
-    .topic-number { font: 500 12px 'DM Mono', monospace; }
-    .topic h3 { margin: 34px 0 7px; font-size: 19px; letter-spacing: -.05em; }
-    .topic p { margin-bottom: 12px; color: rgba(24,35,34,.7); font-size: 13px; }
-    .topic-code { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .code { display: inline-block; min-width: 0; padding: 3px 6px; border-radius: 3px; background: rgba(255,255,255,.48); font: 11px 'DM Mono', monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .topic-copy { flex: 0 0 auto; border: 1px solid rgba(24,35,34,.3); border-radius: 4px; padding: 4px 7px; background: rgba(255,255,255,.45); color: var(--ink); font: 10px 'DM Mono', monospace; }
-    .topic-copy:hover { border-color: var(--green); background: rgba(255,255,255,.8); }
-    .topic-status { min-height: 16px; margin: 6px 0 0; color: var(--green); font: 10px 'DM Mono', monospace; }
-
-    .practice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .compare-table th, .compare-table td { padding: 11px 8px; border-bottom: 1px solid var(--line); text-align: left; }
-    .compare-table th { color: var(--muted); font: 500 11px 'DM Mono', monospace; text-transform: uppercase; }
-    .compare-table td:not(:first-child) { font-family: 'DM Mono', monospace; }
-    .flashcard { min-height: 278px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; background: var(--ink); color: white; border-radius: 8px; }
-    .flashcard .eyebrow { color: var(--yellow); }
-    .flashcard h3 { max-width: 460px; margin: 35px 0 18px; font-size: 28px; line-height: 1.1; letter-spacing: -.06em; }
-    .answer { display: none; padding: 12px; border-left: 2px solid var(--yellow); color: #d9eee2; font-size: 13px; }
-    .answer.visible { display: block; }
-    .flash-btn { width: fit-content; border: 1px solid rgba(255,255,255,.35); border-radius: 5px; padding: 9px 13px; background: transparent; color: white; font-size: 12px; }
-    .flash-btn:hover { border-color: var(--yellow); color: var(--yellow); }
-    .quiz { padding: 24px; }
-    .quiz h3 { margin-bottom: 20px; font-size: 18px; }
-    .quiz-option { display: block; width: 100%; margin: 8px 0; padding: 12px; border: 1px solid var(--line); border-radius: 5px; background: transparent; text-align: left; color: var(--ink); font-size: 13px; }
-    .quiz-option:hover { border-color: var(--green); }
-    .quiz-option.correct { border-color: var(--green); background: var(--mint); }
-    .quiz-option.wrong { border-color: var(--orange); background: #f4c8af; }
-    .quiz-feedback { min-height: 24px; margin-top: 14px; font-size: 13px; color: var(--green); }
-    .colab-card { grid-column: 1 / -1; padding: 24px; background: #243b35; color: #f4f7e9; }
-    .colab-card .eyebrow { color: var(--yellow); }
-    .colab-head { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 16px; }
-    .colab-head h3 { margin: 12px 0 0; font-size: 25px; letter-spacing: -.06em; }
-    .colab-head p { max-width: 490px; margin: 0; color: #b9cbc2; font-size: 13px; }
-    .copy-btn { flex: 0 0 auto; border: 1px solid #91bea9; border-radius: 5px; padding: 10px 13px; background: var(--yellow); color: var(--ink); font-size: 12px; font-weight: 800; }
-    .copy-btn:hover { background: #fff1ae; }
-    .colab-code { overflow: auto; max-height: 390px; margin: 0; padding: 18px; border: 1px solid rgba(185,234,208,.22); border-radius: 6px; background: #142522; color: #d9eee2; font: 12px/1.65 'DM Mono', monospace; white-space: pre; }
-    .copy-status { min-height: 20px; margin: 9px 0 0; color: var(--yellow); font: 11px 'DM Mono', monospace; }
-    footer { padding: 45px 0 60px; color: var(--muted); font-size: 12px; }
-    footer .footer-line { display: flex; justify-content: space-between; gap: 15px; border-top: 1px solid var(--line); padding-top: 17px; }
-    @media (max-width: 820px) {
-      .hero, .lab-shell, .practice-grid { grid-template-columns: 1fr; gap: 28px; }
-      .pipeline { grid-template-columns: repeat(3, 1fr); }
-      .stage:nth-child(3) { border-right: 0; }
-      .stage:nth-child(3)::after, .stage:nth-child(6)::after { display: none; }
-      .stage:nth-child(4), .stage:nth-child(5), .stage:nth-child(6) { border-top: 1px solid var(--line); }
-      .topic-grid { grid-template-columns: repeat(2, 1fr); }
+    a {
+      color: inherit;
     }
+
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .wrap {
+      width: min(1160px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    header {
+      padding: 24px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      background: var(--orange);
+      color: white;
+      border-radius: 8px;
+      font: 500 15px 'DM Mono', monospace;
+      transform: rotate(-7deg);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--green);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 80px;
+      align-items: end;
+      padding-top: 90px;
+    }
+
+    .eyebrow {
+      color: var(--green);
+      font: 500 12px 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 15px 0 22px;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: .98;
+      letter-spacing: -.075em;
+    }
+
+    .hero-copy {
+      max-width: 530px;
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .hero-note {
+      border-top: 1px solid var(--ink);
+      padding-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-note strong {
+      display: block;
+      color: var(--ink);
+      font-size: 24px;
+      letter-spacing: -.05em;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      background: rgba(255, 253, 248, .6);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .section {
+      padding: 52px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      margin-bottom: 5px;
+      font-size: clamp(27px, 4vw, 42px);
+      line-height: 1;
+      letter-spacing: -.06em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      max-width: 480px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .stage {
+      position: relative;
+      min-height: 150px;
+      padding: 18px 15px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stage:last-child {
+      border: 0;
+    }
+
+    .stage-number {
+      font: 500 12px 'DM Mono', monospace;
+      color: var(--orange);
+    }
+
+    .stage h3 {
+      margin: 35px 0 4px;
+      font-size: 15px;
+      letter-spacing: -.03em;
+    }
+
+    .stage p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .stage::after {
+      content: "->";
+      position: absolute;
+      right: -12px;
+      top: 58px;
+      z-index: 1;
+      color: var(--green);
+      background: var(--paper);
+      padding: 2px;
+      font: 500 16px 'DM Mono', monospace;
+    }
+
+    .stage:last-child::after {
+      display: none;
+    }
+
+    .lab-shell {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .editor,
+    .output {
+      padding: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font: 500 11px 'DM Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 210px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 14px;
+      background: #fbfaf5;
+      color: var(--ink);
+      outline: none;
+      font: 14px/1.65 'DM Mono', monospace;
+    }
+
+    textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(33, 107, 87, .12);
+    }
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 12px 0 20px;
+    }
+
+    .preset,
+    .reset-btn {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 7px 9px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .preset:hover,
+    .reset-btn:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .control label {
+      margin: 0;
+      color: var(--ink);
+      font: 600 12px Manrope, sans-serif;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    input[type="checkbox"] {
+      accent-color: var(--green);
+      width: 17px;
+      height: 17px;
+    }
+
+    .output-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .output-top h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .counter {
+      color: var(--muted);
+      font: 12px 'DM Mono', monospace;
+    }
+
+    .output-box {
+      min-height: 210px;
+      padding: 18px;
+      border-radius: 6px;
+      background: #20322f;
+      color: #eff9ee;
+      font: 14px/1.9 'DM Mono', monospace;
+    }
+
+    .token {
+      display: inline-block;
+      margin: 3px 4px 3px 0;
+      padding: 2px 7px;
+      border: 1px solid rgba(185, 234, 208, .3);
+      border-radius: 4px;
+      background: rgba(185, 234, 208, .1);
+    }
+
+    .token.removed {
+      color: #8aa19a;
+      text-decoration: line-through;
+      border-color: rgba(233, 130, 73, .3);
+      background: rgba(233, 130, 73, .08);
+    }
+
+    .empty {
+      color: #8aa19a;
+    }
+
+    .explain {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .explain strong {
+      color: var(--green);
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .topic {
+      padding: 22px;
+      min-height: 205px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, .72);
+    }
+
+    .topic:nth-child(2) {
+      background: var(--mint);
+    }
+
+    .topic:nth-child(3) {
+      background: var(--yellow);
+    }
+
+    .topic:nth-child(4) {
+      background: var(--blue);
+    }
+
+    .topic:nth-child(5) {
+      background: #f4c8af;
+    }
+
+    .topic:nth-child(6) {
+      background: #d6d4ee;
+    }
+
+    .topic-number {
+      font: 500 12px 'DM Mono', monospace;
+    }
+
+    .topic h3 {
+      margin: 34px 0 7px;
+      font-size: 19px;
+      letter-spacing: -.05em;
+    }
+
+    .topic p {
+      margin-bottom: 12px;
+      color: rgba(24, 35, 34, .7);
+      font-size: 13px;
+    }
+
+    .topic-code {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .code {
+      display: inline-block;
+      min-width: 0;
+      padding: 3px 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, .48);
+      font: 11px 'DM Mono', monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topic-copy {
+      flex: 0 0 auto;
+      border: 1px solid rgba(24, 35, 34, .3);
+      border-radius: 4px;
+      padding: 4px 7px;
+      background: rgba(255, 255, 255, .45);
+      color: var(--ink);
+      font: 10px 'DM Mono', monospace;
+    }
+
+    .topic-copy:hover {
+      border-color: var(--green);
+      background: rgba(255, 255, 255, .8);
+    }
+
+    .topic-status {
+      min-height: 16px;
+      margin: 6px 0 0;
+      color: var(--green);
+      font: 10px 'DM Mono', monospace;
+    }
+
+    .practice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 11px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    .compare-table th {
+      color: var(--muted);
+      font: 500 11px 'DM Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    .compare-table td:not(:first-child) {
+      font-family: 'DM Mono', monospace;
+    }
+
+    .flashcard {
+      min-height: 278px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--ink);
+      color: white;
+      border-radius: 8px;
+    }
+
+    .flashcard .eyebrow {
+      color: var(--yellow);
+    }
+
+    .flashcard h3 {
+      max-width: 460px;
+      margin: 35px 0 18px;
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -.06em;
+    }
+
+    .answer {
+      display: none;
+      padding: 12px;
+      border-left: 2px solid var(--yellow);
+      color: #d9eee2;
+      font-size: 13px;
+    }
+
+    .answer.visible {
+      display: block;
+    }
+
+    .flash-btn {
+      width: fit-content;
+      border: 1px solid rgba(255, 255, 255, .35);
+      border-radius: 5px;
+      padding: 9px 13px;
+      background: transparent;
+      color: white;
+      font-size: 12px;
+    }
+
+    .flash-btn:hover {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    .quiz {
+      padding: 24px;
+    }
+
+    .quiz h3 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .quiz-option {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: transparent;
+      text-align: left;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--green);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--green);
+      background: var(--mint);
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--orange);
+      background: #f4c8af;
+    }
+
+    .quiz-feedback {
+      min-height: 24px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--green);
+    }
+
+    .colab-card {
+      grid-column: 1 / -1;
+      padding: 24px;
+      background: #243b35;
+      color: #f4f7e9;
+    }
+
+    .colab-card .eyebrow {
+      color: var(--yellow);
+    }
+
+    .colab-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .colab-head h3 {
+      margin: 12px 0 0;
+      font-size: 25px;
+      letter-spacing: -.06em;
+    }
+
+    .colab-head p {
+      max-width: 490px;
+      margin: 0;
+      color: #b9cbc2;
+      font-size: 13px;
+    }
+
+    .copy-btn {
+      flex: 0 0 auto;
+      border: 1px solid #91bea9;
+      border-radius: 5px;
+      padding: 10px 13px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .copy-btn:hover {
+      background: #fff1ae;
+    }
+
+    .colab-code {
+      overflow: auto;
+      max-height: 390px;
+      margin: 0;
+      padding: 18px;
+      border: 1px solid rgba(185, 234, 208, .22);
+      border-radius: 6px;
+      background: #142522;
+      color: #d9eee2;
+      font: 12px/1.65 'DM Mono', monospace;
+      white-space: pre;
+    }
+
+    .copy-status {
+      min-height: 20px;
+      margin: 9px 0 0;
+      color: var(--yellow);
+      font: 11px 'DM Mono', monospace;
+    }
+
+    footer {
+      padding: 45px 0 60px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer .footer-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      border-top: 1px solid var(--line);
+      padding-top: 17px;
+    }
+
+    @media (max-width: 820px) {
+
+      .hero,
+      .lab-shell,
+      .practice-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .pipeline {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .stage:nth-child(3) {
+        border-right: 0;
+      }
+
+      .stage:nth-child(3)::after,
+      .stage:nth-child(6)::after {
+        display: none;
+      }
+
+      .stage:nth-child(4),
+      .stage:nth-child(5),
+      .stage:nth-child(6) {
+        border-top: 1px solid var(--line);
+      }
+
+      .topic-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     @media (max-width: 540px) {
-      .wrap { width: min(100% - 28px, 1160px); }
-      header { padding-bottom: 45px; }
-      nav { align-items: flex-start; }
-      .nav-links { display: none; }
-      .hero { padding-top: 62px; }
-      h1 { font-size: 51px; }
-      .pipeline, .topic-grid { grid-template-columns: 1fr; }
-      .stage, .stage:nth-child(4), .stage:nth-child(5), .stage:nth-child(6) { min-height: 105px; border-right: 0; border-top: 1px solid var(--line); }
-      .stage:first-child { border-top: 0; }
-      .stage h3 { margin-top: 15px; }
-      .stage::after { display: none; }
-      .control-grid { grid-template-columns: 1fr; }
-      .colab-head { display: block; }
-      .copy-btn { margin-top: 16px; }
-      .section { padding: 38px 0; }
-      .section-heading { display: block; }
-      .section-heading p { margin-top: 12px; }
+      .wrap {
+        width: min(100% - 28px, 1160px);
+      }
+
+      header {
+        padding-bottom: 45px;
+      }
+
+      nav {
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 62px;
+      }
+
+      h1 {
+        font-size: 51px;
+      }
+
+      .pipeline,
+      .topic-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stage,
+      .stage:nth-child(4),
+      .stage:nth-child(5),
+      .stage:nth-child(6) {
+        min-height: 105px;
+        border-right: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .stage:first-child {
+        border-top: 0;
+      }
+
+      .stage h3 {
+        margin-top: 15px;
+      }
+
+      .stage::after {
+        display: none;
+      }
+
+      .control-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .colab-head {
+        display: block;
+      }
+
+      .copy-btn {
+        margin-top: 16px;
+      }
+
+      .section {
+        padding: 38px 0;
+      }
+
+      .section-heading {
+        display: block;
+      }
+
+      .section-heading p {
+        margin-top: 12px;
+      }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="wrap">
       <nav>
-        <div class="brand"><span class="brand-mark">TF</span> <a href="index.html" style="text-decoration: none; color: inherit;">Text Forge</a></div>
+        <div class="brand"><span class="brand-mark">TF</span> <a href="index.html"
+            style="text-decoration: none; color: inherit;">Text Forge</a></div>
         <div class="nav-links">
           <a href="index.html">Course dashboard</a>
           <a href="business-text-sources.html">Text sources</a>
@@ -191,42 +846,82 @@
         <div>
           <span class="pill"><span class="dot"></span> Session 04 / NLP foundations</span>
           <h1>Turn messy text into useful signals.</h1>
-          <p class="hero-copy">A hands-on field guide to cleaning and preprocessing language. Change the input, flip the switches, and watch every decision happen in real time.</p>
+          <p class="hero-copy">A hands-on field guide to cleaning and preprocessing language. Change the input, flip the
+            switches, and watch every decision happen in real time.</p>
         </div>
-        <div class="hero-note"><strong>6 concepts</strong>One playground, quick references, and small challenges for learning by doing.</div>
+        <div class="hero-note"><strong>11 concepts</strong>One playground, quick references, and small challenges for
+          learning by doing.</div>
       </div>
     </div>
   </header>
 
   <main class="wrap">
     <section class="section" aria-labelledby="map-title">
-      <div class="section-heading"><div><span class="eyebrow">The mental model</span><h2 id="map-title">A text pipeline, one choice at a time.</h2></div><p>There is no universal perfect pipeline. Keep the information your task needs, and remove only the noise that gets in its way.</p></div>
+      <div class="section-heading">
+        <div><span class="eyebrow">The mental model</span>
+          <h2 id="map-title">A text pipeline, one choice at a time.</h2>
+        </div>
+        <p>There is no universal perfect pipeline. Keep the information your task needs, and remove only the noise that
+          gets in its way.</p>
+      </div>
       <div class="pipeline">
-        <div class="stage"><span class="stage-number">01</span><h3>Cleaning</h3><p>Strip markup, URLs, emails, and noise.</p></div>
-        <div class="stage"><span class="stage-number">02</span><h3>Normalization</h3><p>Make variants comparable.</p></div>
-        <div class="stage"><span class="stage-number">03</span><h3>Tokenization</h3><p>Split text into useful units.</p></div>
-        <div class="stage"><span class="stage-number">04</span><h3>Stop words</h3><p>Remove common low-signal words.</p></div>
-        <div class="stage"><span class="stage-number">05</span><h3>Stemming</h3><p>Reduce words with fast rules.</p></div>
-        <div class="stage"><span class="stage-number">06</span><h3>Lemmatization</h3><p>Find dictionary base forms.</p></div>
+        <div class="stage"><span class="stage-number">01</span>
+          <h3>Cleaning</h3>
+          <p>Strip markup, URLs, emails, and noise.</p>
+        </div>
+        <div class="stage"><span class="stage-number">02</span>
+          <h3>Normalization</h3>
+          <p>Make variants comparable.</p>
+        </div>
+        <div class="stage"><span class="stage-number">03</span>
+          <h3>Tokenization</h3>
+          <p>Split text into useful units.</p>
+        </div>
+        <div class="stage"><span class="stage-number">04</span>
+          <h3>Stop words</h3>
+          <p>Remove common low-signal words.</p>
+        </div>
+        <div class="stage"><span class="stage-number">05</span>
+          <h3>Stemming</h3>
+          <p>Reduce words with fast rules.</p>
+        </div>
+        <div class="stage"><span class="stage-number">06</span>
+          <h3>Lemmatization</h3>
+          <p>Find dictionary base forms.</p>
+        </div>
       </div>
     </section>
 
     <section class="section" id="lab" aria-labelledby="lab-title">
-      <div class="section-heading"><div><span class="eyebrow">01 / Interactive lab</span><h2 id="lab-title">Run the pipeline.</h2></div><p>Start with a noisy review, message, or support ticket. Every toggle is intentionally simple so you can isolate cause and effect.</p></div>
+      <div class="section-heading">
+        <div><span class="eyebrow">01 / Interactive lab</span>
+          <h2 id="lab-title">Run the pipeline.</h2>
+        </div>
+        <p>Start with a noisy review, message, or support ticket. Every toggle is intentionally simple so you can
+          isolate cause and effect.</p>
+      </div>
       <div class="lab-shell">
         <div class="panel editor">
           <label for="source-text">Your raw text</label>
-          <textarea id="source-text">&lt;p&gt;I LOVED this product!!! Visit https://shop.test #awesome&lt;/p&gt; Price: $100. Email me at learner@example.com</textarea>
-          <div class="preset-row"><button class="preset" data-text="&lt;p&gt;I LOVED this product!!! Visit https://shop.test #awesome&lt;/p&gt; Price: $100. Email me at learner@example.com">Product review</button><button class="preset" data-text="The patient was treated at the hospital on 01/15/2024. It was gr8!">Medical note</button><button class="preset" data-text="Running runners run quickly. The cats were chasing mice.">Action words</button></div>
+          <textarea
+            id="source-text">&lt;p&gt;URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Visit https://help.company.com for support. Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!&lt;/p&gt;</textarea>
+          <div class="preset-row"><button class="preset"
+              data-text="&lt;p&gt;URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Visit https://help.company.com for support. Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!&lt;/p&gt;">MBA
+              Customer Complaint Benchmark</button></div>
           <div class="control-grid">
             <div class="control"><label for="clean">Clean noise</label><input id="clean" type="checkbox" checked></div>
-            <div class="control"><label for="normalize">Normalize case</label><input id="normalize" type="checkbox" checked></div>
-            <div class="control"><label for="stopwords">Remove stop words</label><input id="stopwords" type="checkbox"></div>
-            <div class="control"><label for="punctuation">Drop punctuation</label><input id="punctuation" type="checkbox"></div>
+            <div class="control"><label for="normalize">Normalize case</label><input id="normalize" type="checkbox"
+                checked></div>
+            <div class="control"><label for="stopwords">Remove stop words</label><input id="stopwords" type="checkbox">
+            </div>
+            <div class="control"><label for="punctuation">Drop punctuation</label><input id="punctuation"
+                type="checkbox"></div>
           </div>
         </div>
         <div class="panel output">
-          <div class="output-top"><h3>Token stream</h3><span class="counter" id="token-count">0 tokens</span></div>
+          <div class="output-top">
+            <h3>Token stream</h3><span class="counter" id="token-count">0 tokens</span>
+          </div>
           <div class="output-box" id="output" aria-live="polite"></div>
           <p class="explain" id="explain"></p>
         </div>
@@ -234,36 +929,491 @@
     </section>
 
     <section class="section" id="topics" aria-labelledby="topics-title">
-      <div class="section-heading"><div><span class="eyebrow">02 / Quick reference</span><h2 id="topics-title">The six moves.</h2></div><p>Run the cards in order. Step 1 creates the data, and every next card continues from the previous step.</p></div>
+      <div class="section-heading">
+        <div><span class="eyebrow">02 / Quick reference</span>
+          <h2 id="topics-title">The 11 core preprocessing topics (MBA Benchmark Review).</h2>
+        </div>
+        <p>Follow the exact same MBA customer review paragraph through every step of the pipeline with ultra-simple
+          1-line code snippets.</p>
+      </div>
       <div class="topic-grid">
-        <article class="topic"><span class="topic-number">01</span><h3>Cleaning</h3><p>Remove HTML, URLs, emails, emojis, and unwanted symbols from customer feedback before analysis.</p><div class="topic-code"><span class="code">re.sub(pattern, '', text)</span><button class="topic-copy" data-copy="import re&#10;&#10;customer_review = '''&lt;p&gt;I LOVED this app!!! 😊&lt;/p&gt;&#10;Visit https://shop.example/support for help.&#10;Email help@brand.com for refund updates.&#10;The delivery was late and the support team was rude.&#10;The package arrived on 18/09/2026.&#10;I am very unhappy with the service.'''&#10;cleaned_text = re.sub(r'&lt;[^&gt;]*&gt;|https?://\S+|[\w.+-]+@[\w-]+\.[\w.-]+', '', customer_review)&#10;cleaned_text = re.sub(r'[^a-zA-Z0-9\s.,!?$/-]', '', cleaned_text)&#10;print(cleaned_text)">Copy code</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">02</span><h3>Normalization</h3><p>Use Step 1's cleaned customer text. Lowercase it and normalize abbreviations like <code>gr8</code> to <code>great</code>.</p><div class="topic-code"><span class="code">cleaned_text = cleaned_text.lower()</span><button class="topic-copy" data-copy="customer_review = 'The Delivery was LATE and the support was gr8 at first but then awful.'&#10;customer_review = customer_review.lower()&#10;customer_review = customer_review.replace('gr8', 'great')&#10;print(customer_review)">Copy step 2</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">03</span><h3>Tokenization</h3><p>Split a customer complaint into tokens so the model can analyze each word and phrase.</p><div class="topic-code"><span class="code">tokens = nltk.word_tokenize(text)</span><button class="topic-copy" data-copy="import nltk&#10;nltk.download('punkt', quiet=True)&#10;&#10;review = 'Late delivery, wrong item, and poor customer support.'&#10;tokens = nltk.word_tokenize(review)&#10;print(tokens)">Copy step 3</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">04</span><h3>Stop words</h3><p>Remove common words such as <code>the</code>, <code>and</code>, and <code>was</code> to keep only high-value terms.</p><div class="topic-code"><span class="code">filtered_tokens = [...]</span><button class="topic-copy" data-copy="from nltk.corpus import stopwords&#10;nltk.download('stopwords', quiet=True)&#10;&#10;review = 'Late delivery and poor customer support was unacceptable.'&#10;tokens = review.lower().split()&#10;stop_words = set(stopwords.words('english'))&#10;filtered_tokens = [word for word in tokens if word not in stop_words]&#10;print(filtered_tokens)">Copy step 4</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">05</span><h3>N-grams & Phrase detection</h3><p>Multi-word phrases carry more meaning than isolated words in support text: <code>'late delivery'</code>, <code>'customer support'</code>, <code>'refund request'</code>.</p><div class="topic-code"><span class="code">bigrams = list(ngrams(tokens, 2))</span><button class="topic-copy" data-copy="from nltk import ngrams&#10;ticket = 'late delivery and poor customer support refund request'&#10;tokens = ticket.split()&#10;bigrams = list(ngrams(tokens, 2))&#10;print(bigrams)">Copy step 5</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">06</span><h3>Bag of Words</h3><p>Count frequency of words in customer complaints to build a text feature vector.</p><div class="topic-code"><span class="code">Counter(tokens)</span><button class="topic-copy" data-copy="from collections import Counter&#10;complaints = [&#10;    'delivery was late and support was slow',&#10;    'late delivery issue and refund request',&#10;    'product quality is good'&#10;]
-all_tokens = ' '.join(complaints).split()&#10;print(Counter(all_tokens))">Copy step 6</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">07</span><h3>TF-IDF weight</h3><p>Highlight distinctive words in customer review text, such as <code>refund</code>, <code>delay</code>, and <code>billing</code>, instead of common words like <code>the</code>.</p><div class="topic-code"><span class="code">TfidfVectorizer()</span><button class="topic-copy" data-copy="from sklearn.feature_extraction.text import TfidfVectorizer&#10;reviews = [&#10;    'Refund request due to delayed delivery',&#10;    'Delivery was on time and service was good',&#10;    'Billing error caused refund request'&#10;]
-vectorizer = TfidfVectorizer()&#10;matrix = vectorizer.fit_transform(reviews)&#10;print(vectorizer.get_feature_names_out())&#10;print(matrix.toarray())">Copy step 7</button></div><div class="topic-status" aria-live="polite"></div></article>
-        <article class="topic"><span class="topic-number">08</span><h3>Keyword extraction</h3><p>Pull key phrases that summarize the real issue from customer support tickets.</p><div class="topic-code"><span class="code">keywords = ['late delivery', 'refund request']</span><button class="topic-copy" data-copy="ticket = 'Customer reported late delivery, refund request, and poor customer support.'&#10;keywords = ['late delivery', 'refund request', 'poor customer support']&#10;matched = [k for k in keywords if k in ticket.lower()]&#10;print(matched)">Copy step 8</button></div><div class="topic-status" aria-live="polite"></div></article>
+        <article class="topic"><span class="topic-number">01</span>
+          <h3>1. Text Cleaning & Normalization</h3>
+          <p>Remove HTML tags (&lt;p&gt;), web links (https://...), punctuation (!, %), and lowercase all letters.</p>
+          <div class="topic-code"><span class="code">re.sub(pattern, '', text).lower()</span><button class="topic-copy"
+              data-copy="import re&#10;review = '&lt;p&gt;URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Visit https://help.company.com for support. Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!&lt;/p&gt;'&#10;clean_text = re.sub(r'&lt;[^&gt;]+&gt;|https?://\S+|[^a-zA-Z\s]', ' ', review).lower().strip()&#10;print('Cleaned Text:\n', clean_text)">Copy
+              step 1</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">02</span>
+          <h3>2. NLTK Tokenization</h3>
+          <p>Chop continuous text string into individual word tokens using NLTK word_tokenize.</p>
+          <div class="topic-code"><span class="code">nltk.word_tokenize(clean_text)</span><button class="topic-copy"
+              data-copy="import nltk&#10;from nltk.tokenize import word_tokenize&#10;nltk.download('punkt', quiet=True)&#10;clean_text = 'urgent our service level agreement sla was breached due to late product delivery visit for support customer return on investment roi dropped by 20 i demand an immediate refund or our company will churn now'&#10;tokens = word_tokenize(clean_text)&#10;print('NLTK Tokens:\n', tokens)">Copy
+              step 2</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">03</span>
+          <h3>3. NLTK Stopword Removal</h3>
+          <p>Filter out common filler words using NLTK english stopwords list.</p>
+          <div class="topic-code"><span class="code">[w for w in tokens if w not in stop]</span><button
+              class="topic-copy"
+              data-copy="import nltk&#10;from nltk.corpus import stopwords&#10;nltk.download('stopwords', quiet=True)&#10;tokens = ['urgent', 'our', 'service', 'level', 'agreement', 'sla', 'was', 'breached', 'due', 'to', 'late', 'product', 'delivery', 'visit', 'for', 'support', 'customer', 'return', 'on', 'investment', 'roi', 'dropped', 'by', '20', 'i', 'demand', 'an', 'immediate', 'refund', 'or', 'our', 'company', 'will', 'churn', 'now']&#10;stop_words = set(stopwords.words('english'))&#10;filtered = [w for w in tokens if w not in stop_words]&#10;print('Filtered Tokens:\n', filtered)">Copy
+              step 3</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">04</span>
+          <h3>4. NLTK Stemming</h3>
+          <p>Fast chopping of word endings using NLTK PorterStemmer ('breached' -> 'breach', 'dropped' -> 'drop').</p>
+          <div class="topic-code"><span class="code">PorterStemmer().stem(w)</span><button class="topic-copy"
+              data-copy="from nltk.stem import PorterStemmer&#10;filtered = ['urgent', 'service', 'level', 'agreement', 'sla', 'breached', 'late', 'product', 'delivery', 'customer', 'return', 'investment', 'roi', 'dropped', 'demand', 'immediate', 'refund', 'company', 'churn']&#10;stemmer = PorterStemmer()&#10;stemmed = [stemmer.stem(w) for w in filtered]&#10;print('Stemmed Tokens:\n', stemmed)">Copy
+              step 4</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">05</span>
+          <h3>5. NLTK Lemmatization</h3>
+          <p>Dictionary root word lookup using NLTK WordNetLemmatizer ('breached' -> 'breach', 'dropped' -> 'drop').</p>
+          <div class="topic-code"><span class="code">WordNetLemmatizer().lemmatize(w)</span><button class="topic-copy"
+              data-copy="import nltk&#10;from nltk.stem import WordNetLemmatizer&#10;nltk.download('wordnet', quiet=True)&#10;filtered = ['urgent', 'service', 'level', 'agreement', 'sla', 'breached', 'late', 'product', 'delivery', 'customer', 'return', 'investment', 'roi', 'dropped', 'demand', 'immediate', 'refund', 'company', 'churn']&#10;lemmatizer = WordNetLemmatizer()&#10;lemmas = [lemmatizer.lemmatize(w, pos='v') for w in filtered]&#10;print('Lemmatized Tokens:\n', lemmas)">Copy
+              step 5</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">06</span>
+          <h3>6. N-grams (NLTK ngrams)</h3>
+          <p>Combine words into 2-word pairs using NLTK ngrams function ('service level', 'level agreement', 'sla
+            breach').</p>
+          <div class="topic-code"><span class="code">list(ngrams(lemmas, 2))</span><button class="topic-copy"
+              data-copy="from nltk.util import ngrams&#10;lemmas = ['urgent', 'service', 'level', 'agreement', 'sla', 'breach', 'late', 'product', 'delivery', 'customer', 'return', 'investment', 'roi', 'drop', 'demand', 'immediate', 'refund', 'company', 'churn']&#10;bigrams = list(ngrams(lemmas, 2))&#10;print('NLTK Bigrams:\n', bigrams)">Copy
+              step 6</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">07</span>
+          <h3>7. Bag of Words (BoW) & TF-IDF</h3>
+          <p>Transform cleaned tokens into numerical TF-IDF feature weights.</p>
+          <div class="topic-code"><span class="code">TfidfVectorizer().fit_transform(text)</span><button
+              class="topic-copy"
+              data-copy="from sklearn.feature_extraction.text import TfidfVectorizer&#10;doc = 'urgent service level agreement sla breach late product delivery customer return investment roi drop demand immediate refund company churn'&#10;vectorizer = TfidfVectorizer()&#10;tfidf_matrix = vectorizer.fit_transform([doc])&#10;print('TF-IDF Vocabulary Features:\n', vectorizer.get_feature_names_out())">Copy
+              step 7</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">08</span>
+          <h3>8. Word Frequency & Keyword Extraction</h3>
+          <p>Extract top keywords summarizing customer complaints using Counter.</p>
+          <div class="topic-code"><span class="code">Counter(lemmas).most_common(3)</span><button class="topic-copy"
+              data-copy="from collections import Counter&#10;lemmas = ['urgent', 'service', 'level', 'agreement', 'sla', 'breach', 'late', 'product', 'delivery', 'customer', 'return', 'investment', 'roi', 'drop', 'demand', 'immediate', 'refund', 'company', 'churn']&#10;word_counts = Counter(lemmas)&#10;print('Top 3 Frequent Keywords:\n', word_counts.most_common(3))">Copy
+              step 8</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">09</span>
+          <h3>9. Domain Vocabulary Expansion</h3>
+          <p>Expand business acronyms ('SLA' -> 'Service Level Agreement', 'ROI' -> 'Return on Investment').</p>
+          <div class="topic-code"><span class="code">acronyms.get(word, word)</span><button class="topic-copy"
+              data-copy="lemmas = ['urgent', 'sla', 'breach', 'late', 'delivery', 'roi', 'drop', 'refund', 'churn']&#10;acronyms = {'sla': 'service level agreement', 'roi': 'return on investment'}&#10;expanded = [acronyms.get(w, w) for w in lemmas]&#10;print('Expanded Business Tokens:\n', expanded)">Copy
+              step 9</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">10</span>
+          <h3>10. Business Feature Engineering</h3>
+          <p>Extract numeric business risk signals (length, '!', urgency flag, churn risk).</p>
+          <div class="topic-code"><span class="code">features = {'length': len(review), ...}</span><button
+              class="topic-copy"
+              data-copy="review = 'URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!'&#10;features = {'length': len(review), 'exclamations': review.count('!'), 'is_urgent': 1 if 'URGENT' in review else 0, 'churn_risk': 1 if 'churn' in review.lower() else 0}&#10;print('Engineered Business Features:\n', features)">Copy
+              step 10</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
+
+        <article class="topic"><span class="topic-number">11</span>
+          <h3>11. Text Data Visualization</h3>
+          <p>Generate a Word Cloud image visualizing customer review keywords.</p>
+          <div class="topic-code"><span class="code">WordCloud().generate(text)</span><button class="topic-copy"
+              data-copy="from wordcloud import WordCloud&#10;lemmas = ['urgent', 'service', 'level', 'agreement', 'sla', 'breach', 'late', 'product', 'delivery', 'customer', 'return', 'investment', 'roi', 'drop', 'demand', 'immediate', 'refund', 'company', 'churn']&#10;text_for_cloud = ' '.join(lemmas)&#10;wc = WordCloud(width=400, height=200, background_color='white').generate(text_for_cloud)&#10;print('WordCloud Input Text:\n', text_for_cloud)&#10;print('Top Visualized Words:\n', list(wc.words_.keys())[:5])">Copy
+              step 11</button></div>
+          <div class="topic-status" aria-live="polite"></div>
+        </article>
       </div>
     </section>
 
-    <section class="section" id="practice" aria-labelledby="practice-title">
-      <div class="section-heading"><div><span class="eyebrow">03 / Hands-on practice</span><h2 id="practice-title">Compare. Predict. Check.</h2></div><p>These tiny exercises make the tradeoffs memorable.</p></div>
-      <div class="practice-grid">
-        <div class="panel" style="padding:24px;">
-          <label>Stemming vs lemmatization</label>
-          <table class="compare-table"><thead><tr><th>Word</th><th>Stem</th><th>Lemma</th></tr></thead><tbody><tr><td>running</td><td>run</td><td>run</td></tr><tr><td>studies</td><td>studi</td><td>study</td></tr><tr><td>better</td><td>better</td><td>good</td></tr><tr><td>university</td><td>univers</td><td>university</td></tr></tbody></table>
-          <p class="explain"><strong>Rule of thumb:</strong> stem for speed and matching; lemmatize when language quality matters.</p>
+    <!-- Complete Google Colab Master Script Card -->
+    <section class="section" id="colab-master">
+      <div class="colab-card panel">
+        <div class="colab-head">
+          <div>
+            <span class="eyebrow">Google Colab / Jupyter Ready</span>
+            <h3>Master Python Preprocessing Script (MBA Benchmark Review)</h3>
+            <p>Copy and run this single script in Google Colab to execute every step (1 to 11) on the EXACT same MBA
+              customer review paragraph.</p>
+          </div>
+          <button class="copy-btn" id="copy-colab-btn">Copy complete Colab script</button>
         </div>
-        <div class="flashcard"><div><span class="eyebrow">Flash question</span><h3>Why might removing every stop word be a bad idea?</h3><div class="answer" id="answer">Some tasks need function words. In sentiment, "not good" is very different from "good". In question answering, small words can carry structure.</div></div><button class="flash-btn" id="answer-btn">Reveal answer</button></div>
-        <div class="panel quiz"><span class="eyebrow">Quick check</span><h3>Which tokenizer keeps "New York" as one unit?</h3><button class="quiz-option" data-correct="false">Whitespace tokenizer</button><button class="quiz-option" data-correct="true">Multi-word expression tokenizer</button><button class="quiz-option" data-correct="false">Character tokenizer</button><div class="quiz-feedback" id="quiz-feedback"></div></div>
-      </div>
-    </section>
+        <pre class="colab-code" id="colab-code"># ==============================================================================
+# 24INFS7101: MBA TEXT PREPROCESSING & FEATURE ENGINEERING MASTER PIPELINE
+# SINGLE REALISTIC MBA CUSTOMER COMPLAINT BENCHMARK REVIEW FOR ALL 11 STEPS:
+# 1. Text Cleaning & Normalization   7. BoW & TF-IDF Vectorization
+# 2. Tokenization                    8. Word Frequency & Keyword Extraction
+# 3. Stopword Removal                9. Domain Vocabulary & Acronym Expansion
+# 4. Stemming                       10. Business Text Feature Engineering
+# 5. Lemmatization                  11. Text Visualization (WordCloud & Network)
+# 6. N-grams & Phrase Detection
+# ==============================================================================
+
+# Step 0: Install Dependencies & NLTK Downloads
+!pip install -q nltk scikit-learn pandas numpy matplotlib wordcloud networkx
+
+import re
+from collections import Counter
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+import nltk
+nltk.download('punkt', quiet=True)
+nltk.download('punkt_tab', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('averaged_perceptron_tagger_eng', quiet=True)
+
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords, wordnet
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.util import ngrams
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from wordcloud import WordCloud
+import networkx as nx
+
+# OUR REALISTIC MBA BENCHMARK CUSTOMER REVIEW PARAGRAPH
+SINGLE_RAW_REVIEW = "&lt;p&gt;URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Visit https://help.company.com for support. Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!&lt;/p&gt;"
+
+print("=== RAW INPUT MBA REVIEW ===")
+print(SINGLE_RAW_REVIEW)
+
+print("\n--- 1. TEXT CLEANING & NORMALIZATION ---")
+def clean_and_normalize(text):
+    text = re.sub(r'&lt;[^&gt;]+&gt;', ' ', text)  # Strip HTML markup
+    text = re.sub(r'https?://\S+|www\.\S+', ' ', text)  # Strip URLs
+    text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)  # Replace punctuation with space
+    return re.sub(r'\s+', ' ', text).lower().strip()  # Lowercase & normalize spaces
+
+clean_review = clean_and_normalize(SINGLE_RAW_REVIEW)
+print("Cleaned Review:\n", clean_review)
+
+print("\n--- 2. TOKENIZATION ---")
+word_tokens = word_tokenize(clean_review)
+print("Word Tokens (Total", len(word_tokens), "):\n", word_tokens)
+
+print("\n--- 3. STOPWORD REMOVAL ---")
+english_stopwords = set(stopwords.words('english')) - {'not', 'no', 'never'}
+custom_stopwords = english_stopwords.union({'visit', 'company', 'com', 'help', 'due'})
+filtered_tokens = [w for w in word_tokens if w not in custom_stopwords]
+print("Filtered Tokens (Total", len(filtered_tokens), "):\n", filtered_tokens)
+
+print("\n--- 4. STEMMING (PORTER STEMMER) ---")
+stemmer = PorterStemmer()
+stemmed_tokens = [stemmer.stem(w) for w in filtered_tokens]
+print("Stemmed Tokens:\n", stemmed_tokens)
+
+print("\n--- 5. LEMMATIZATION (WORDNET POS-AWARE) ---")
+lemmatizer = WordNetLemmatizer()
+def get_wordnet_pos(word):
+    tag = nltk.pos_tag([word])[0][1][0].upper()
+    return {"J": wordnet.ADJ, "N": wordnet.NOUN, "V": wordnet.VERB, "R": wordnet.ADV}.get(tag, wordnet.NOUN)
+
+lemmatized_tokens = [lemmatizer.lemmatize(w, get_wordnet_pos(w)) for w in filtered_tokens]
+print("Lemmatized Tokens:\n", lemmatized_tokens)
+
+print("\n--- 6. N-GRAMS & PHRASE DETECTION ---")
+bigrams = list(ngrams(lemmatized_tokens, 2))
+print("Bigrams:\n", bigrams[:5])
+
+print("\n--- 7. BAG OF WORDS (BoW) & TF-IDF VECTORIZATION ---")
+processed_doc = " ".join(lemmatized_tokens)
+corpus = [processed_doc, "delivery was fast product quality is good excellent customer service"]
+
+bow_vec = CountVectorizer()
+bow_matrix = bow_vec.fit_transform([processed_doc])
+bow_df = pd.DataFrame(bow_matrix.toarray(), columns=bow_vec.get_feature_names_out())
+print("BoW Word Frequencies:\n", bow_df.T[bow_df.T[0] > 0])
+
+tfidf_vec = TfidfVectorizer()
+tfidf_matrix = tfidf_vec.fit_transform(corpus)
+tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=tfidf_vec.get_feature_names_out())
+print("\nTop TF-IDF Scores for MBA Review:\n", tfidf_df.iloc[0].sort_values(ascending=False).head(5))
+
+print("\n--- 8. WORD FREQUENCY & KEYWORD EXTRACTION ---")
+freq_dist = Counter(lemmatized_tokens)
+print("Top Word Frequencies:", freq_dist.most_common(5))
+
+print("\n--- 9. DOMAIN-SPECIFIC BUSINESS VOCABULARY ---")
+BUSINESS_ACRONYMS = {"sla": "service level agreement", "roi": "return on investment"}
+expanded_words = [BUSINESS_ACRONYMS.get(w, w) for w in clean_review.split()]
+print("Acronym Expanded Review:\n", " ".join(expanded_words))
+
+print("\n--- 10. FEATURE ENGINEERING FOR BUSINESS TEXT ---")
+features = {
+    'char_length': len(SINGLE_RAW_REVIEW),
+    'word_count': len(word_tokens),
+    'uppercase_ratio': round(sum(1 for c in SINGLE_RAW_REVIEW if c.isupper()) / len(SINGLE_RAW_REVIEW), 3),
+    'exclamation_count': SINGLE_RAW_REVIEW.count('!'),
+    'has_urgency_flag': 1 if any(w in SINGLE_RAW_REVIEW for w in ['URGENT', 'NOW', 'SLA']) else 0,
+    'churn_risk_flag': 1 if 'churn' in clean_review or 'refund' in clean_review else 0
+}
+print("Tabular Feature Vector:\n", pd.Series(features))
+
+print("\n--- 11. TEXT DATA VISUALIZATION ---")
+# 11a. WordCloud
+wc = WordCloud(width=800, height=400, background_color='black', colormap='Greens').generate(processed_doc)
+plt.figure(figsize=(10, 4))
+plt.imshow(wc, interpolation='bilinear')
+plt.axis('off')
+plt.title('MBA Customer Review WordCloud')
+plt.show()
+
+# 11b. Term Network
+G = nx.Graph()
+for i in range(len(lemmatized_tokens) - 1):
+    G.add_edge(lemmatized_tokens[i], lemmatized_tokens[i+1])
+
+plt.figure(figsize=(8, 5))
+pos = nx.spring_layout(G, k=0.5)
+nx.draw_networkx_nodes(G, pos, node_color='#216b57', node_size=1200)
+nx.draw_networkx_labels(G, pos, font_color='white', font_weight='bold')
+nx.draw_networkx_edges(G, pos, edge_color='#e98249', width=2)
+plt.title('MBA Review Term Co-occurrence Network')
+plt.axis('off')
+plt.show()
+print("Pipeline execution completed for MBA review!")</pre>
+
+        <!-- Complete Google Colab Master Script Card -->
+        <section class="section" id="colab-master">
+          <div class="colab-card panel">
+            <div class="colab-head">
+              <div>
+                <span class="eyebrow">Google Colab / Jupyter Ready</span>
+                <h3>Master Python Preprocessing Script (Single Benchmark Review)</h3>
+                <p>Copy and run this single script in Google Colab to execute every step (1 to 11) on the EXACT same
+                  customer review paragraph.</p>
+              </div>
+              <button class="copy-btn" id="copy-colab-btn">Copy complete Colab script</button>
+            </div>
+            <pre class="colab-code" id="colab-code"># ==============================================================================
+# 24INFS7101: TEXT PREPROCESSING & FEATURE ENGINEERING MASTER PIPELINE
+# SINGLE BENCHMARK REVIEW PARAGRAPH USED FOR ALL 11 STEPS:
+# 1. Text Cleaning & Normalization   7. BoW & TF-IDF Vectorization
+# 2. Tokenization                    8. Word Frequency & Keyword Extraction
+# 3. Stopword Removal                9. Domain Vocabulary & Acronym Expansion
+# 4. Stemming                       10. Business Text Feature Engineering
+# 5. Lemmatization                  11. Text Visualization (WordCloud & Network)
+# 6. N-grams & Phrase Detection
+# ==============================================================================
+
+# Step 0: Install Dependencies & NLTK Downloads
+!pip install -q nltk scikit-learn pandas numpy matplotlib wordcloud networkx
+
+import re
+from collections import Counter
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+import nltk
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords, wordnet
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.util import ngrams
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from wordcloud import WordCloud
+import networkx as nx
+
+# OUR SINGLE BENCHMARK CUSTOMER REVIEW PARAGRAPH
+SINGLE_RAW_REVIEW = "&lt;p&gt;URGENT: Our SLA was breached! Visit https://help.brand.com or email support@brand.com. The customer ROI dropped by 20% and the delivery was extremely late. I want an immediate refund or I will churn NOW!!!&lt;/p&gt;"
+
+print("=== RAW INPUT REVIEW ===")
+print(SINGLE_RAW_REVIEW)
+
+print("\n--- 1. TEXT CLEANING & NORMALIZATION ---")
+def clean_and_normalize(text):
+    text = re.sub(r'&lt;[^&gt;]+&gt;', ' ', text)  # Strip HTML markup
+    text = re.sub(r'https?://\S+|www\.\S+', ' ', text)  # Strip URLs
+    text = re.sub(r'[\w.+-]+@[\w-]+\.[\w.-]+', ' ', text)  # Strip Emails
+    text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)  # Replace punctuation with space
+    return re.sub(r'\s+', ' ', text).lower().strip()  # Lowercase & normalize spaces
+
+clean_review = clean_and_normalize(SINGLE_RAW_REVIEW)
+print("Cleaned Review:\n", clean_review)
+
+print("\n--- 2. TOKENIZATION ---")
+word_tokens = word_tokenize(clean_review)
+sentence_tokens = sent_tokenize(re.sub(r'&lt;[^&gt;]+&gt;', '', SINGLE_RAW_REVIEW))
+print("Word Tokens (Total", len(word_tokens), "):\n", word_tokens)
+print("Sentence Tokens:\n", sentence_tokens)
+
+print("\n--- 3. STOPWORD REMOVAL ---")
+english_stopwords = set(stopwords.words('english')) - {'not', 'no', 'never'}
+custom_stopwords = english_stopwords.union({'visit', 'email', 'brand', 'com', 'help'})
+filtered_tokens = [w for w in word_tokens if w not in custom_stopwords]
+print("Filtered Tokens (Total", len(filtered_tokens), "):\n", filtered_tokens)
+
+print("\n--- 4. STEMMING (PORTER STEMMER) ---")
+stemmer = PorterStemmer()
+stemmed_tokens = [stemmer.stem(w) for w in filtered_tokens]
+print("Stemmed Tokens:\n", stemmed_tokens)
+
+print("\n--- 5. LEMMATIZATION (WORDNET POS-AWARE) ---")
+lemmatizer = WordNetLemmatizer()
+def get_wordnet_pos(word):
+    tag = nltk.pos_tag([word])[0][1][0].upper()
+    return {"J": wordnet.ADJ, "N": wordnet.NOUN, "V": wordnet.VERB, "R": wordnet.ADV}.get(tag, wordnet.NOUN)
+
+lemmatized_tokens = [lemmatizer.lemmatize(w, get_wordnet_pos(w)) for w in filtered_tokens]
+print("Lemmatized Tokens:\n", lemmatized_tokens)
+
+print("\n--- 6. N-GRAMS & PHRASE DETECTION ---")
+bigrams = list(ngrams(lemmatized_tokens, 2))
+trigrams = list(ngrams(lemmatized_tokens, 3))
+print("Bigrams:\n", bigrams[:5])
+print("Trigrams:\n", trigrams[:5])
+
+print("\n--- 7. BAG OF WORDS (BoW) & TF-IDF VECTORIZATION ---")
+processed_doc = " ".join(lemmatized_tokens)
+corpus = [processed_doc, "delivery was fast product quality is good excellent customer service"]
+
+bow_vec = CountVectorizer()
+bow_matrix = bow_vec.fit_transform([processed_doc])
+bow_df = pd.DataFrame(bow_matrix.toarray(), columns=bow_vec.get_feature_names_out())
+print("BoW Word Frequencies:\n", bow_df.T[bow_df.T[0] > 0])
+
+tfidf_vec = TfidfVectorizer()
+tfidf_matrix = tfidf_vec.fit_transform(corpus)
+tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=tfidf_vec.get_feature_names_out())
+print("\nTop TF-IDF Scores for our Single Review:\n", tfidf_df.iloc[0].sort_values(ascending=False).head(5))
+
+print("\n--- 8. WORD FREQUENCY & KEYWORD EXTRACTION ---")
+freq_dist = Counter(lemmatized_tokens)
+print("Top Word Frequencies:", freq_dist.most_common(5))
+
+print("\n--- 9. DOMAIN-SPECIFIC BUSINESS VOCABULARY ---")
+BUSINESS_ACRONYMS = {"sla": "service level agreement", "roi": "return on investment"}
+expanded_words = [BUSINESS_ACRONYMS.get(w, w) for w in clean_review.split()]
+print("Acronym Expanded Review:\n", " ".join(expanded_words))
+
+print("\n--- 10. FEATURE ENGINEERING FOR BUSINESS TEXT ---")
+features = {
+    'char_length': len(SINGLE_RAW_REVIEW),
+    'word_count': len(word_tokens),
+    'uppercase_ratio': round(sum(1 for c in SINGLE_RAW_REVIEW if c.isupper()) / len(SINGLE_RAW_REVIEW), 3),
+    'exclamation_count': SINGLE_RAW_REVIEW.count('!'),
+    'has_urgency_flag': 1 if any(w in SINGLE_RAW_REVIEW for w in ['URGENT', 'NOW', 'SLA']) else 0,
+    'churn_risk_flag': 1 if 'churn' in clean_review or 'refund' in clean_review else 0
+}
+print("Tabular Feature Vector:\n", pd.Series(features))
+
+print("\n--- 11. TEXT DATA VISUALIZATION ---")
+# 11a. WordCloud
+wc = WordCloud(width=800, height=400, background_color='black', colormap='Greens').generate(processed_doc)
+plt.figure(figsize=(10, 4))
+plt.imshow(wc, interpolation='bilinear')
+plt.axis('off')
+plt.title('Benchmark Review WordCloud')
+plt.show()
+
+# 11b. Term Network
+G = nx.Graph()
+for i in range(len(lemmatized_tokens) - 1):
+    G.add_edge(lemmatized_tokens[i], lemmatized_tokens[i+1])
+
+plt.figure(figsize=(8, 5))
+pos = nx.spring_layout(G, k=0.5)
+nx.draw_networkx_nodes(G, pos, node_color='#216b57', node_size=1200)
+nx.draw_networkx_labels(G, pos, font_color='white', font_weight='bold')
+nx.draw_networkx_edges(G, pos, edge_color='#e98249', width=2)
+plt.title('Benchmark Review Term Co-occurrence Network')
+plt.axis('off')
+plt.show()
+print("Pipeline execution completed for single review!")</pre>
+            <div class="copy-status" id="colab-copy-status" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="section" id="practice" aria-labelledby="practice-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">03 / Hands-on practice</span>
+              <h2 id="practice-title">Compare. Predict. Check.</h2>
+            </div>
+            <p>These tiny exercises make the tradeoffs memorable.</p>
+          </div>
+          <div class="practice-grid">
+            <div class="panel" style="padding:24px;">
+              <label>Stemming vs lemmatization</label>
+              <table class="compare-table">
+                <thead>
+                  <tr>
+                    <th>Word</th>
+                    <th>Stem</th>
+                    <th>Lemma</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>running</td>
+                    <td>run</td>
+                    <td>run</td>
+                  </tr>
+                  <tr>
+                    <td>studies</td>
+                    <td>studi</td>
+                    <td>study</td>
+                  </tr>
+                  <tr>
+                    <td>better</td>
+                    <td>better</td>
+                    <td>good</td>
+                  </tr>
+                  <tr>
+                    <td>university</td>
+                    <td>univers</td>
+                    <td>university</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="explain"><strong>Rule of thumb:</strong> stem for speed and matching; lemmatize when language
+                quality matters.</p>
+            </div>
+            <div class="flashcard">
+              <div><span class="eyebrow">Flash question</span>
+                <h3>Why might removing every stop word be a bad idea?</h3>
+                <div class="answer" id="answer">Some tasks need function words. In sentiment, "not good" is very
+                  different from "good". In question answering, small words can carry structure.</div>
+              </div><button class="flash-btn" id="answer-btn">Reveal answer</button>
+            </div>
+            <div class="panel quiz"><span class="eyebrow">Quick check</span>
+              <h3>Which tokenizer keeps "New York" as one unit?</h3><button class="quiz-option"
+                data-correct="false">Whitespace tokenizer</button><button class="quiz-option"
+                data-correct="true">Multi-word expression tokenizer</button><button class="quiz-option"
+                data-correct="false">Character tokenizer</button>
+              <div class="quiz-feedback" id="quiz-feedback"></div>
+            </div>
+          </div>
+        </section>
   </main>
 
-  <footer><div class="wrap footer-line"><span>Text Forge / Session 4</span><span>Learn by changing one thing at a time.</span></div></footer>
+  <footer>
+    <div class="wrap footer-line"><span>Text Forge / Session 4</span><span>Learn by changing one thing at a time.</span>
+    </div>
+  </footer>
 
   <script>
     const source = document.querySelector('#source-text');
@@ -332,7 +1482,34 @@ vectorizer = TfidfVectorizer()&#10;matrix = vectorizer.fit_transform(reviews)&#1
       }
       setTimeout(() => { status.textContent = ''; }, 3000);
     }));
+
+    const copyColabBtn = document.querySelector('#copy-colab-btn');
+    if (copyColabBtn) {
+      copyColabBtn.addEventListener('click', async () => {
+        const codeText = document.querySelector('#colab-code').textContent;
+        const status = document.querySelector('#colab-copy-status');
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(codeText);
+          } else {
+            const copyArea = document.createElement('textarea');
+            copyArea.value = codeText;
+            copyArea.style.position = 'fixed';
+            copyArea.style.opacity = '0';
+            document.body.appendChild(copyArea);
+            copyArea.select();
+            document.execCommand('copy');
+            copyArea.remove();
+          }
+          status.textContent = 'Full 11-topic Colab script copied to clipboard! Ready to paste into Google Colab.';
+        } catch (e) {
+          status.textContent = 'Failed to copy automatically. Please manually select and copy the code block.';
+        }
+        setTimeout(() => { status.textContent = ''; }, 4000);
+      });
+    }
     render();
   </script>
 </body>
+
 </html>

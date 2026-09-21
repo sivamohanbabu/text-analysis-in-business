@@ -62,68 +62,141 @@ const NLP_DATA = {
       number: "Unit II",
       title: "Text Preparation and Feature Engineering",
       hours: "6 Hours",
-      summary: "Learn how to clean noisy text, detect word phrases, count real word frequencies, build Bag of Words features, apply TF-IDF weighting, and extract the most important business keywords from review and support data.",
+      summary: "Master the full 11-stage text preprocessing and feature engineering pipeline on a realistic MBA customer complaint review: text cleaning, normalization, tokenization, stopword removal, stemming, lemmatization, N-grams, Bag of Words, TF-IDF, domain vocabulary handling, business text feature extraction, and text visualization.",
       topics: [
         {
           id: "t2-1",
-          title: "Text Cleaning, Normalization, Tokenization & Stopword Removal",
-          concept: "Raw text has noise (HTML tags, punctuation, emojis, upper/lowercase clutter). Normalization converts text to lowercase. Tokenization breaks text into individual words/tokens. Stopword removal strips low-info words ('the', 'is', 'at').",
-          eli5: "Imagine baking a cake! Before mixing ingredients, you sift the flour to catch rocks and leaves (Cleaning). Tokenization is chopping fruits into tiny bite-sized cubes. Removing Stopwords is throwing away fruit peels and seeds so only the tasty fruit stays in the bowl!",
-          bizValue: "Reduces vocabulary size by 60-80%, speeding up Machine Learning models while focusing on high-signal keywords.",
+          title: "1. Text Cleaning & Normalization",
+          concept: "Raw text from business sources contains markup noise (HTML tags, URLs, email addresses, emojis, and special punctuation). Text cleaning removes unwanted patterns using regular expressions (regex). Normalization standardizes casing (lowercasing), expands contractions ('don't' -> 'do not'), and applies Unicode NFKD normalization.",
+          eli5: "Before baking a cake, you sift the flour to remove rocks and leaves (Text Cleaning). Normalization is making sure all words wear the same uniform (lowercasing) so 'SLA', 'sla', and 'Sla' are recognized as identical!",
+          bizValue: "Eliminates formatting noise across customer support tickets, reducing memory overhead and preventing duplicate vocabulary entries.",
           keyTerms: [
-            { term: "Tokenization", def: "Splitting text into individual units (tokens) like words or subwords." },
-            { term: "Stopwords", def: "Common words stripped out because they carry little semantic value (e.g., 'and', 'the')." }
-          ]
+            { term: "Regex (Regular Expressions)", def: "Pattern matching sequences used to identify and strip HTML tags, URLs, and emails." },
+            { term: "Normalization", def: "Converting text variants (casing, accents, contractions) into a unified standard representation." }
+          ],
+          example: "Raw MBA Review: '<p>URGENT: Our Service Level Agreement (SLA) was breached due to late product delivery! Visit https://help.company.com for support. Customer Return on Investment (ROI) dropped by 20%. I demand an immediate refund or our company will churn NOW!!!</p>' -> Cleaned: 'urgent our service level agreement sla was breached due to late product delivery visit for support customer return on investment roi dropped by 20 i demand an immediate refund or our company will churn now'"
         },
         {
           id: "t2-2",
-          title: "Stemming, Lemmatization & Phrase Detection (N-Grams)",
-          concept: "Stemming chops word endings using crude rules (Porter Stemmer: 'running' -> 'runn'). Lemmatization uses vocabulary and grammatical context (WordNet: 'better' -> 'good', 'running' -> 'run'). N-grams capture phrases: Unigram = 'delivery', Bigram = 'delivery delay', Trigram = 'late delivery delay complaint'. Phrase detection matters because 'not satisfied' means something different from 'satisfied'.",
-          eli5: "Stemming is like chopping a tree branch with a quick axe—sometimes it cuts too much off! Lemmatization is like a botanist carefully looking up a plant in a textbook to find its true root. N-grams are like looking at pairs or groups of words together, because 'high quality' is not the same as 'quality' alone!",
-          bizValue: "Phrase detection helps identify complaints like 'late delivery' or 'poor customer service' that single words can miss.",
+          title: "2. Tokenization (Word, Sentence & Subword using NLTK)",
+          concept: "Tokenization partitions continuous text into discrete units called tokens using NLTK functions (nltk.word_tokenize() for words and nltk.sent_tokenize() for sentences). It converts unstructured text strings into structured arrays for downstream business models.",
+          eli5: "Tokenization is like chopping a fruit salad into bite-sized apples and bananas! Using NLTK's word_tokenize(), your computer slices a giant wall of text into neat word blocks so it can count and analyze each one easily.",
+          bizValue: "Enables structural analysis of support text, allowing sentiment analyzers to evaluate word-by-word sentiment scores.",
           keyTerms: [
-            { term: "Stemming", def: "Fast, rule-based chopping of word suffixes to get crude word roots." },
-            { term: "Lemmatization", def: "Morphological analysis returning dictionary root forms (lemmas)." },
-            { term: "N-gram", def: "A contiguous sequence of N items from a given sample of text." },
-            { term: "Phrase Detection", def: "Finding multi-word expressions that carry more meaning than isolated words." }
-          ]
+            { term: "nltk.word_tokenize()", def: "Splits continuous text into individual word tokens while preserving punctuation boundaries." },
+            { term: "nltk.sent_tokenize()", def: "Segmenting text into distinct sentences based on punctuation and capitalization rules." },
+            { term: "Subword Tokenization", def: "Splitting rare words into sub-word pieces (e.g. 'unbeatably' -> 'un', 'beat', 'ably')." }
+          ],
+          example: "From MBA Review -> NLTK Tokens: ['urgent', 'our', 'service', 'level', 'agreement', 'sla', 'was', 'breached', 'due', 'to', 'late', 'product', 'delivery', 'visit', 'for', 'support', 'customer', 'return', 'on', 'investment', 'roi', 'dropped', 'by', '20', 'i', 'demand', 'an', 'immediate', 'refund', 'or', 'our', 'company', 'will', 'churn', 'now']"
         },
         {
           id: "t2-3",
-          title: "Bag of Words (BoW) & Word Frequency",
-          concept: "Bag of Words represents a document as a count vector. Each position corresponds to a word in the vocabulary and the value is the frequency of that word. Word frequency helps reveal dominant terms in reviews or support tickets.",
-          eli5: "Imagine a bag full of hundreds of toy blocks, where each block is a word. The bag does not care about sentence order—it only counts how many times each word appears. If 'delay' appears 12 times in support tickets, that is a strong business signal!",
-          bizValue: "A company can quickly see that 'refund', 'delay', and 'delivery' are the most frequent issues after a shipping forecast problem.",
+          title: "3. Stopword Removal (Standard & Domain Custom Lists)",
+          concept: "Stopwords are high-frequency, low-information function words (e.g., 'the', 'is', 'at', 'which'). Removing them compresses text vectors. Crucially, business domain pipelines must preserve negation words ('not', 'never', 'no') and remove domain-specific filler terms.",
+          eli5: "Imagine peeling an orange! Stopwords are the bitter white pith and peel. You throw them away so you can enjoy only the juicy fruit slices (high-signal keywords).",
+          bizValue: "Reduces vocabulary size by 60-80%, accelerating downstream ML training while prioritizing domain terms like 'defect', 'refund', or 'delay'.",
           keyTerms: [
-            { term: "Bag of Words (BoW)", def: "A document representation based on word counts without preserving word order." },
-            { term: "Word Frequency", def: "The count of how many times a word appears in a document or corpus." }
+            { term: "Stopwords", def: "High-frequency words stripped out because they carry little domain sentiment or semantic value." },
+            { term: "Custom Stopword List", def: "Domain-tailored lists adding corporate noise words (e.g., 'thanks', 'regards', 'company')." }
           ],
-          example: "Document A: 'The delivery was delayed and the product arrived late.' -> {'delivery': 1, 'was': 1, 'delayed': 1, 'product': 1, 'arrived': 1, 'late': 1}. Document B: 'Delivery delay is a serious issue.' -> {'delivery': 1, 'delay': 1, 'is': 1, 'a': 1, 'serious': 1, 'issue': 1}."
+          example: "From MBA Review -> Filtered Tokens: ['urgent', 'service', 'level', 'agreement', 'sla', 'breached', 'late', 'product', 'delivery', 'support', 'customer', 'return', 'investment', 'roi', 'dropped', 'demand', 'immediate', 'refund', 'company', 'churn']"
         },
         {
           id: "t2-4",
-          title: "TF-IDF (Term Frequency - Inverse Document Frequency)",
-          concept: "TF-IDF weights terms by how often they appear in a document and discounts words that appear in many documents. This helps highlight distinctive, high-signal words such as 'refund', 'battery', or 'fraud' in a large text corpus.",
-          eli5: "If a word appears in almost every review, it is not useful. But if 'battery drainage' appears only in a few reviews, it becomes a very important clue. TF-IDF gives rare and distinctive phrases a bigger score!",
-          bizValue: "Helps search and recommendation systems surface the most relevant support tickets and customer complaints from thousands of documents.",
+          title: "4. Stemming (Porter & Snowball)",
+          concept: "Stemming truncates word suffixes using fast heuristic rules to map inflected words to a base root (stem). For example, PorterStemmer converts 'running', 'runner', 'runs' to 'runn'. While computationally fast, stemming may produce non-dictionary tokens (over-stemming).",
+          eli5: "Stemming is like chopping tree branches with a fast hatchet! It works super fast, but sometimes it trims a branch a little too short, leaving a weird-looking stem.",
+          bizValue: "Extremely fast feature reduction for high-throughput search engines and real-time log indexing.",
           keyTerms: [
-            { term: "Term Frequency (TF)", def: "How often a word appears in a single document." },
-            { term: "Inverse Document Frequency (IDF)", def: "Logarithmic scaling that penalizes common words across the corpus." },
-            { term: "TF-IDF Score", def: "A numeric score representing a word's importance in one document relative to the whole collection." }
+            { term: "Porter Stemmer", def: "A classic 5-stage rule-based algorithm for stripping English suffixes." },
+            { term: "Over-stemming", def: "Erroneously truncating different words to the same stem (e.g., 'universe' and 'university' -> 'univers')." }
           ],
-          example: "Review 1: 'Battery drains very fast after update.' Review 2: 'The app is very fast and stable.' The word 'battery' is more important in Review 1 because it appears in fewer documents than 'fast' and is more specific."
+          example: "From MBA Review -> Stemmed Tokens: ['urgent', 'servic', 'level', 'agreement', 'sla', 'breach', 'late', 'product', 'deliveri', 'support', 'custom', 'return', 'invest', 'roi', 'drop', 'demand', 'immedi', 'refund', 'compani', 'churn']"
         },
         {
           id: "t2-5",
-          title: "Keyword Extraction & Keyphrase Detection",
-          concept: "Keyword extraction identifies the most informative words or phrases in a document. In business contexts, this may mean extracting 'late delivery', 'poor customer service', or 'refund request' from large volumes of customer feedback and support tickets.",
-          eli5: "Keyword extraction is like choosing the 3 most important clues from a huge detective file. If the file says, 'The package arrived late, the app crashed, and customer support was slow', then the key clues are 'late package', 'app crash', and 'slow support'.",
-          bizValue: "Companies can detect urgent issues faster: e.g., trending complaints such as 'billing error', 'login failure', or 'delivery delay' are turned into operational dashboards.",
+          title: "5. Lemmatization (WordNet & spaCy)",
+          concept: "Lemmatization uses morphological analysis, full dictionaries (WordNet), and Part-of-Speech (POS) tags to reduce words to their valid canonical base forms (lemmas). Unlike stemming, 'breached' becomes 'breach', and 'dropped' becomes 'drop'.",
+          eli5: "Lemmatization is like asking a dictionary expert botanist! Instead of hacking branches, the botanist looks up the plant's exact Latin root name in a official encyclopedia.",
+          bizValue: "Ensures legal, financial, and medical text analytics preserve grammatical accuracy and search quality.",
           keyTerms: [
-            { term: "Keyword Extraction", def: "Selecting the most informative terms from text." },
-            { term: "Keyphrase Detection", def: "Finding important multi-word expressions that summarize a document." }
+            { term: "Lemma", def: "The canonical dictionary form of a set of words." },
+            { term: "POS-Aware Lemmatization", def: "Using noun/verb/adjective context tags to find accurate root forms." }
           ],
-          example: "Customer review: 'The delivery was late, the app kept crashing, and the support team was unhelpful.' Extracted keywords: 'late delivery', 'app crashing', 'unhelpful support'."
+          example: "From MBA Review -> Lemmatized Tokens: ['urgent', 'service', 'level', 'agreement', 'sla', 'breach', 'late', 'product', 'delivery', 'support', 'customer', 'return', 'investment', 'roi', 'drop', 'demand', 'immediate', 'refund', 'company', 'churn']"
+        },
+        {
+          id: "t2-6",
+          title: "6. N-grams & Phrase Detection",
+          concept: "N-grams are contiguous sequences of N words (Unigrams N=1, Bigrams N=2, Trigrams N=3). Phrase detection groups multi-word expressions (e.g., 'customer_support', 'credit_card', 'late_delivery') that carry significantly more business meaning than individual isolated words.",
+          eli5: "Single words are like puzzle pieces. 'Late' and 'delivery' separately seem fine, but when you snap them together as a Bigram 'late delivery', you discover the true picture!",
+          bizValue: "Captures multi-word issue phrases in customer feedback, distinguishing 'great customer service' from 'poor customer service'.",
+          keyTerms: [
+            { term: "N-gram", def: "A contiguous sequence of N items from a given sample of text." },
+            { term: "Phrase Detection", def: "Automated statistical detection of co-occurring terms (e.g. Gensim Phrases)." }
+          ],
+          example: "From MBA Review -> Bigrams: [('sla', 'breach'), ('late', 'product'), ('product', 'delivery'), ('immediate', 'refund'), ('company', 'churn')]"
+        },
+        {
+          id: "t2-7",
+          title: "7. Bag of Words (BoW) & TF-IDF Vectorization",
+          concept: "Bag of Words (BoW) represents text as numerical term counts regardless of order. TF-IDF (Term Frequency-Inverse Document Frequency) improves on BoW by weighting terms: TF rewards frequent words in a document, while IDF penalizes words common across all documents.",
+          eli5: "BoW simply counts how many times each word appears in a bucket. TF-IDF acts like a smart magnifying glass—it highlights rare words like 'sla breach' while ignoring common words like 'product'.",
+          bizValue: "Transforms unstructured text into high-performance numeric sparse matrices suitable for scikit-learn classifiers.",
+          keyTerms: [
+            { term: "Term Frequency (TF)", def: "Ratio of a word's count to total words in a specific document." },
+            { term: "Inverse Document Frequency (IDF)", def: "Logarithmic weight discounting words frequent across the entire corpus." },
+            { term: "TfidfVectorizer", def: "Scikit-learn class that converts a text collection into a TF-IDF weighted sparse matrix." }
+          ],
+          example: "From MBA Review -> BoW vector: {'sla': 1, 'breach': 1, 'delivery': 1, 'refund': 1, 'churn': 1} | High TF-IDF Scores: 'sla', 'breach', 'churn', 'refund'"
+        },
+        {
+          id: "t2-8",
+          title: "8. Word Frequency & Keyword Extraction",
+          concept: "Word frequency counts surface dominant vocabulary trends. Keyword extraction algorithms (TF-IDF ranking, RAKE, YAKE) identify the top keyphrases that best summarize document intent without requiring manual reading.",
+          eli5: "Keyword extraction is like picking out the 3 biggest headlines from a 10-page newspaper report so the CEO gets the summary in 5 seconds!",
+          bizValue: "Automatically aggregates trending root causes in thousands of daily call center transcripts for management reporting.",
+          keyTerms: [
+            { term: "Word Frequency Distribution", def: "Statistical breakdown of word counts across a corpus." },
+            { term: "Keyword Extraction", def: "Algorithmic selection of high-scoring keyphrases summarizing text intent." }
+          ],
+          example: "From MBA Review -> Extracted Keywords: ['sla breached', 'late product delivery', 'immediate refund', 'company churn']"
+        },
+        {
+          id: "t2-9",
+          title: "9. Handling Domain-Specific Business Vocabulary",
+          concept: "Enterprise text contains specialized acronyms (SLA, ROI, EBITDA, KPI, PII), corporate jargon, and product SKUs. Preprocessing pipelines must expand acronyms via business lookup dictionaries, protect brand entities, and filter corporate boilerplate.",
+          eli5: "If a new worker joins your office, they won't understand company nicknames like 'SLA' or 'ROI'. Domain vocabulary handling is giving the AI a cheat-sheet glossary so it speaks fluent business!",
+          bizValue: "Prevents critical business acronyms from being misclassified or discarded as unknown words in automated compliance systems.",
+          keyTerms: [
+            { term: "Acronym Expansion", def: "Replacing shorthand abbreviations with full expanded business phrases (e.g. 'SLA' -> 'Service Level Agreement')." },
+            { term: "Domain Lexicon", def: "A specialized dictionary mapping industry terms to standard business definitions." }
+          ],
+          example: "From MBA Review -> Acronym Expanded: 'urgent our service level agreement was breached due to late product delivery ... customer return on investment dropped by 20 ...'"
+        },
+        {
+          id: "t2-10",
+          title: "10. Feature Engineering for Business Text",
+          concept: "Beyond bag-of-words vectors, text feature engineering creates tabular numeric predictors: text length, word count, uppercase character ratio (urgency/shouting indicator), punctuation count ('!'), POS tag distributions (noun/verb ratios), readability formulas (Flesch-Kincaid), and sentiment scores.",
+          eli5: "Imagine judging a customer email! You don't just read the words—you also notice if it's written in ALL CAPS, has 10 exclamation points, or is 5 pages long! Feature engineering turns those clues into numbers for machine learning.",
+          bizValue: "Boosts predictive performance in churn prediction, fraud detection, and customer ticket priority routing.",
+          keyTerms: [
+            { term: "Text Surface Features", def: "Numeric indicators like character count, word count, and uppercase letter ratio." },
+            { term: "Flesch Reading Ease", def: "A readability formula estimating text complexity based on word and syllable counts." }
+          ],
+          example: "From MBA Review -> Extracted Feature Vector: {char_length: 245, word_count: 35, uppercase_ratio: 0.065, exclamation_count: 4, has_html: 1, urgency_flag: 1, churn_flag: 1}"
+        },
+        {
+          id: "t2-11",
+          title: "11. Introduction to Text Data Visualization (Word Clouds & Term Networks)",
+          concept: "Text data visualization converts complex linguistic corpora into executive visual dashboards. Word Clouds highlight high-frequency keywords using font size scaling. Term Co-occurrence Networks (using NetworkX) map relationships and co-occurrence graphs between business entities.",
+          eli5: "Word Clouds turn word counts into a colorful visual picture where big words mean big issues! Term Networks draw spiderwebs connecting words like 'urgent' -> 'sla' -> 'breach'.",
+          bizValue: "Provides intuitive visual reporting for executive boardrooms, marketing campaign tracking, and operational bottlenecks.",
+          keyTerms: [
+            { term: "Word Cloud", def: "Visual display of text data where term frequency determines word size and prominence." },
+            { term: "Term Co-occurrence Network", def: "A network graph mapping pairs of words that frequently appear together in documents." }
+          ],
+          example: "Support Corpus -> Generates a Word Cloud featuring 'DELIVERY', 'REFUND', 'SUPPORT' alongside a co-occurrence network."
         }
       ]
     },
