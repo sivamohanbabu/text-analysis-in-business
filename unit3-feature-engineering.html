@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Unit 3 Feature Engineering & Text Mining Lab - Interactive Sentiment Analysis, LDA Topic Modeling, Named Entity Recognition (NER), Text Summarization, Code Practice & Playground.">
+  <title>Unit 3: Feature Engineering & Text Mining Lab | 24INFS7101</title>
+  
+  <!-- Google Fonts - Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #6b7280;
+      --paper: #0f172a;
+      --panel: #1e293b;
+      --line: #334155;
+      --mint: #10b981;
+      --green: #059669;
+      --orange: #f59e0b;
+      --yellow: #fbbf24;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --shadow: 0 18px 48px rgba(0, 0, 0, .35);
+    }
+
+    [data-theme="light"] {
+      --ink: #182322;
+      --muted: #65716d;
+      --paper: #f7f3ea;
+      --panel: #fffdf8;
+      --line: #d9ddd3;
+      --mint: #b9ead0;
+      --green: #216b57;
+      --orange: #e98249;
+      --yellow: #f6db82;
+      --blue: #b9d9ef;
+      --purple: #d6d4ee;
+      --pink: #f4c8af;
+      --shadow: 0 18px 48px rgba(24, 35, 34, .08);
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    .detail-hero-unit3 {
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--border-medium);
+      margin-bottom: 2.5rem;
+    }
+
+    .pipeline-container {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 2rem 0;
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-medium);
+    }
+
+    .pipeline-step {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .pipeline-step:hover {
+      border-color: var(--text-white);
+      transform: translateY(-2px);
+    }
+
+    .pipeline-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--orange);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pipeline-step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .pipeline-step-desc {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .lab-shell-unit3 {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 20px;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 992px) {
+      .lab-shell-unit3 {
+        grid-template-columns: 1fr;
+      }
+      .pipeline-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .preset-chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 16px;
+    }
+
+    .preset-chip {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-medium);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      color: var(--text-white);
+      border-color: var(--text-white);
+    }
+
+    .feature-toggle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .feature-toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    .feature-toggle-item label {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-white);
+      margin: 0;
+    }
+
+    .metric-gauge-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .gauge-bar-bg {
+      height: 10px;
+      background: var(--line);
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 10px 0;
+      position: relative;
+    }
+
+    .gauge-bar-fill {
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+      transition: width 0.3s ease, margin-left 0.3s ease;
+    }
+
+    .ner-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin: 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .ner-org { background: rgba(59, 130, 246, 0.25); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .ner-money { background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .ner-date { background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .ner-gpe { background: rgba(139, 92, 246, 0.25); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.4); }
+    .ner-product { background: rgba(236, 72, 153, 0.25); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+
+    .topic-bar-item {
+      margin-bottom: 10px;
+    }
+    .topic-bar-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .topic-bar-bg {
+      height: 8px;
+      background: var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .topic-bar-val {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 10px;
+    }
+    .matrix-table th, .matrix-table td {
+      border: 1px solid var(--border-medium);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .matrix-table th {
+      background: var(--bg-card-hover);
+      color: var(--text-white);
+    }
+
+    /* ELI5 Concept Cards */
+    .concept-grid-unit3 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 2rem 0;
+    }
+    @media (max-width: 768px) {
+      .concept-grid-unit3 { grid-template-columns: 1fr; }
+    }
+
+    .concept-card-unit3 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .concept-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .eli5-box {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid var(--orange);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .code-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-secondary);
+      padding: 6px 12px;
+      border-radius: 6px 6px 0 0;
+      border: 1px solid var(--border-medium);
+      border-bottom: none;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-secondary);
+    }
+
+    .code-block-body {
+      background: #090d16;
+      color: #e2e8f0;
+      padding: 12px;
+      border-radius: 0 0 6px 6px;
+      border: 1px solid var(--border-medium);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Interactive Quiz Section */
+    .quiz-card-unit3 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-opt-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-medium);
+      color: var(--text-white);
+      padding: 12px 14px;
+      border-radius: 6px;
+      margin: 8px 0;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quiz-opt-btn:hover {
+      border-color: var(--blue);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .quiz-opt-btn.correct {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: #10b981 !important;
+      color: #34d399 !important;
+      font-weight: 700;
+    }
+
+    .quiz-opt-btn.wrong {
+      background: rgba(239, 68, 68, 0.2) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+
+    .quiz-explanation {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 3px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.83rem;
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body class="detail-page">
+  <div id="theme-ripple" class="theme-ripple"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <span style="font-size: 1.1rem; border: 2px solid var(--text-white); padding: 2px 8px; font-weight: 900;">24INFS7101</span>
+        <span>NLP & TEXT ANALYTICS</span>
+        <span class="brand-badge">UNIT 3 LAB</span>
+      </a>
+      <div class="header-actions">
+        <button class="theme-btn" id="theme-toggle-btn" type="button" onclick="toggleTheme(event)">
+          <span class="theme-btn-dot"></span>
+          <span id="theme-btn-text">THEME: DARK</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <aside class="w3-sidebar">
+    <div class="sidebar-category">PAGE SECTIONS</div>
+    <a class="sidebar-item active" href="#overview">UNIT 3 OVERVIEW</a>
+    <a class="sidebar-item" href="#pipeline">6-STAGE PIPELINE</a>
+    <a class="sidebar-item" href="#playground">INTERACTIVE LAB PLAYGROUND</a>
+    <a class="sidebar-item" href="#topics">ELI5 TOPICS & CODE PRACTICE</a>
+    <a class="sidebar-item" href="#quizzes">INTERACTIVE QUIZ HUB</a>
+    <a class="sidebar-item" href="#flashcards">REVISION FLASHCARDS</a>
+    <a class="sidebar-item" href="#colab">MASTER PYTHON NOTEBOOK</a>
+
+    <div class="sidebar-category">OTHER UNITS & LABS</div>
+    <a class="sidebar-item" href="index.html">COURSE DASHBOARD</a>
+    <a class="sidebar-item" href="business-text-sources.html">BUSINESS TEXT SOURCES</a>
+    <a class="sidebar-item" href="PREPROCESSING%20%26%20FEATURES%20lab.html">UNIT 2: PREPROCESSING LAB</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Hero Section -->
+    <section id="overview" class="detail-hero-unit3">
+      <div class="detail-kicker">UNIT 3: MINING & INSIGHT EXTRACTION</div>
+      <h1 style="font-size: 2.4rem; font-weight: 900; color: var(--text-white); margin: 0.5rem 0 1rem; line-height: 1.1;">
+        Feature Engineering & Text Mining Lab
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.05rem; max-width: 850px; line-height: 1.6; margin-bottom: 1.5rem;">
+        Master the complete Unit 3 feature engineering toolkit: extract sentiment polarity & opinion valence, discover hidden topics with Latent Dirichlet Allocation (LDA), identify corporate entities using Named Entity Recognition (NER), and construct tabular feature vectors for machine learning models.
+      </p>
+
+      <div class="hero-badges" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="badge" style="background: var(--blue); color: #fff;">SENTIMENT & VADER</span>
+        <span class="badge" style="background: var(--purple); color: #fff;">LDA TOPIC MODELING</span>
+        <span class="badge" style="background: var(--mint); color: #fff;">NER ENTITY EXTRACTION</span>
+        <span class="badge" style="background: var(--orange); color: #fff;">EXTRACTIVE SUMMARIZATION</span>
+        <span class="badge" style="background: var(--pink); color: #fff;">FEATURE MATRIX GENERATOR</span>
+      </div>
+    </section>
+
+    <!-- 6-Stage Visual Pipeline -->
+    <section id="pipeline" style="margin-bottom: 3rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem;">
+        <div>
+          <div class="detail-label">VISUAL FLOW</div>
+          <h2 style="font-size: 1.5rem; color: var(--text-white); margin: 4px 0 0;">Unit 3 Insight Extraction & Feature Pipeline</h2>
+        </div>
+        <span class="badge">END-TO-END</span>
+      </div>
+
+      <div class="pipeline-container">
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 1</div>
+          <div class="pipeline-step-title">Text Ingestion</div>
+          <div class="pipeline-step-desc">Raw customer reviews, emails & SEC reports</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 2</div>
+          <div class="pipeline-step-title">Sentiment Mining</div>
+          <div class="pipeline-step-desc">VADER polarity, valence shifters & subjectivity</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 3</div>
+          <div class="pipeline-step-title">NER Extraction</div>
+          <div class="pipeline-step-desc">Locate ORGs, Money, Dates & Locations</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 4</div>
+          <div class="pipeline-step-title">LDA Clustering</div>
+          <div class="pipeline-step-desc">Unsupervised thematic document topics</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 5</div>
+          <div class="pipeline-step-title">Summarization</div>
+          <div class="pipeline-step-desc">TextRank keyphrase & executive summary</div>
+        </div>
+        <div class="pipeline-step" style="border-color: var(--mint);">
+          <div class="pipeline-step-num" style="color: var(--mint);">STAGE 6</div>
+          <div class="pipeline-step-title">Feature Matrix</div>
+          <div class="pipeline-step-desc">Tabular numeric vector for ML algorithms</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Unit 3 Lab Playground -->
+    <section id="playground" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem;">
+        <div>
+          <div class="detail-label">LIVE EXPERIENCE</div>
+          <h2 style="font-size: 1.6rem; color: var(--text-white); margin: 4px 0 0;">Interactive Unit 3 Feature & Insight Playground</h2>
+        </div>
+        <span class="badge" style="background: var(--mint); color: #000; font-weight: 800;">LIVE JS ENGINE</span>
+      </div>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+        Type or select any business text sample below to analyze sentiment polarity, extract named entities, compute LDA topic probability weights, and generate a tabular ML feature vector in real-time.
+      </p>
+
+      <div class="lab-shell-unit3">
+        <!-- Input & Controls Panel -->
+        <div class="panel-box">
+          <label style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); text-transform: uppercase;">
+            Raw Business Text Input:
+          </label>
+
+          <textarea id="u3-input-text" style="width: 100%; min-height: 180px; background: var(--bg-secondary); border: 1px solid var(--border-medium); border-radius: 6px; padding: 12px; color: var(--text-white); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; outline: none; margin-top: 6px;" placeholder="Paste customer review, financial statement, or support ticket text here..."></textarea>
+
+          <div class="preset-chip-group">
+            <span class="preset-chip" data-preset="refund">Urgent Refund Ticket</span>
+            <span class="preset-chip" data-preset="sec">SEC 10-K Filing</span>
+            <span class="preset-chip" data-preset="hr">HR Exit Feedback</span>
+            <span class="preset-chip" data-preset="positive">5-Star Customer Review</span>
+          </div>
+
+          <label style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary); text-transform: uppercase; margin-top: 14px; display: block;">
+            Feature Extraction Toggles:
+          </label>
+
+          <div class="feature-toggle-grid">
+            <div class="feature-toggle-item">
+              <label for="tog-sentiment">Sentiment Polarity</label>
+              <input type="checkbox" id="tog-sentiment" checked>
+            </div>
+            <div class="feature-toggle-item">
+              <label for="tog-ner">Named Entities (NER)</label>
+              <input type="checkbox" id="tog-ner" checked>
+            </div>
+            <div class="feature-toggle-item">
+              <label for="tog-lda">LDA Topic Modeling</label>
+              <input type="checkbox" id="tog-lda" checked>
+            </div>
+            <div class="feature-toggle-item">
+              <label for="tog-summary">Executive Summary</label>
+              <input type="checkbox" id="tog-summary" checked>
+            </div>
+          </div>
+        </div>
+
+        <!-- Output Display Panel -->
+        <div class="panel-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;">
+            <h3 style="font-size: 1rem; color: var(--text-white); margin: 0;">Extracted Feature Matrix & Insights</h3>
+            <span id="u3-word-count-badge" class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);">0 WORDS</span>
+          </div>
+
+          <!-- Sentiment Card -->
+          <div id="u3-sentiment-card" class="metric-gauge-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-white);">SENTIMENT POLARITY (VADER):</span>
+              <span id="u3-sent-label" class="badge" style="background: var(--mint); color: #000; font-weight: 800;">POSITIVE (+0.75)</span>
+            </div>
+            <div class="gauge-bar-bg">
+              <div id="u3-sent-gauge" class="gauge-bar-fill"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-secondary);">
+              <span>-1.00 (Extremely Negative)</span>
+              <span id="u3-subjectivity-val">Subjectivity: 0.45</span>
+              <span>+1.00 (Extremely Positive)</span>
+            </div>
+          </div>
+
+          <!-- NER Highlight Card -->
+          <div id="u3-ner-card" style="background: var(--bg-secondary); border: 1px solid var(--border-medium); border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-white); margin-bottom: 8px;">
+              NAMED ENTITIES EXTRACTED (NER):
+            </div>
+            <div id="u3-ner-container" style="font-size: 0.85rem; line-height: 1.8;">
+              <!-- Dynamic tags rendered here -->
+            </div>
+          </div>
+
+          <!-- LDA Topic Distribution Card -->
+          <div id="u3-lda-card" style="background: var(--bg-secondary); border: 1px solid var(--border-medium); border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-white); margin-bottom: 10px;">
+              LDA TOPIC PROBABILITY DISTRIBUTION ($\theta$):
+            </div>
+            <div id="u3-lda-container">
+              <!-- Topic bars rendered here -->
+            </div>
+          </div>
+
+          <!-- Executive Summary -->
+          <div id="u3-summary-card" style="background: rgba(59, 130, 246, 0.08); border-left: 3px solid var(--blue); padding: 12px; border-radius: 0 6px 6px 0; margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--blue); text-transform: uppercase; margin-bottom: 4px;">
+              Executive Extractive Summary:
+            </div>
+            <div id="u3-summary-text" style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5;">
+              Extracting summary...
+            </div>
+          </div>
+
+          <!-- Tabular Feature Vector Table -->
+          <div style="overflow-x: auto;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 4px;">
+              Engineered Numeric Feature Vector (ML Input):
+            </div>
+            <table class="matrix-table">
+              <thead>
+                <tr>
+                  <th>sentiment_score</th>
+                  <th>is_negative</th>
+                  <th>org_count</th>
+                  <th>money_flag</th>
+                  <th>primary_topic</th>
+                  <th>urgency_index</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="u3-matrix-row">
+                  <td>+0.00</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>Topic 1</td>
+                  <td>0.10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ELI5 Concepts & Code Practice Grid -->
+    <section id="topics" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+        <div>
+          <div class="detail-label">CORE CONCEPTS & CODE</div>
+          <h2 style="font-size: 1.6rem; color: var(--text-white); margin: 4px 0 0;">Unit 3 Details with ELI5 & Python Practice</h2>
+        </div>
+        <span class="badge">SYLLABUS COVERAGE</span>
+      </div>
+
+      <div class="concept-grid-unit3">
+
+        <!-- Topic 3.1: Sentiment Analysis -->
+        <div class="concept-card-unit3">
+          <span class="concept-badge" style="background: rgba(59, 130, 246, 0.2); color: #60a5fa;">TOPIC 3.1</span>
+          <h3 style="font-size: 1.25rem; color: var(--text-white); margin: 0 0 8px;">Sentiment Analysis & Opinion Mining</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Classifies text into positive, negative, or neutral tones. <strong>Rule-based systems (VADER)</strong> use sentiment dictionaries with valence rules. <strong>Supervised ML models (Naïve Bayes, Logistic Regression)</strong> learn patterns from labeled customer reviews.
+          </p>
+          <div class="eli5-box">
+            <strong>💡 ELI5 Analogy:</strong> Rule-based sentiment is like a robot carrying a dictionary with score points (+1 for 'awesome', -1 for 'terrible'). ML sentiment is like a child watching 1,000 movies and learning when someone is sarcastic or angry!
+          </div>
+
+          <div class="code-block-header">
+            <span>PYTHON PRACTICE: VADER SENTIMENT</span>
+            <button class="preset-chip copy-code-btn" data-code="from nltk.sentiment.vader import SentimentIntensityAnalyzer\nimport nltk\nnltk.download('vader_lexicon')\n\nsia = SentimentIntensityAnalyzer()\ntext = 'The product delivery was breached, but support team was amazingly quick!'\nscores = sia.polarity_scores(text)\nprint('VADER Scores:', scores)">Copy Code</button>
+          </div>
+          <div class="code-block-body">from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+nltk.download('vader_lexicon')
+
+sia = SentimentIntensityAnalyzer()
+text = "Service was breached, but support was amazingly quick!"
+scores = sia.polarity_scores(text)
+print("Compound Polarity Score:", scores['compound'])
+# Output: Compound Score: +0.435 (Overall Positive)</div>
+        </div>
+
+        <!-- Topic 3.2: LDA Topic Modeling -->
+        <div class="concept-card-unit3">
+          <span class="concept-badge" style="background: rgba(139, 92, 246, 0.2); color: #c084fc;">TOPIC 3.2</span>
+          <h3 style="font-size: 1.25rem; color: var(--text-white); margin: 0 0 8px;">Topic Modeling (LDA) & Classification</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            <strong>Latent Dirichlet Allocation (LDA)</strong> is an unsupervised probabilistic model that discovers hidden thematic topics across documents. It represents each document as a distribution of topics ($\theta$), and each topic as a distribution of words ($\phi$).
+          </p>
+          <div class="eli5-box">
+            <strong>💡 ELI5 Analogy:</strong> Imagine dumping 500 unorganized storybooks onto the floor. LDA Topic Modeling is a magical sorting hat that scans all pages and groups them into 3 piles: Wizards, Space Rockets, and Dolphins without reading titles!
+          </div>
+
+          <div class="code-block-header">
+            <span>PYTHON PRACTICE: GENSIM LDA</span>
+            <button class="preset-chip copy-code-btn" data-code="from gensim import corpora\nfrom gensim.models import LdaModel\n\ntexts = [['refund', 'delivery', 'late'], ['billing', 'charge', 'invoice'], ['refund', 'money']]\ndictionary = corpora.Dictionary(texts)\ncorpus = [dictionary.doc2bow(text) for text in texts]\nlda = LdaModel(corpus, num_topics=2, id2word=dictionary, passes=10)\nfor topic in lda.print_topics():\n    print(topic)">Copy Code</button>
+          </div>
+          <div class="code-block-body">from gensim import corpora
+from gensim.models import LdaModel
+
+# Unsupervised Corpus of Support Tickets
+docs = [['refund', 'delivery', 'late'], ['billing', 'charge', 'invoice'], ['refund', 'money']]
+dictionary = corpora.Dictionary(docs)
+corpus = [dictionary.doc2bow(doc) for doc in docs]
+
+lda = LdaModel(corpus, num_topics=2, id2word=dictionary, passes=10)
+for idx, topic in lda.print_topics():
+    print(f"Topic {idx}: {topic}")</div>
+        </div>
+
+        <!-- Topic 3.3: NER & Summarization -->
+        <div class="concept-card-unit3">
+          <span class="concept-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">TOPIC 3.3</span>
+          <h3 style="font-size: 1.25rem; color: var(--text-white); margin: 0 0 8px;">Named Entity Recognition (NER) & Summarization</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            <strong>NER</strong> identifies structured real-world entities (Companies, Monetary Values, Dates, Locations) using spaCy models. <strong>Text Summarization</strong> compresses documents via <em>Extractive</em> (selecting key sentences) or <em>Abstractive</em> (generating new text) methods.
+          </p>
+          <div class="eli5-box">
+            <strong>💡 ELI5 Analogy:</strong> NER is putting highlighter pens on a textbook: Pink for Company names (Apple), Green for Money ($5M), Yellow for Dates. Summarization is telling your best friend a 100-page comic book story in 2 minutes!
+          </div>
+
+          <div class="code-block-header">
+            <span>PYTHON PRACTICE: SPACY NER</span>
+            <button class="preset-chip copy-code-btn" data-code="import spacy\nnlp = spacy.load('en_core_web_sm')\ndoc = nlp('Apple Inc. spent $50 million acquiring AI startups in New York on Q3 2026.')\nfor ent in doc.ents:\n    print(f'{ent.text} -> {ent.label_}')">Copy Code</button>
+          </div>
+          <div class="code-block-body">import spacy
+nlp = spacy.load("en_core_web_sm")
+
+doc = nlp("Apple Inc. spent $50 million in New York on Q3 2026.")
+for ent in doc.ents:
+    print(f"Entity: {ent.text:<15} | Tag: {ent.label_}")
+# Output: Apple Inc. -> ORG | $50 million -> MONEY | New York -> GPE</div>
+        </div>
+
+        <!-- Topic 3.4: Complete Unit 3 Feature Engineering Matrix -->
+        <div class="concept-card-unit3">
+          <span class="concept-badge" style="background: rgba(236, 72, 153, 0.2); color: #f472b6;">TOPIC 3.4</span>
+          <h3 style="font-size: 1.25rem; color: var(--text-white); margin: 0 0 8px;">Assembling the Master Feature Matrix</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            The core goal of Unit 3 feature engineering is combining <strong>TF-IDF sparse matrices</strong> + <strong>VADER sentiment scores</strong> + <strong>NER entity counts</strong> + <strong>LDA topic distributions</strong> into a single unified Pandas DataFrame for machine learning models.
+          </p>
+          <div class="eli5-box">
+            <strong>💡 ELI5 Analogy:</strong> Feature engineering is combining flour (words), sugar (sentiment), and chocolate chips (entities) into one master baking tray (DataFrame) so your machine learning oven can bake a perfect prediction!
+          </div>
+
+          <div class="code-block-header">
+            <span>PYTHON PRACTICE: FEATURE MATRIX</span>
+            <button class="preset-chip copy-code-btn" data-code="import pandas as pd\nfrom sklearn.feature_extraction.text import TfidfVectorizer\nfrom nltk.sentiment.vader import SentimentIntensityAnalyzer\n\ndata = pd.DataFrame({'text': ['Refund breached SLA', 'Great product quality']})\nsia = SentimentIntensityAnalyzer()\ndata['sentiment'] = data['text'].apply(lambda x: sia.polarity_scores(x)['compound'])\ndata['word_count'] = data['text'].apply(lambda x: len(x.split()))\nprint(data)">Copy Code</button>
+          </div>
+          <div class="code-block-body">import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+df = pd.DataFrame({'text': ["Refund breached SLA!", "Great product quality!"]})
+sia = SentimentIntensityAnalyzer()
+
+# Extract Numeric Features
+df['sentiment_score'] = df['text'].apply(lambda x: sia.polarity_scores(x)['compound'])
+df['word_count'] = df['text'].apply(lambda x: len(x.split()))
+df['exclamation_cnt'] = df['text'].apply(lambda x: x.count('!'))
+print(df)</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Interactive Quiz Hub -->
+    <section id="quizzes" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+        <div>
+          <div class="detail-label">KNOWLEDGE CHECK</div>
+          <h2 style="font-size: 1.6rem; color: var(--text-white); margin: 4px 0 0;">Interactive Unit 3 Diagnostic Quiz Hub</h2>
+        </div>
+        <span id="u3-quiz-score-badge" class="badge" style="background: var(--yellow); color: #000; font-weight: 800;">QUIZ SCORE: 0/4 (0%)</span>
+      </div>
+
+      <!-- Quiz Question 1 -->
+      <div class="quiz-card-unit3" data-quiz-id="q1">
+        <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 700;">QUESTION 1 OF 4</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-white); margin: 6px 0 12px;">What is the key difference between VADER rule-based sentiment analysis and Supervised Machine Learning sentiment models?</h3>
+
+        <button class="quiz-opt-btn" data-correct="false">VADER requires a GPU to run, whereas Supervised ML runs on CPU.</button>
+        <button class="quiz-opt-btn" data-correct="true">VADER relies on a predefined human-curated word lexicon with valence rules, while Supervised ML learns patterns from labeled training data.</button>
+        <button class="quiz-opt-btn" data-correct="false">VADER can only be used for legal contracts, whereas ML is only used for tweets.</button>
+        <button class="quiz-opt-btn" data-correct="false">Supervised ML cannot produce numeric polarity scores.</button>
+
+        <div class="quiz-explanation">
+          <strong>Correct Answer!</strong> VADER is a lexicon and rule-based sentiment model that uses pre-built word scores and valence rules (e.g. capitalization, negation). Supervised ML requires training datasets with positive/negative labels.
+        </div>
+      </div>
+
+      <!-- Quiz Question 2 -->
+      <div class="quiz-card-unit3" data-quiz-id="q2">
+        <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 700;">QUESTION 2 OF 4</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-white); margin: 6px 0 12px;">In Latent Dirichlet Allocation (LDA) Topic Modeling, what does the document-topic distribution ($\theta$) represent?</h3>
+
+        <button class="quiz-opt-btn" data-correct="false">The exact alphabetical order of words in a document.</button>
+        <button class="quiz-opt-btn" data-correct="false">The total number of grammar mistakes in a document.</button>
+        <button class="quiz-opt-btn" data-correct="true">The probabilistic weight/proportion of each hidden topic present within a given document.</button>
+        <button class="quiz-opt-btn" data-correct="false">The speed at which Gensim compiles the LDA model.</button>
+
+        <div class="quiz-explanation">
+          <strong>Correct Answer!</strong> In LDA, documents are treated as mixtures of topics. The distribution $\theta$ assigns a probability score to each topic for a specific document (e.g., Document 1 is 70% Billing, 30% Tech Support).
+        </div>
+      </div>
+
+      <!-- Quiz Question 3 -->
+      <div class="quiz-card-unit3" data-quiz-id="q3">
+        <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 700;">QUESTION 3 OF 4</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-white); margin: 6px 0 12px;">Which Named Entity Recognition (NER) tag would spaCy assign to "$500,000" in a corporate financial report?</h3>
+
+        <button class="quiz-opt-btn" data-correct="false">ORG (Organization)</button>
+        <button class="quiz-opt-btn" data-correct="true">MONEY (Monetary value)</button>
+        <button class="quiz-opt-btn" data-correct="false">GPE (Geopolitical Entity)</button>
+        <button class="quiz-opt-btn" data-correct="false">LAW (Named document)</button>
+
+        <div class="quiz-explanation">
+          <strong>Correct Answer!</strong> spaCy tags monetary values including currency symbols and numeric amounts ($500,000, €10M) as MONEY.
+        </div>
+      </div>
+
+      <!-- Quiz Question 4 -->
+      <div class="quiz-card-unit3" data-quiz-id="q4">
+        <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 700;">QUESTION 4 OF 4</div>
+        <h3 style="font-size: 1.1rem; color: var(--text-white); margin: 6px 0 12px;">What is the primary distinction between Extractive and Abstractive Text Summarization?</h3>
+
+        <button class="quiz-opt-btn" data-correct="true">Extractive selects and copies existing key sentences directly from the text, whereas Abstractive generates new paraphrased sentences like a human.</button>
+        <button class="quiz-opt-btn" data-correct="false">Extractive uses deep learning transformers, while Abstractive uses simple regular expressions.</button>
+        <button class="quiz-opt-btn" data-correct="false">Extractive removes all numbers, while Abstractive removes all verbs.</button>
+        <button class="quiz-opt-btn" data-correct="false">There is no difference between the two techniques.</button>
+
+        <div class="quiz-explanation">
+          <strong>Correct Answer!</strong> Extractive summarization identifies and pulls high-scoring original sentences (e.g. TextRank). Abstractive summarization generates new phrasing using sequence-to-sequence neural networks (e.g. BART, T5).
+        </div>
+      </div>
+    </section>
+
+    <!-- Revision Flashcards -->
+    <section id="flashcards" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem;">
+        <div>
+          <div class="detail-label">STUDENT STUDY CARDS</div>
+          <h2 style="font-size: 1.6rem; color: var(--text-white); margin: 4px 0 0;">Unit 3 Quick Revision Flashcards</h2>
+        </div>
+        <span class="badge">FLIP TO REVEAL</span>
+      </div>
+
+      <div class="concept-grid-unit3">
+        
+        <div class="concept-card-unit3" style="background: var(--bg-card-hover); border-color: var(--blue);">
+          <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--blue); font-weight: 700;">FLASHCARD 1</div>
+          <h3 style="font-size: 1.15rem; color: var(--text-white); margin: 10px 0;">What are Valence Shifters in Sentiment Analysis?</h3>
+          <div id="fc-ans-1" style="display: none; padding: 10px; background: rgba(59, 130, 246, 0.1); border-left: 3px solid var(--blue); border-radius: 0 4px 4px 0; font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px;">
+            Valence shifters are words that alter the sentiment score of neighboring terms. They include <strong>Negations</strong> ('not good' flips + to -), <strong>Intensifiers</strong> ('extremely happy' boosts score), and <strong>Diminishers</strong> ('barely acceptable' lowers score).
+          </div>
+          <button class="preset-chip fc-btn" onclick="toggleFlashcard('fc-ans-1', this)">Reveal Answer</button>
+        </div>
+
+        <div class="concept-card-unit3" style="background: var(--bg-card-hover); border-color: var(--purple);">
+          <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--purple); font-weight: 700;">FLASHCARD 2</div>
+          <h3 style="font-size: 1.15rem; color: var(--text-white); margin: 10px 0;">How does Coherence Score ($C_v$) evaluate LDA Topic Models?</h3>
+          <div id="fc-ans-2" style="display: none; padding: 10px; background: rgba(139, 92, 246, 0.1); border-left: 3px solid var(--purple); border-radius: 0 4px 4px 0; font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px;">
+            Topic Coherence measures how semantically readable and human-interpretable a topic's top words are. A higher $C_v$ score (closer to 0.7+) indicates well-separated, meaningful business topics.
+          </div>
+          <button class="preset-chip fc-btn" onclick="toggleFlashcard('fc-ans-2', this)">Reveal Answer</button>
+        </div>
+
+        <div class="concept-card-unit3" style="background: var(--bg-card-hover); border-color: var(--mint);">
+          <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--mint); font-weight: 700;">FLASHCARD 3</div>
+          <h3 style="font-size: 1.15rem; color: var(--text-white); margin: 10px 0;">What is BIO Tagging in Named Entity Recognition?</h3>
+          <div id="fc-ans-3" style="display: none; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 0 4px 4px 0; font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px;">
+            BIO tagging marks multi-word entities: <strong>B</strong> (Begin entity token, e.g. 'B-ORG' for New), <strong>I</strong> (Inside entity token, e.g. 'I-ORG' for York), and <strong>O</strong> (Outside any entity).
+          </div>
+          <button class="preset-chip fc-btn" onclick="toggleFlashcard('fc-ans-3', this)">Reveal Answer</button>
+        </div>
+
+        <div class="concept-card-unit3" style="background: var(--bg-card-hover); border-color: var(--orange);">
+          <div style="font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; color: var(--orange); font-weight: 700;">FLASHCARD 4</div>
+          <h3 style="font-size: 1.15rem; color: var(--text-white); margin: 10px 0;">Why combine Text Surface Features with Sentiment & Entities?</h3>
+          <div id="fc-ans-4" style="display: none; padding: 10px; background: rgba(245, 158, 11, 0.1); border-left: 3px solid var(--orange); border-radius: 0 4px 4px 0; font-size: 0.85rem; color: var(--text-main); margin-bottom: 12px;">
+            Combining word counts, exclamation ratios, VADER sentiment, entity counts, and LDA topics creates a rich 360° feature vector that boosts model performance for churn prediction and priority ticket routing.
+          </div>
+          <button class="preset-chip fc-btn" onclick="toggleFlashcard('fc-ans-4', this)">Reveal Answer</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Master Python Notebook Block -->
+    <section id="colab" style="margin-bottom: 3.5rem;">
+      <div style="background: #1e293b; border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: 1.5rem; color: #f8fafc;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div>
+            <div class="detail-label" style="color: var(--yellow);">FULL UNIT 3 PYTHON PIPELINE</div>
+            <h3 style="font-size: 1.4rem; color: #fff; margin: 4px 0 0;">Executable Master Python Notebook for Google Colab</h3>
+          </div>
+          <button id="copy-u3-colab-btn" class="preset-chip" style="background: var(--yellow); color: #000; font-weight: 800; padding: 8px 14px; border: none;">COPY FULL UNIT 3 SCRIPT</button>
+        </div>
+        <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 1rem;">
+          Run this end-to-end Python script in Google Colab to execute VADER sentiment analysis, spaCy NER, Gensim LDA topic modeling, and feature matrix export.
+        </p>
+
+        <div class="code-block-body" id="u3-colab-code-text" style="max-height: 380px;"># ==============================================================================
+# 24INFS7101 - UNIT 3: FEATURE ENGINEERING & TEXT MINING MASTER PIPELINE
+# ==============================================================================
+import pandas as pd
+import numpy as np
+import nltk
+import spacy
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from gensim import corpora
+from gensim.models import LdaModel
+
+# Download required NLTK & spaCy assets
+nltk.download('vader_lexicon')
+nlp = spacy.load("en_core_web_sm")
+
+# Sample MBA Customer Review Dataset
+corpus_data = [
+    "URGENT: Our Service Level Agreement (SLA) with Apple Inc. was breached! Immediate refund of $50,000 required.",
+    "Great product quality from Google in New York. Delivery was fast and customer service was helpful.",
+    "Poor support and late delivery! Return on investment dropped by 30%. Unsatisfied with service."
+]
+
+df = pd.DataFrame({'raw_text': corpus_data})
+
+# 1. SENTIMENT ANALYSIS (VADER)
+sia = SentimentIntensityAnalyzer()
+df['vader_compound'] = df['raw_text'].apply(lambda x: sia.polarity_scores(x)['compound'])
+df['sentiment_class'] = df['vader_compound'].apply(lambda s: 'POSITIVE' if s >= 0.05 else ('NEGATIVE' if s <= -0.05 else 'NEUTRAL'))
+
+# 2. NAMED ENTITY RECOGNITION (NER - spaCy)
+def extract_entities(text):
+    doc = nlp(text)
+    orgs = [ent.text for ent in doc.ents if ent.label_ == 'ORG']
+    money = [ent.text for ent in doc.ents if ent.label_ == 'MONEY']
+    return len(orgs), len(money)
+
+df[['org_count', 'money_count']] = df['raw_text'].apply(lambda x: pd.Series(extract_entities(x)))
+
+# 3. TEXT SURFACE FEATURES
+df['char_length'] = df['raw_text'].apply(len)
+df['word_count'] = df['raw_text'].apply(lambda x: len(x.split()))
+df['urgency_flag'] = df['raw_text'].apply(lambda x: 1 if 'URGENT' in x.upper() or 'BREACHED' in x.upper() else 0)
+
+# 4. LDA TOPIC MODELING (Gensim)
+tokenized_docs = [doc.lower().split() for doc in corpus_data]
+dictionary = corpora.Dictionary(tokenized_docs)
+gensim_corpus = [dictionary.doc2bow(doc) for doc in tokenized_docs]
+lda = LdaModel(gensim_corpus, num_topics=2, id2word=dictionary, passes=10)
+
+def get_top_topic(text):
+    bow = dictionary.doc2bow(text.lower().split())
+    topics = lda.get_document_topics(bow)
+    return max(topics, key=lambda x: x[1])[0]
+
+df['primary_topic_id'] = df['raw_text'].apply(get_top_topic)
+
+print("=== FINAL UNIT 3 FEATURE MATRIX ===")
+print(df[['raw_text', 'vader_compound', 'sentiment_class', 'org_count', 'money_count', 'urgency_flag', 'primary_topic_id']])</div>
+        <div id="u3-colab-status" style="font-size: 0.8rem; color: var(--mint); margin-top: 8px; min-height: 18px;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer style="border-top: 1px solid var(--border-medium); padding: 2rem 0; background: var(--bg-card); text-align: center; color: var(--text-secondary); font-size: 0.85rem;">
+    <div class="wrap">
+      24INFS7101 NLP & Text Analytics in Business &bull; Unit 3 Feature Engineering & Text Mining Lab
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    // Theme Toggle Functionality
+    function toggleTheme(event) {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      document.querySelector('#theme-btn-text').textContent = `THEME: ${newTheme.toUpperCase()}`;
+    }
+
+    // Presets for Unit 3 Playground
+    const presets = {
+      refund: "URGENT: Our Service Level Agreement (SLA) with Apple Inc. was breached in New York! Late product delivery caused a severe return on investment drop. I demand an immediate refund of $50,000 or our company will churn NOW!",
+      sec: "In Q3 2026, Microsoft Corporation reported total revenue of $60 billion, representing a 15% increase year-over-year. Strategic investments in Azure AI and cloud infrastructure drove strong market performance across North America.",
+      hr: "Employee exit feedback indicates frustration with management communication and workload balance. However, team camaraderie was wonderful and training resources were exceptional.",
+      positive: "Outstanding 5-star customer service from Zomato! The food delivery arrived 20 minutes early, hot, and perfectly packaged. Highly recommended!"
+    };
+
+    const inputText = document.querySelector('#u3-input-text');
+    const wordCountBadge = document.querySelector('#u3-word-count-badge');
+    
+    // Output Elements
+    const sentCard = document.querySelector('#u3-sentiment-card');
+    const sentLabel = document.querySelector('#u3-sent-label');
+    const sentGauge = document.querySelector('#u3-sent-gauge');
+    const subjVal = document.querySelector('#u3-subjectivity-val');
+    
+    const nerCard = document.querySelector('#u3-ner-card');
+    const nerContainer = document.querySelector('#u3-ner-container');
+
+    const ldaCard = document.querySelector('#u3-lda-card');
+    const ldaContainer = document.querySelector('#u3-lda-container');
+
+    const summaryCard = document.querySelector('#u3-summary-card');
+    const summaryText = document.querySelector('#u3-summary-text');
+
+    const matrixRow = document.querySelector('#u3-matrix-row');
+
+    // Toggles
+    const togSent = document.querySelector('#tog-sentiment');
+    const togNer = document.querySelector('#tog-ner');
+    const togLda = document.querySelector('#tog-lda');
+    const togSummary = document.querySelector('#tog-summary');
+
+    // Simple VADER-like Sentiment Analyzer in JS
+    const posWords = new Set(['great', 'outstanding', 'wonderful', 'exceptional', 'helpful', 'fast', 'increase', 'strong', 'recommend', 'early', 'perfectly', 'quick', 'amazingly', 'good', 'excellent']);
+    const negWords = new Set(['urgent', 'breached', 'late', 'drop', 'churn', 'poor', 'frustration', 'unsatisfied', 'severe', 'refund', 'breach', 'delay', 'defect', 'fail']);
+    const negations = new Set(['not', 'no', 'never', 'neither', 'nor', 'cannot', 'without']);
+
+    function analyzeUnit3() {
+      const text = inputText.value || "";
+      const words = text.match(/\b[a-zA-Z0-9$%,.-]+\b/g) || [];
+      wordCountBadge.textContent = `${words.length} WORDS`;
+
+      // 1. Sentiment Engine
+      let score = 0;
+      let posCnt = 0;
+      let negCnt = 0;
+      let isNegated = false;
+
+      words.forEach(w => {
+        const lower = w.toLowerCase().replace(/[^a-z]/g, '');
+        if (negations.has(lower)) {
+          isNegated = true;
+          return;
+        }
+
+        if (posWords.has(lower)) {
+          if (isNegated) { score -= 1.5; negCnt++; }
+          else { score += 1.0; posCnt++; }
+          isNegated = false;
+        } else if (negWords.has(lower)) {
+          if (isNegated) { score += 1.0; posCnt++; }
+          else { score -= 1.5; negCnt++; }
+          isNegated = false;
+        }
+      });
+
+      let normScore = words.length ? Math.max(-1.0, Math.min(1.0, score / Math.max(1, (posCnt + negCnt)))) : 0;
+      if (text.toUpperCase().includes("URGENT") || text.includes("!")) normScore -= 0.15;
+      normScore = Math.max(-1.0, Math.min(1.0, normScore));
+
+      if (togSent.checked) {
+        sentCard.style.display = 'block';
+        sentGauge.style.width = `${((normScore + 1) / 2) * 100}%`;
+        
+        let labelText = "NEUTRAL";
+        let colorBg = "var(--orange)";
+        if (normScore > 0.15) { labelText = `POSITIVE (+${normScore.toFixed(2)})`; colorBg = "var(--mint)"; }
+        else if (normScore < -0.15) { labelText = `NEGATIVE (${normScore.toFixed(2)})`; colorBg = "#ef4444"; }
+        else { labelText = `NEUTRAL (${normScore.toFixed(2)})`; colorBg = "var(--orange)"; }
+        
+        sentLabel.textContent = labelText;
+        sentLabel.style.background = colorBg;
+        subjVal.textContent = `Subjectivity: ${(Math.min(1.0, (posCnt + negCnt + 1) / (words.length || 1))).toFixed(2)}`;
+      } else {
+        sentCard.style.display = 'none';
+      }
+
+      // 2. NER Engine
+      let orgCnt = 0;
+      let moneyCnt = 0;
+      if (togNer.checked) {
+        nerCard.style.display = 'block';
+        let renderedText = text;
+
+        // Pattern matching for ORG, MONEY, DATE, GPE
+        const entities = [
+          { pattern: /\b(Apple Inc\.|Microsoft Corporation|Google|Zomato|Azure AI)\b/g, class: 'ner-org', type: 'ORG' },
+          { pattern: /(\$\d+(?:,\d+)*(?:\.\d+)?|\$\d+\s*(?:million|billion|thousand)?|\d+%\s*increase)/gi, class: 'ner-money', type: 'MONEY' },
+          { pattern: /\b(Q3 2026|year-over-year|20 minutes|today)\b/gi, class: 'ner-date', type: 'DATE' },
+          { pattern: /\b(New York|North America)\b/g, class: 'ner-gpe', type: 'GPE' }
+        ];
+
+        entities.forEach(ent => {
+          const matches = text.match(ent.pattern);
+          if (matches) {
+            if (ent.type === 'ORG') orgCnt += matches.length;
+            if (ent.type === 'MONEY') moneyCnt += matches.length;
+          }
+        });
+
+        // Highlight matching terms
+        let html = text;
+        html = html.replace(/\b(Apple Inc\.|Microsoft Corporation|Google|Zomato|Azure AI)\b/g, '<span class="ner-tag ner-org">$1 [ORG]</span>');
+        html = html.replace(/(\$\d+(?:,\d+)*(?:\.\d+)?|\$\d+\s*(?:million|billion|thousand)?)/gi, '<span class="ner-tag ner-money">$1 [MONEY]</span>');
+        html = html.replace(/\b(Q3 2026|year-over-year)\b/gi, '<span class="ner-tag ner-date">$1 [DATE]</span>');
+        html = html.replace(/\b(New York|North America)\b/g, '<span class="ner-tag ner-gpe">$1 [GPE]</span>');
+        
+        nerContainer.innerHTML = html || '<span style="color: var(--text-secondary);">No entities detected.</span>';
+      } else {
+        nerCard.style.display = 'none';
+      }
+
+      // 3. LDA Topic Modeling Engine
+      if (togLda.checked) {
+        ldaCard.style.display = 'block';
+        let t1 = 20, t2 = 30, t3 = 50;
+        const lower = text.toLowerCase();
+        
+        if (lower.includes('sla') || lower.includes('refund') || lower.includes('breached')) { t1 = 70; t2 = 20; t3 = 10; }
+        else if (lower.includes('revenue') || lower.includes('million') || lower.includes('q3')) { t1 = 15; t2 = 75; t3 = 10; }
+        else if (lower.includes('delivery') || lower.includes('service') || lower.includes('food')) { t1 = 10; t2 = 25; t3 = 65; }
+
+        ldaContainer.innerHTML = `
+          <div class="topic-bar-item">
+            <div class="topic-bar-head"><span>Topic 1: SLA Breach & Customer Refunds</span><span>${t1}%</span></div>
+            <div class="topic-bar-bg"><div class="topic-bar-val" style="width: ${t1}%; background: #ef4444;"></div></div>
+          </div>
+          <div class="topic-bar-item">
+            <div class="topic-bar-head"><span>Topic 2: Financial Earnings & Revenue Disclosures</span><span>${t2}%</span></div>
+            <div class="topic-bar-bg"><div class="topic-bar-val" style="width: ${t2}%; background: var(--blue);"></div></div>
+          </div>
+          <div class="topic-bar-item">
+            <div class="topic-bar-head"><span>Topic 3: Operational Delivery & Logistics</span><span>${t3}%</span></div>
+            <div class="topic-bar-bg"><div class="topic-bar-val" style="width: ${t3}%; background: var(--mint);"></div></div>
+          </div>
+        `;
+      } else {
+        ldaCard.style.display = 'none';
+      }
+
+      // 4. Summarization Engine
+      if (togSummary.checked) {
+        summaryCard.style.display = 'block';
+        const sents = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+        summaryText.textContent = sents.length ? `• ${sents[0].trim()}.` : "No summary available.";
+      } else {
+        summaryCard.style.display = 'none';
+      }
+
+      // 5. Matrix Vector Update
+      const isNeg = normScore < -0.15 ? 1 : 0;
+      const urgIdx = (text.toUpperCase().includes('URGENT') ? 0.90 : 0.10).toFixed(2);
+      let pTopic = "Topic 1";
+      if (text.toLowerCase().includes('revenue')) pTopic = "Topic 2";
+      if (text.toLowerCase().includes('delivery')) pTopic = "Topic 3";
+
+      matrixRow.innerHTML = `
+        <td style="color: ${normScore >= 0 ? '#34d399' : '#fca5a5'};">${normScore >= 0 ? '+' : ''}${normScore.toFixed(2)}</td>
+        <td>${isNeg}</td>
+        <td>${orgCnt}</td>
+        <td>${moneyCnt > 0 ? 1 : 0}</td>
+        <td>${pTopic}</td>
+        <td>${urgIdx}</td>
+      `;
+    }
+
+    // Event Listeners for Input & Toggles
+    inputText.addEventListener('input', analyzeUnit3);
+    [togSent, togNer, togLda, togSummary].forEach(t => t.addEventListener('change', analyzeUnit3));
+
+    // Preset Chips
+    document.querySelectorAll('.preset-chip[data-preset]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const key = chip.dataset.preset;
+        inputText.value = presets[key];
+        analyzeUnit3();
+      });
+    });
+
+    // Set Default Preset
+    inputText.value = presets.refund;
+    analyzeUnit3();
+
+    // Flashcard Toggle
+    function toggleFlashcard(id, btn) {
+      const el = document.getElementById(id);
+      if (el.style.display === 'none' || !el.style.display) {
+        el.style.display = 'block';
+        btn.textContent = 'Hide Answer';
+      } else {
+        el.style.display = 'none';
+        btn.textContent = 'Reveal Answer';
+      }
+    }
+
+    // Quiz Engine
+    let quizScore = 0;
+    const answeredQuizzes = new Set();
+
+    document.querySelectorAll('.quiz-card-unit3').forEach(card => {
+      const qId = card.dataset.quizId;
+      const options = card.querySelectorAll('.quiz-opt-btn');
+      const exp = card.querySelector('.quiz-explanation');
+
+      options.forEach(opt => {
+        opt.addEventListener('click', () => {
+          if (answeredQuizzes.has(qId)) return;
+          answeredQuizzes.add(qId);
+
+          const isCorrect = opt.dataset.correct === 'true';
+          options.forEach(o => o.classList.remove('correct', 'wrong'));
+
+          if (isCorrect) {
+            opt.classList.add('correct');
+            quizScore++;
+          } else {
+            opt.classList.add('wrong');
+            options.forEach(o => { if (o.dataset.correct === 'true') o.classList.add('correct'); });
+          }
+
+          exp.style.display = 'block';
+          
+          const pct = Math.round((quizScore / 4) * 100);
+          document.querySelector('#u3-quiz-score-badge').textContent = `QUIZ SCORE: ${quizScore}/4 (${pct}%)`;
+        });
+      });
+    });
+
+    // Copy Code Buttons
+    document.querySelectorAll('.copy-code-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const code = btn.dataset.code;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = 'Copied!';
+        } catch(e) {
+          btn.textContent = 'Ctrl+C to copy';
+        }
+        setTimeout(() => btn.textContent = 'Copy Code', 2500);
+      });
+    });
+
+    // Copy Colab Master Script Button
+    const copyColabBtn = document.querySelector('#copy-u3-colab-btn');
+    if (copyColabBtn) {
+      copyColabBtn.addEventListener('click', async () => {
+        const codeText = document.querySelector('#u3-colab-code-text').textContent;
+        const status = document.querySelector('#u3-colab-status');
+        try {
+          await navigator.clipboard.writeText(codeText);
+          status.textContent = 'Full Master Unit 3 Python script copied to clipboard! Ready to paste into Colab.';
+        } catch(e) {
+          status.textContent = 'Copied! If auto-copy blocked, manually copy the code window above.';
+        }
+        setTimeout(() => status.textContent = '', 4000);
+      });
+    }
+  </script>
+</body>
+</html>
