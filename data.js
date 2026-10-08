@@ -451,6 +451,58 @@ const NLP_DATA = {
       explanation: "Word2Vec gives 'bank' the exact same vector in 'river bank' and 'investment bank'. BERT reads text bidirectionally to create context-aware representations."
     },
     {
+      id: "q9_b",
+      unitId: "unit-4",
+      question: "In Word2Vec, what is the fundamental difference between Continuous Bag-of-Words (CBOW) and Skip-gram architectures?",
+      options: [
+        "CBOW predicts surrounding context words given a target word, while Skip-gram predicts the target word from context words",
+        "CBOW predicts a target word from surrounding context words, while Skip-gram predicts surrounding context words given a target word",
+        "CBOW only works on numbers, while Skip-gram only works on HTML text",
+        "Both architectures produce static 1D integer outputs with no vectors"
+      ],
+      correctIndex: 1,
+      explanation: "CBOW takes surrounding context words to predict the target word, whereas Skip-gram takes a target word to predict surrounding context words. Skip-gram generally performs better on rare words and smaller corpora."
+    },
+    {
+      id: "q9_c",
+      unitId: "unit-4",
+      question: "Why is FastText particularly effective for handling Out-of-Vocabulary (OOV) words and domain typos in business text?",
+      options: [
+        "Because FastText breaks words into character n-grams, allowing it to construct vectors for unseen words from subword components",
+        "Because FastText automatically translates typos into French before vectorizing",
+        "Because FastText stores text in SQL relational tables instead of dense vector spaces",
+        "Because FastText discards all words that are not in the Merriam-Webster dictionary"
+      ],
+      correctIndex: 0,
+      explanation: "FastText represents words as bags of character n-grams (e.g. 'tech', 'echn', 'chno'). When an unknown word or typo appears (e.g. 'technolgy'), FastText sums its subword vectors to construct an accurate embedding."
+    },
+    {
+      id: "q9_d",
+      unitId: "unit-4",
+      question: "In conversational AI chatbots for enterprise customer support, what is 'Intent Recognition'?",
+      options: [
+        "Extracting credit card details from customer email attachments",
+        "Identifying the core user goal or action behind an utterance (e.g., 'Cancel_Subscription' or 'Request_Refund')",
+        "Converting typed text into spoken audio files",
+        "Deleting low-rated customer reviews from database storage"
+      ],
+      correctIndex: 1,
+      explanation: "Intent Recognition identifies the user's underlying goal (e.g., 'Check_Order_Status'), enabling dialogue management systems to trigger automated enterprise API workflows."
+    },
+    {
+      id: "q9_e",
+      unitId: "unit-4",
+      question: "What is the primary function of the Self-Attention mechanism in Transformer models like BERT?",
+      options: [
+        "It forces the model to ignore all words except the first token in a sentence",
+        "It computes attention weights between all pairs of words in a sentence, allowing word representations to dynamically incorporate contextual relationships",
+        "It compresses raw text files into zip format to conserve disk memory",
+        "It generates random pseudorandom numbers for statistical sampling"
+      ],
+      correctIndex: 1,
+      explanation: "Self-attention allows every word in a sequence to attend to every other word simultaneously, calculating contextual weights (e.g., linking 'it' to 'bank' or 'product') regardless of positional distance."
+    },
+    {
       id: "q10",
       unitId: "unit-5",
       question: "Why is Explainable AI (XAI) such as SHAP or LIME essential when deploying NLP for loan application processing?",

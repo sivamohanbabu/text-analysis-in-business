@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Unit 4: Advanced NLP Applications & Transformers Lab - Word Embeddings (Word2Vec, GloVe, FastText), BERT Contextual Transformers, Conversational AI Chatbots, Fraud Detection & BI Dashboard Integration.">
+  <title>Unit 4: Advanced NLP & Transformers Lab | 24INFS7101</title>
+  
+  <!-- Google Fonts - Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+  
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #6b7280;
+      --paper: #0f172a;
+      --panel: #1e293b;
+      --line: #334155;
+      --mint: #10b981;
+      --green: #059669;
+      --orange: #f59e0b;
+      --yellow: #fbbf24;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --shadow: 0 18px 48px rgba(0, 0, 0, .35);
+    }
+
+    [data-theme="light"] {
+      --ink: #182322;
+      --muted: #65716d;
+      --paper: #f7f3ea;
+      --panel: #fffdf8;
+      --line: #d9ddd3;
+      --mint: #b9ead0;
+      --green: #216b57;
+      --orange: #e98249;
+      --yellow: #f6db82;
+      --blue: #b9d9ef;
+      --purple: #d6d4ee;
+      --pink: #f4c8af;
+      --shadow: 0 18px 48px rgba(24, 35, 34, .08);
+    }
+
+    .wrap {
+      width: min(1200px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    .detail-hero-unit4 {
+      padding: 3rem 0 2rem;
+      border-bottom: 1px solid var(--border-medium);
+      margin-bottom: 2.5rem;
+    }
+
+    .pipeline-container-unit4 {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 2rem 0;
+      background: var(--bg-card);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-medium);
+    }
+
+    .pipeline-step {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .pipeline-step:hover {
+      border-color: var(--text-white);
+      transform: translateY(-2px);
+    }
+
+    .pipeline-step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--purple);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pipeline-step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .pipeline-step-desc {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .lab-shell-unit4 {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 20px;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 992px) {
+      .lab-shell-unit4 {
+        grid-template-columns: 1fr;
+      }
+      .pipeline-container-unit4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .preset-chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 16px;
+    }
+
+    .preset-chip {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-medium);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      color: var(--text-white);
+      border-color: var(--text-white);
+    }
+
+    .sim-bar-bg {
+      height: 8px;
+      background: var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+
+    .sim-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple) 0%, var(--blue) 100%);
+      transition: width 0.4s ease;
+    }
+
+    /* ELI5 Concept Cards */
+    .concept-grid-unit4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin: 2rem 0;
+    }
+    @media (max-width: 768px) {
+      .concept-grid-unit4 { grid-template-columns: 1fr; }
+    }
+
+    .concept-card-unit4 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .eli5-box {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 3px solid var(--orange);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .biz-box {
+      background: rgba(16, 185, 129, 0.1);
+      border-left: 3px solid var(--mint);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .math-box {
+      background: rgba(139, 92, 246, 0.1);
+      border-left: 3px solid var(--purple);
+      padding: 10px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .flashcard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 2rem 0;
+    }
+    @media (max-width: 900px) {
+      .flashcard-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .flashcard-grid { grid-template-columns: 1fr; }
+    }
+
+    .flashcard {
+      background: var(--bg-card);
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      min-height: 160px;
+      cursor: pointer;
+      perspective: 1000px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .flashcard:hover {
+      border-color: var(--purple);
+      transform: translateY(-2px);
+    }
+
+    .flashcard-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--purple);
+      margin-bottom: 8px;
+    }
+
+    .flashcard-body {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .code-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d1117;
+      padding: 8px 16px;
+      border-radius: 6px 6px 0 0;
+      border: 1px solid var(--border-medium);
+      border-bottom: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .code-block-body {
+      background: #090d13;
+      border: 1px solid var(--border-medium);
+      border-radius: 0 0 6px 6px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: #e6edf3;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .btn-copy {
+      background: var(--bg-card-hover);
+      border: 1px solid var(--border-medium);
+      color: var(--text-white);
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+    .btn-copy:hover {
+      background: var(--purple);
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+    .matrix-table th, .matrix-table td {
+      border: 1px solid var(--border-medium);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    .matrix-table th {
+      background: var(--bg-card-hover);
+      color: var(--text-white);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Theme Transition Overlay -->
+  <div id="theme-ripple" class="theme-ripple"></div>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <span style="font-size: 1.1rem; border: 2px solid var(--text-white); padding: 2px 8px; font-weight: 900;">24INFS7101</span>
+        <span>NLP & TEXT ANALYTICS</span>
+        <span class="brand-badge">UNIT 4 LAB</span>
+      </a>
+
+      <div class="header-actions">
+        <div class="search-box">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input type="text" id="global-search" placeholder="SEARCH WORD2VEC, BERT, CHATBOTS, FRAUD...">
+        </div>
+
+        <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme(event)">
+          <span class="theme-btn-dot"></span>
+          <span id="theme-btn-text">THEME: DARK</span>
+        </button>
+
+        <div class="stat-pill" id="progress-stat">
+          UNIT 4 PROGRESS: 100%
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar Navigation -->
+  <aside class="w3-sidebar">
+    <div class="sidebar-category">PAGE SECTIONS</div>
+    <a class="sidebar-item active" href="#overview">UNIT 4 OVERVIEW</a>
+    <a class="sidebar-item" href="#pipeline">6-STAGE ARCHITECTURE</a>
+    <a class="sidebar-item" href="#playgrounds">INTERACTIVE LAB PLAYGROUNDS</a>
+    <a class="sidebar-item" href="#topics">ELI5 TOPICS & BUSINESS VALUE</a>
+    <a class="sidebar-item" href="#quizzes">UNIT DIAGNOSTIC MCQS</a>
+    <a class="sidebar-item" href="#flashcards">REVISION FLASHCARDS</a>
+    <a class="sidebar-item" href="#colab">MASTER PYTHON LAB CODE</a>
+    <a class="sidebar-item" href="#matrix">BUSINESS VALUE & ROI MATRIX</a>
+
+    <div class="sidebar-category">ALL COURSE UNITS & LABS</div>
+    <a class="sidebar-item" href="index.html">COURSE DASHBOARD</a>
+    <a class="sidebar-item" href="business-text-sources.html">UNIT 1: BUSINESS TEXT SOURCES</a>
+    <a class="sidebar-item" href="PREPROCESSING%20%26%20FEATURES%20lab.html">UNIT 2: PREPROCESSING LAB</a>
+    <a class="sidebar-item" href="unit3-feature-engineering.html">UNIT 3: FEATURE ENGINEERING LAB</a>
+    <a class="sidebar-item active" href="unit4-advanced-nlp.html">UNIT 4: ADVANCED NLP & TRANSFORMERS</a>
+    <a class="sidebar-item" href="index.html#curriculum-tab">UNIT 5: STRATEGY & GOVERNANCE</a>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    
+    <!-- Hero Section -->
+    <section id="overview" class="detail-hero-unit4">
+      <div class="detail-kicker">UNIT 4: ADVANCED NLP APPLICATIONS & TRANSFORMERS (6 HOURS)</div>
+      <h1 style="font-size: 2.4rem; font-weight: 900; color: var(--text-white); margin: 0.5rem 0 1rem; line-height: 1.1;">
+        Advanced NLP Applications & Transformer Super-Brain Lab
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.05rem; max-width: 880px; line-height: 1.6; margin-bottom: 1.5rem;">
+        Step into modern deep learning for text analytics. Master dense word vector spaces (Word2Vec, GloVe, FastText), bidirectional contextual Transformers (BERT & Self-Attention), conversational AI chatbots (Intent Recognition & Slot Filling), enterprise fraud/anomaly detection, and automated Business Intelligence (BI) dashboard feeds.
+      </p>
+
+      <div class="hero-badges" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="badge" style="background: var(--purple); color: #fff;">WORD2VEC & DENSE VECTORS</span>
+        <span class="badge" style="background: var(--blue); color: #fff;">BERT & TRANSFORMERS</span>
+        <span class="badge" style="background: var(--mint); color: #fff;">SELF-ATTENTION MECHANISM</span>
+        <span class="badge" style="background: var(--orange); color: #fff;">CONVERSATIONAL AI & CHATBOTS</span>
+        <span class="badge" style="background: var(--pink); color: #fff;">FRAUD & ANOMALY SCANNER</span>
+        <span class="badge" style="background: var(--yellow); color: #000;">NLP + BI DASHBOARD FEEDS</span>
+      </div>
+    </section>
+
+    <!-- 6-Stage Visual Architecture -->
+    <section id="pipeline" style="margin-bottom: 3.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem;">
+        <div>
+          <div class="detail-label">VISUAL FLOW</div>
+          <h2 style="font-size: 1.5rem; color: var(--text-white); margin: 4px 0 0;">Unit 4 Advanced NLP & Transformer Architecture</h2>
+        </div>
+        <span class="badge">DEEP LEARNING PIPELINE</span>
+      </div>
+
+      <div class="pipeline-container-unit4">
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 01</div>
+          <div class="pipeline-step-title">Dense Vectors</div>
+          <div class="pipeline-step-desc">Word2Vec (CBOW/Skip-gram), GloVe & FastText subword n-grams.</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 02</div>
+          <div class="pipeline-step-title">Transformers & BERT</div>
+          <div class="pipeline-step-desc">Self-Attention mechanism, Masked LM & contextual embeddings.</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 03</div>
+          <div class="pipeline-step-title">Conversational AI</div>
+          <div class="pipeline-step-desc">Intent recognition, slot-filling entity extraction & dialogue memory.</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 04</div>
+          <div class="pipeline-step-title">Domain NLP</div>
+          <div class="pipeline-step-desc">CRM lead scoring, HR attrition prediction & financial earnings analysis.</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 05</div>
+          <div class="pipeline-step-title">Text Fraud & Risk</div>
+          <div class="pipeline-step-desc">Real-time audit scanning, toxic language filtering & anomaly alerts.</div>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">STAGE 06</div>
+          <div class="pipeline-step-title">BI Integration</div>
+          <div class="pipeline-step-desc">REST API JSON feeds to Power BI, Tableau & executive dashboards.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Playgrounds Header -->
+    <section id="playgrounds" style="margin-bottom: 3.5rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 2rem;">
+        <span class="badge" style="background: var(--purple); color: #fff;">LIVE INTERACTIVE SIMULATORS</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Interactive NLP & Transformer Playgrounds
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Test vector math equations, inspect BERT self-attention contextual vector shifts, simulate conversational chatbot intent/entities, and scan real-time text logs for financial fraud.
+        </p>
+      </div>
+
+      <!-- Playground 1: Word Vector Math & Cosine Similarity -->
+      <div class="panel-box" style="margin-bottom: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-white); display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--purple); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">1</span>
+            Interactive Word Vector Math & Cosine Similarity Calculator
+          </h3>
+          <span class="badge">WORD2VEC / GLOVE SIMULATOR</span>
+        </div>
+        
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;">
+          In dense vector spaces, semantic relationships become geometric geometry! Try vector arithmetic (e.g., <code>King - Man + Woman = Queen</code>) or compute Cosine Similarity scores between business terms.
+        </p>
+
+        <div class="preset-chip-group">
+          <span class="preset-chip" onclick="setVectorPreset('analogy')">Formula: King - Man + Woman = ?</span>
+          <span class="preset-chip" onclick="setVectorPreset('synonym')">E-Commerce Search: Laptop vs Notebook</span>
+          <span class="preset-chip" onclick="setVectorPreset('finance')">Financial Terms: Revenue vs Profit</span>
+          <span class="preset-chip" onclick="setVectorPreset('fasttext')">FastText Typo: Delivery vs Delivry</span>
+          <span class="preset-chip" onclick="setVectorPreset('unrelated')">Unrelated: Revenue vs Banana</span>
+        </div>
+
+        <div class="lab-shell-unit4">
+          <div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">VECTOR WORD A:</label>
+              <input type="text" id="vec-word1" value="King" style="width: 100%; padding: 8px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-code);">
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">MINUS WORD B (Optional):</label>
+              <input type="text" id="vec-word2" value="Man" style="width: 100%; padding: 8px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-code);">
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">PLUS WORD C (Optional):</label>
+              <input type="text" id="vec-word3" value="Woman" style="width: 100%; padding: 8px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-code);">
+            </div>
+            <button onclick="calculateVectorSim()" style="width: 100%; padding: 10px; background: var(--purple); color: #fff; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase;">
+              Calculate Vector Arithmetic & Cosine Similarity
+            </button>
+          </div>
+
+          <div style="background: var(--bg-dark); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">VECTOR SIMILARITY OUTPUT:</div>
+            <div id="vector-result-title" style="font-size: 1.1rem; font-weight: 800; color: var(--text-white); margin-bottom: 6px;">Result: Vector('Queen')</div>
+            
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px;">
+              <span>Cosine Similarity Score:</span>
+              <strong id="vector-score-text" style="color: var(--mint);">0.892 (High Semantic Affinity)</strong>
+            </div>
+            <div class="sim-bar-bg">
+              <div class="sim-bar-fill" id="vector-score-bar" style="width: 89.2%;"></div>
+            </div>
+
+            <div style="margin-top: 1rem; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; background: var(--bg-card); padding: 10px; border-radius: 4px; border: 1px solid var(--border-medium);">
+              <span style="color: var(--purple); font-weight: 700;">Vector Space Insight:</span>
+              <span id="vector-explanation">
+                <code>Vector('King') - Vector('Man') + Vector('Woman')</code> strips gender from royalty and adds female gender, yielding a vector with 0.892 cosine similarity to <code>'Queen'</code>.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playground 2: BERT Transformer Contextual Word Embedding Simulator -->
+      <div class="panel-box" style="margin-bottom: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-white); display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--blue); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">2</span>
+            BERT Contextual Vector & Self-Attention Matrix Simulator
+          </h3>
+          <span class="badge">TRANSFORMER / ATTENTION MECHANISM</span>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;">
+          Static embeddings give 'bank' one fixed vector. BERT reads bidirectional context to dynamically adjust vector meanings depending on whether 'bank' means money or a river.
+        </p>
+
+        <div class="preset-chip-group">
+          <span class="preset-chip" onclick="setBertPreset('bank_finance')">Context A: "I deposited cash at the investment bank."</span>
+          <span class="preset-chip" onclick="setBertPreset('bank_river')">Context B: "We went fishing by the muddy river bank."</span>
+          <span class="preset-chip" onclick="setBertPreset('mlm_profit')">Masked LM: "The CEO announced a quarterly [MASK] of $50M."</span>
+          <span class="preset-chip" onclick="setBertPreset('mlm_churn')">Masked LM: "Customer service SLA breach led to high [MASK]."</span>
+        </div>
+
+        <div class="lab-shell-unit4">
+          <div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">ENTER SENTENCE (Use [MASK] for Masked LM):</label>
+              <textarea id="bert-input" rows="3" style="width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-main); font-size: 0.9rem;">I deposited cash at the investment bank.</textarea>
+            </div>
+            <button onclick="runBertSimulation()" style="width: 100%; padding: 10px; background: var(--blue); color: #fff; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase;">
+              Run BERT Bidirectional Context Pass
+            </button>
+          </div>
+
+          <div style="background: var(--bg-dark); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">SELF-ATTENTION & CONTEXTUAL ANALYSIS:</div>
+            <div id="bert-output-title" style="font-size: 1rem; font-weight: 800; color: var(--blue); margin-bottom: 8px;">Target Entity: 'bank' -> Financial Institution Vector</div>
+            
+            <div id="bert-attention-list" style="margin-bottom: 1rem;">
+              <!-- Dynamic Attention Weight Bars -->
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;">Self-Attention Weights to Target Word 'bank':</div>
+              <div style="font-size: 0.75rem; font-family: var(--font-code); color: var(--text-white);">
+                <div>'deposited' -> 0.42 [||||||||||||]</div>
+                <div>'cash' -> 0.38 [||||||||||]</div>
+                <div>'investment' -> 0.15 [||||]</div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; background: var(--bg-card); padding: 10px; border-radius: 4px; border: 1px solid var(--border-medium);">
+              <span style="color: var(--blue); font-weight: 700;">Contextual Shift Result:</span>
+              <span id="bert-explanation">
+                BERT's 12-layer Transformer encoder attends to 'deposited', 'cash', and 'investment', shifting the 768-dimensional vector representation of <code>'bank'</code> into the Financial Institution cluster (Cosine distance to 'river' = 0.12).
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playground 3: Conversational AI & Intent / Entity Classifier -->
+      <div class="panel-box" style="margin-bottom: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-white); display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--mint); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">3</span>
+            Conversational AI Chatbot: Intent Recognition & Slot Extraction
+          </h3>
+          <span class="badge">CRM & CHATBOT ENGINE</span>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;">
+          Test an enterprise conversational AI agent. Type a customer support message or click a scenario to watch Intent Classification, Entity Extraction (Slot Filling), and Automated Action triggering in real-time.
+        </p>
+
+        <div class="preset-chip-group">
+          <span class="preset-chip" onclick="setChatbotPreset('refund')">Support: "I want to cancel order #9421 and get a refund of $150."</span>
+          <span class="preset-chip" onclick="setChatbotPreset('hr')">HR Attrition: "I am dissatisfied with my salary and submitting my resignation."</span>
+          <span class="preset-chip" onclick="setChatbotPreset('crm')">CRM Lead: "We need an enterprise quote for 500 software licenses next month."</span>
+          <span class="preset-chip" onclick="setChatbotPreset('finance')">Finance: "Please email the Q3 earnings report for Tesla Motors."</span>
+        </div>
+
+        <div class="lab-shell-unit4">
+          <div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">CUSTOMER UTTERANCE:</label>
+              <textarea id="chatbot-input" rows="3" style="width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-main); font-size: 0.9rem;">I want to cancel order #9421 and get an immediate refund of $150 due to late delivery.</textarea>
+            </div>
+            <button onclick="runChatbotEngine()" style="width: 100%; padding: 10px; background: var(--mint); color: #000; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase;">
+              Process Conversational Utterance
+            </button>
+          </div>
+
+          <div style="background: var(--bg-dark); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">BOT DIALOGUE STATE & ACTION:</div>
+            
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <span class="badge" style="background: var(--mint); color: #000; font-weight: 800;" id="chat-intent">INTENT: Cancel_Order_Refund</span>
+              <span class="badge" style="background: var(--bg-card-hover); color: var(--text-white);" id="chat-confidence">CONFIDENCE: 98.4%</span>
+            </div>
+
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px;">
+              <strong>Extracted Entity Slots:</strong>
+              <div id="chat-entities" style="margin-top: 4px; font-family: var(--font-code); color: var(--text-white);">
+                <div>ORDER_ID: <span style="color: var(--yellow);">#9421</span></div>
+                <div>MONEY: <span style="color: var(--mint);">$150</span></div>
+                <div>REASON: <span style="color: var(--pink);">Late Delivery</span></div>
+              </div>
+            </div>
+
+            <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; background: var(--bg-card); padding: 10px; border-radius: 4px; border: 1px solid var(--border-medium);">
+              <strong style="color: var(--mint);">Automated BOT Response:</strong>
+              <p id="chat-bot-response" style="color: var(--text-white); margin-top: 4px;">
+                "I have identified your request to cancel order #9421. A refund of $150 has been initiated to your original payment method. Priority ticket #TK-882 logged."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playground 4: Enterprise Text Fraud, Anomaly & BI Dashboard Simulator -->
+      <div class="panel-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-white); display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--pink); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem;">4</span>
+            Enterprise Text Fraud, Anomaly & BI Dashboard Simulator
+          </h3>
+          <span class="badge">FINANCE & GOVERNANCE SCANNER</span>
+        </div>
+
+        <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem;">
+          Scan enterprise email feeds and financial disclosures for compliance anomalies, insider trading keywords, and toxic workplace indicators. Automatically pushes JSON payloads to executive BI dashboards.
+        </p>
+
+        <div class="preset-chip-group">
+          <span class="preset-chip" onclick="setFraudPreset('insider')">Financial Risk: "Off-the-books transfer before Q4 audit announcement."</span>
+          <span class="preset-chip" onclick="setFraudPreset('phishing')">Cybersecurity: "Urgent: Wire $45,000 to unverified account immediately."</span>
+          <span class="preset-chip" onclick="setFraudPreset('clean')">Normal Operational Email: "Weekly team sync scheduled for 10 AM Thursday."</span>
+        </div>
+
+        <div class="lab-shell-unit4">
+          <div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">ENTERPRISE TEXT FEED LOG:</label>
+              <textarea id="fraud-input" rows="3" style="width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--border-medium); color: var(--text-white); border-radius: 4px; font-family: var(--font-main); font-size: 0.9rem;">URGENT: Move $45,000 to offshore bank account prior to Friday's financial audit. Do not log in SEC filing system.</textarea>
+            </div>
+            <button onclick="runFraudScanner()" style="width: 100%; padding: 10px; background: var(--pink); color: #fff; font-weight: 800; border: none; border-radius: 6px; cursor: pointer; text-transform: uppercase;">
+              Scan Log for Fraud & Push to BI Dashboard
+            </button>
+          </div>
+
+          <div style="background: var(--bg-dark); padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+            <div style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">REAL-TIME ANOMALY & BI PAYLOAD:</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-white);">Risk Assessment Score:</span>
+              <span id="fraud-score-tag" class="badge" style="background: #ef4444; color: #fff; font-weight: 900;">HIGH RISK: 94.8%</span>
+            </div>
+
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px;">
+              <strong>Flagged Anomaly Excerpts:</strong>
+              <div id="fraud-flags" style="color: #f87171; font-family: var(--font-code); margin-top: 4px;">
+                • "offshore bank account" [FINANCIAL_COMPLIANCE_VIOLATION]<br>
+                • "Do not log in SEC filing" [REGULATORY_EVASION_FLAG]
+              </div>
+            </div>
+
+            <div style="font-size: 0.75rem; font-family: var(--font-code); background: #000; padding: 10px; border-radius: 4px; border: 1px solid var(--border-medium); color: var(--mint);">
+              <div style="color: var(--text-muted); margin-bottom: 4px;">// Power BI REST API JSON Payload</div>
+              <pre id="fraud-json-payload" style="margin: 0;">{
+  "timestamp": "2026-10-08T06:03:00Z",
+  "anomaly_flag": true,
+  "risk_score": 0.948,
+  "category": "FINANCIAL_FRAUD",
+  "escalate_to": "CHIEF_COMPLIANCE_OFFICER"
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ELI5 Curriculum Topics & Business Value Lessons -->
+    <section id="topics" style="margin-bottom: 3.5rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 2rem;">
+        <span class="badge" style="background: var(--text-white); color: var(--text-inverse); font-weight: 900;">SYLLABUS LESSONS</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Core Concepts, ELI5 & Business Value Deep Dive
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Comprehensive breakdown of dense vector spaces, transformer attention mechanisms, conversational chatbot engines, and BI integration.
+        </p>
+      </div>
+
+      <div class="concept-grid-unit4">
+        
+        <!-- Lesson 4.1 -->
+        <div class="concept-card-unit4" id="t4-1">
+          <span class="badge" style="background: var(--purple); color: #fff;">TOPIC 4.1</span>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-white); margin: 8px 0;">
+            Dense Word Embeddings (Word2Vec, GloVe, FastText)
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Traditional Bag-of-Words vectors are sparse and orthogonal, treating 'laptop' and 'notebook' as completely unrelated. Word embeddings map words into dense 100-300 dimensional continuous vector spaces where geometric proximity reflects semantic meaning.
+          </p>
+
+          <div class="eli5-box">
+            <strong style="color: var(--orange);">ELI5 (Explain Like I'm 5):</strong>
+            Imagine a 3D playground where every word gets a special GPS coordinate! Words that mean similar things sit together on the same bench—like 'Apple' and 'Banana'. If you ask 'King minus Man plus Woman', the GPS arrow points straight to 'Queen'!
+          </div>
+
+          <div class="biz-box">
+            <strong style="color: var(--mint);">Business Value & Enterprise Impact:</strong>
+            Powers modern e-commerce semantic search engines (e.g. Amazon, Flipkart)—allowing users who search for 'warm winter coat' to automatically find catalog items named 'thermal jacket' even when no exact words overlap!
+          </div>
+
+          <div class="math-box">
+            <strong style="color: var(--purple);">Mathematical Formulation:</strong><br>
+            Cosine Similarity: <code>cos(&theta;) = (u &middot; v) / (||u|| * ||v||)</code><br>
+            Skip-gram predicts context word <i>w<sub>t+j</sub></i> given target <i>w<sub>t</sub></i> by maximizing log likelihood.
+          </div>
+        </div>
+
+        <!-- Lesson 4.2 -->
+        <div class="concept-card-unit4" id="t4-2">
+          <span class="badge" style="background: var(--blue); color: #fff;">TOPIC 4.2</span>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-white); margin: 8px 0;">
+            Contextual Embeddings & Transformers (BERT Conceptual Level)
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Static models (Word2Vec) give 'bank' one fixed vector regardless of context. BERT (Bidirectional Encoder Representations from Transformers) uses Transformer Encoders and Self-Attention to dynamically compute context-aware embeddings by reading words left-to-right and right-to-left simultaneously.
+          </p>
+
+          <div class="eli5-box">
+            <strong style="color: var(--orange);">ELI5 (Explain Like I'm 5):</strong>
+            Old word models were like a chameleon stuck in red paint—the word 'bank' always meant the same thing. BERT is a super-smart chameleon that reads the whole sentence: if it sees fish, 'bank' turns into a riverbank; if it sees money, 'bank' turns into a bank vault!
+          </div>
+
+          <div class="biz-box">
+            <strong style="color: var(--mint);">Business Value & Enterprise Impact:</strong>
+            Drives Google Search and enterprise document AI. Enables financial banks and law firms to automatically parse complex contract clauses and regulatory disclosures with human-level accuracy.
+          </div>
+
+          <div class="math-box">
+            <strong style="color: var(--blue);">Transformer Self-Attention:</strong><br>
+            <code>Attention(Q, K, V) = softmax(Q * K<sup>T</sup> / sqrt(d<sub>k</sub>)) * V</code><br>
+            Pre-trained via Masked Language Modeling (MLM) & Next Sentence Prediction (NSP).
+          </div>
+        </div>
+
+        <!-- Lesson 4.3 -->
+        <div class="concept-card-unit4" id="t4-3">
+          <span class="badge" style="background: var(--mint); color: #000; font-weight: 800;">TOPIC 4.3</span>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-white); margin: 8px 0;">
+            Conversational AI & Chatbots in Enterprise Functions
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Conversational AI frameworks combine Intent Recognition (identifying what the user wants to do) and Entity Extraction / Slot Filling (identifying dates, order IDs, cash amounts) to automate multi-turn customer dialogues across CRM, HR, and Finance.
+          </p>
+
+          <div class="eli5-box">
+            <strong style="color: var(--orange);">ELI5 (Explain Like I'm 5):</strong>
+            A chatbot is like a digital hotel receptionist who never sleeps! When you say "I want a pizza delivered to Room 302", it figures out your Intent (Order Food) and Entities (Item = Pizza, Room = 302), then tells the kitchen to make your food immediately!
+          </div>
+
+          <div class="biz-box">
+            <strong style="color: var(--mint);">Business Value & Enterprise Impact:</strong>
+            Saves up to 70% in call center customer support costs while cutting response wait times from 45 minutes to under 2 seconds. Automatically screens resumes in HR and scores sales leads in CRM.
+          </div>
+
+          <div class="math-box">
+            <strong style="color: var(--mint);">Architecture Workflow:</strong><br>
+            <code>Utterance -> Intent Classifier -> NER Slot Filler -> Dialogue State Tracker -> Enterprise REST API</code>
+          </div>
+        </div>
+
+        <!-- Lesson 4.4 -->
+        <div class="concept-card-unit4" id="t4-4">
+          <span class="badge" style="background: var(--pink); color: #fff;">TOPIC 4.4</span>
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-white); margin: 8px 0;">
+            Customer Service Automation, Text Fraud & BI Dashboard Integration
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+            Enterprise NLP systems do not operate in isolation. Text fraud scanners monitor communication logs for regulatory violations, while streaming NLP pipelines push sentiment trends, topic distributions, and risk scores directly into Business Intelligence dashboards (Power BI / Tableau).
+          </p>
+
+          <div class="eli5-box">
+            <strong style="color: var(--orange);">ELI5 (Explain Like I'm 5):</strong>
+            Imagine attaching a smart camera to a big executive scoreboard! Whenever a bad event happens, the camera flashes a red light and updates the principal's scoreboard instantly so everyone stays safe.
+          </div>
+
+          <div class="biz-box">
+            <strong style="color: var(--mint);">Business Value & Enterprise Impact:</strong>
+            Protects banks and healthcare enterprises from multimillion-dollar compliance fines by flagging insider trading, toxic employee communications, and suspicious financial transfers in real time.
+          </div>
+
+          <div class="math-box">
+            <strong style="color: var(--pink);">BI Integration Pipeline:</strong><br>
+            <code>Text Ingestion -> Anomaly Classifier -> Risk Scorer -> JSON Payload -> Power BI REST API</code>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Unit 4 Diagnostic MCQ Hub -->
+    <section id="quizzes" style="margin-bottom: 3.5rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 2rem;">
+        <span class="badge" style="background: var(--yellow); color: #000; font-weight: 800;">DIAGNOSTIC TEST</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Interactive Diagnostic MCQ Quiz Hub
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Test your mastery of word embeddings, BERT transformers, intent classification, and fraud detection. Instant feedback and explanations included.
+        </p>
+      </div>
+
+      <div id="unit4-quiz-container">
+        <!-- Interactive Quiz Items -->
+        <div class="panel-box" style="margin-bottom: 1.5rem;" id="q-box-1">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--purple); color: #fff;">QUESTION 1 OF 5</span>
+            <span class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);" id="q1-status">UNANSWERED</span>
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-white); margin-bottom: 12px;">
+            What major limitation of traditional static word embeddings (like Word2Vec) does BERT solve?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="checkUnit4Quiz(1, 0)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">A) Word2Vec cannot run on GPU servers</button>
+            <button onclick="checkUnit4Quiz(1, 1)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">B) Word2Vec assigns a single fixed vector to a word regardless of context, whereas BERT generates contextual embeddings based on surrounding text</button>
+            <button onclick="checkUnit4Quiz(1, 2)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">C) BERT cannot process English sentences</button>
+            <button onclick="checkUnit4Quiz(1, 3)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">D) Word2Vec requires HTML input</button>
+          </div>
+          <div id="q1-explanation" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 4px; font-size: 0.85rem; color: var(--text-white);"></div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom: 1.5rem;" id="q-box-2">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--purple); color: #fff;">QUESTION 2 OF 5</span>
+            <span class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);" id="q2-status">UNANSWERED</span>
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-white); margin-bottom: 12px;">
+            In Word2Vec, what is the fundamental difference between Continuous Bag-of-Words (CBOW) and Skip-gram architectures?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="checkUnit4Quiz(2, 0)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">A) CBOW predicts surrounding context words given a target word, while Skip-gram predicts the target word from context words</button>
+            <button onclick="checkUnit4Quiz(2, 1)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">B) CBOW predicts a target word from surrounding context words, while Skip-gram predicts surrounding context words given a target word</button>
+            <button onclick="checkUnit4Quiz(2, 2)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">C) CBOW only works on numbers, while Skip-gram only works on HTML text</button>
+            <button onclick="checkUnit4Quiz(2, 3)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">D) Both architectures produce static 1D integer outputs with no vectors</button>
+          </div>
+          <div id="q2-explanation" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 4px; font-size: 0.85rem; color: var(--text-white);"></div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom: 1.5rem;" id="q-box-3">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--purple); color: #fff;">QUESTION 3 OF 5</span>
+            <span class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);" id="q3-status">UNANSWERED</span>
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-white); margin-bottom: 12px;">
+            Why is FastText particularly effective for handling Out-of-Vocabulary (OOV) words and domain typos in business text?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="checkUnit4Quiz(3, 0)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">A) Because FastText breaks words into character n-grams, allowing it to construct vectors for unseen words from subword components</button>
+            <button onclick="checkUnit4Quiz(3, 1)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">B) Because FastText automatically translates typos into French before vectorizing</button>
+            <button onclick="checkUnit4Quiz(3, 2)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">C) Because FastText stores text in SQL relational tables instead of dense vector spaces</button>
+            <button onclick="checkUnit4Quiz(3, 3)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">D) Because FastText discards all words that are not in the dictionary</button>
+          </div>
+          <div id="q3-explanation" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 4px; font-size: 0.85rem; color: var(--text-white);"></div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom: 1.5rem;" id="q-box-4">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--purple); color: #fff;">QUESTION 4 OF 5</span>
+            <span class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);" id="q4-status">UNANSWERED</span>
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-white); margin-bottom: 12px;">
+            In conversational AI chatbots for enterprise customer support, what is 'Intent Recognition'?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="checkUnit4Quiz(4, 0)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">A) Extracting credit card details from customer email attachments</button>
+            <button onclick="checkUnit4Quiz(4, 1)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">B) Identifying the core user goal or action behind an utterance (e.g., 'Cancel_Subscription' or 'Request_Refund')</button>
+            <button onclick="checkUnit4Quiz(4, 2)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">C) Converting typed text into spoken audio files</button>
+            <button onclick="checkUnit4Quiz(4, 3)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">D) Deleting low-rated customer reviews from database storage</button>
+          </div>
+          <div id="q4-explanation" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 4px; font-size: 0.85rem; color: var(--text-white);"></div>
+        </div>
+
+        <div class="panel-box" style="margin-bottom: 1.5rem;" id="q-box-5">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span class="badge" style="background: var(--purple); color: #fff;">QUESTION 5 OF 5</span>
+            <span class="badge" style="background: var(--bg-card-hover); color: var(--text-secondary);" id="q5-status">UNANSWERED</span>
+          </div>
+          <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-white); margin-bottom: 12px;">
+            What is the primary function of the Self-Attention mechanism in Transformer models like BERT?
+          </h3>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="checkUnit4Quiz(5, 0)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">A) It forces the model to ignore all words except the first token in a sentence</button>
+            <button onclick="checkUnit4Quiz(5, 1)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">B) It computes attention weights between all pairs of words in a sentence, allowing word representations to dynamically incorporate contextual relationships</button>
+            <button onclick="checkUnit4Quiz(5, 2)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">C) It compresses raw text files into zip format to conserve disk memory</button>
+            <button onclick="checkUnit4Quiz(5, 3)" class="preset-chip" style="text-align: left; padding: 10px 14px; font-weight: 500;">D) It generates random pseudorandom numbers for statistical sampling</button>
+          </div>
+          <div id="q5-explanation" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--mint); border-radius: 4px; font-size: 0.85rem; color: var(--text-white);"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Revision Flashcards -->
+    <section id="flashcards" style="margin-bottom: 3.5rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+        <span class="badge" style="background: var(--mint); color: #000; font-weight: 800;">STUDY CARDS</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Key Concepts Revision Flashcards
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Click any flashcard to toggle between term definition and executive business application.
+        </p>
+      </div>
+
+      <div class="flashcard-grid">
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">Word2Vec (Skip-gram vs CBOW)</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Neural network model generating static dense vectors.<br>
+            <strong>CBOW:</strong> Context -> Target word.<br>
+            <strong>Skip-gram:</strong> Target word -> Context words (better for rare terms).
+          </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">FastText Subword N-grams</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Represents words as bags of character n-grams.<br>
+            <strong>Biz Impact:</strong> Solves Out-of-Vocabulary (OOV) terms & domain typos in customer reviews effortlessly.
+          </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">BERT & Self-Attention</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Bidirectional Transformer Encoder.<br>
+            <strong>Self-Attention:</strong> Weights inter-word dependencies dynamically to handle polysemy (e.g. 'bank').
+          </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">Intent Recognition</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Supervised classification identifying user goal (e.g., 'Request_Refund').<br>
+            <strong>Biz Impact:</strong> Automates customer support routing & SLA escalation.
+          </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">Slot Filling / Entity Extraction</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Parsing named entities (MONEY, DATES, ORDER_ID) to fill API request parameters.<br>
+            <strong>Biz Impact:</strong> Enables 24/7 automated bot transaction execution.
+          </div>
+        </div>
+
+        <div class="flashcard" onclick="toggleFlashcard(this)">
+          <div class="flashcard-title">Text Anomaly & Fraud Scanner</div>
+          <div class="flashcard-body">
+            <strong>Concept:</strong> Scanning communication logs for suspicious terms and compliance violations.<br>
+            <strong>Biz Impact:</strong> Prevents insider trading & regulatory penalties.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Master Python Laboratory -->
+    <section id="colab" style="margin-bottom: 3.5rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+        <span class="badge" style="background: var(--purple); color: #fff;">PRODUCTION PYTHON CODE</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Master Python Code Laboratory
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Copy and run this production-grade Python script to execute Word2Vec training, HuggingFace BERT classification, Chatbot Intent recognition, and BI REST API formatting.
+        </p>
+      </div>
+
+      <div class="code-block-header">
+        <span>unit4_advanced_nlp_masterclass.py</span>
+        <button class="btn-copy" onclick="copyMasterCode()">COPY CODE</button>
+      </div>
+      <div class="code-block-body" id="python-master-code">import numpy as np
+import pandas as pd
+from gensim.models import Word2Vec
+from transformers import pipeline
+import spacy
+
+# ==============================================================================
+# 1. DENSE WORD EMBEDDINGS (WORD2VEC TRAINING ON BUSINESS CORPUS)
+# ==============================================================================
+corpus = [
+    ["urgent", "service", "level", "agreement", "sla", "breached", "late", "delivery"],
+    ["customer", "demands", "immediate", "refund", "for", "defective", "product"],
+    ["excellent", "customer", "support", "great", "product", "quality", "satisfied"],
+    ["financial", "audit", "flagged", "unauthorized", "wire", "transfer"]
+]
+
+# Train Skip-Gram Word2Vec Model
+word2vec_model = Word2Vec(sentences=corpus, vector_size=100, window=5, min_count=1, sg=1, epochs=20)
+print("--- 1. WORD2VEC COSINE SIMILARITY ---")
+sim_score = word2vec_model.wv.similarity("service", "support")
+print(f"Similarity('service', 'support'): {sim_score:.4f}")
+
+# ==============================================================================
+# 2. TRANSFORMER & BERT CONTEXTUAL CLASSIFICATION (HUGGINGFACE)
+# ==============================================================================
+print("\n--- 2. BERT CONTEXTUAL SENTIMENT PIPELINE ---")
+classifier = pipeline("sentiment-analysis")
+results = classifier([
+    "SLA breached and late product delivery caused severe financial loss.",
+    "Outstanding customer support and rapid refund processing!"
+])
+for r in results:
+    print(f"Label: {r['label']} | Confidence Score: {r['score']:.4f}")
+
+# ==============================================================================
+# 3. CONVERSATIONAL AI: INTENT RECOGNITION & SLOT EXTRACTION
+# ==============================================================================
+nlp_spacy = spacy.load("en_core_web_sm")
+
+def process_chatbot_utterance(text):
+    doc = nlp_spacy(text)
+    entities = [(ent.text, ent.label_) for ent in doc.ents]
+    intent = "CANCEL_REFUND" if "refund" in text.lower() or "cancel" in text.lower() else "GENERAL_INQUIRY"
+    return {"utterance": text, "intent": intent, "extracted_slots": entities}
+
+print("\n--- 3. CHATBOT INTENT & SLOT EXTRACTION ---")
+res = process_chatbot_utterance("I want to cancel order #9421 and get a refund of $150.")
+print(res)
+
+# ==============================================================================
+# 4. TEXT FRAUD SCANNER & BI DASHBOARD PAYLOAD GENERATOR
+# ==============================================================================
+def scan_text_fraud_and_generate_bi_payload(log_text):
+    risk_keywords = ["offshore", "unauthorized", "wire transfer", "evade", "bypass"]
+    flagged = [kw for kw in risk_keywords if kw in log_text.lower()]
+    risk_score = len(flagged) * 0.45
+    return {
+        "log_text": log_text,
+        "is_fraud": len(flagged) > 0,
+        "risk_score": min(risk_score, 1.0),
+        "flagged_keywords": flagged,
+        "bi_dashboard_status": "HIGH_ALERT" if len(flagged) > 0 else "NORMAL"
+    }
+
+print("\n--- 4. BI FRAUD SCANNER PAYLOAD ---")
+fraud_payload = scan_text_fraud_and_generate_bi_payload("Off-the-books wire transfer requested before audit.")
+print(fraud_payload)</div>
+    </section>
+
+    <!-- Strategic Business Value & ROI Matrix -->
+    <section id="matrix" style="margin-bottom: 4rem;">
+      <div style="border-bottom: 1px solid var(--border-medium); padding-bottom: 0.75rem; margin-bottom: 1.5rem;">
+        <span class="badge" style="background: var(--blue); color: #fff;">EXECUTIVE SUMMARY</span>
+        <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--text-white); margin-top: 0.5rem;">
+          Unit 4 Business Value & ROI Decision Matrix
+        </h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+          Strategic comparison of technical capabilities, computational latency, cost tradeoffs, and enterprise ROI impact.
+        </p>
+      </div>
+
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Technique</th>
+            <th>Mathematical Basis</th>
+            <th>Enterprise Use Case</th>
+            <th>Latency & Cost</th>
+            <th>Expected ROI Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Word2Vec / FastText</strong></td>
+            <td>Neural skip-gram & character n-grams</td>
+            <td>E-commerce semantic search & synonym expansion</td>
+            <td>Ultra-fast (< 5ms), Low RAM</td>
+            <td>15-25% boost in search conversion rates</td>
+          </tr>
+          <tr>
+            <td><strong>BERT Transformers</strong></td>
+            <td>Bidirectional Self-Attention Encoders</td>
+            <td>Contract clause analysis, fine sentiment, doc search</td>
+            <td>Medium-High (10-50ms), Requires GPU</td>
+            <td>90%+ reduction in contract review hours</td>
+          </tr>
+          <tr>
+            <td><strong>Conversational Chatbots</strong></td>
+            <td>Intent classification & slot filling</td>
+            <td>Customer support ticket resolution & CRM lead scoring</td>
+            <td>Fast (< 100ms API)</td>
+            <td>60-70% reduction in support desk operational cost</td>
+          </tr>
+          <tr>
+            <td><strong>Text Fraud & BI Feeds</strong></td>
+            <td>Anomaly classification & REST JSON feeds</td>
+            <td>Compliance audit, insider trading alerts, executive BI</td>
+            <td>Real-time streaming (< 10ms)</td>
+            <td>Prevents multi-million dollar regulatory fines</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    /* Unit 4 Interactive Playground Scripts */
+
+    // 1. Vector Playground
+    function calculateVectorSim() {
+      const w1 = document.getElementById('vec-word1').value.trim();
+      const w2 = document.getElementById('vec-word2').value.trim();
+      const w3 = document.getElementById('vec-word3').value.trim();
+
+      const titleElem = document.getElementById('vector-result-title');
+      const scoreText = document.getElementById('vector-score-text');
+      const scoreBar = document.getElementById('vector-score-bar');
+      const expElem = document.getElementById('vector-explanation');
+
+      if (w1.toLowerCase() === 'king' && w2.toLowerCase() === 'man' && w3.toLowerCase() === 'woman') {
+        titleElem.innerText = "Result: Vector('Queen')";
+        scoreText.innerText = "0.892 (High Semantic Affinity)";
+        scoreBar.style.width = "89.2%";
+        expElem.innerHTML = `<code>Vector('${w1}') - Vector('${w2}') + Vector('${w3}')</code> strips male gender from royalty and adds female gender, yielding a vector with 0.892 cosine similarity to <code>'Queen'</code>.`;
+      } else if (w1.toLowerCase() === 'laptop' && w2.toLowerCase() === 'notebook') {
+        titleElem.innerText = "Result: High Synonym Co-occurrence";
+        scoreText.innerText = "0.915 (E-Commerce Match)";
+        scoreBar.style.width = "91.5%";
+        expElem.innerHTML = `Word2Vec identifies <code>'${w1}'</code> and <code>'${w2}'</code> as interchangeable hardware products in customer review contexts.`;
+      } else if (w1.toLowerCase() === 'revenue' && w2.toLowerCase() === 'profit') {
+        titleElem.innerText = "Result: Financial Concept Pair";
+        scoreText.innerText = "0.864 (High Financial Co-occurrence)";
+        scoreBar.style.width = "86.4%";
+        expElem.innerHTML = `Financial earnings transcripts show <code>'${w1}'</code> and <code>'${w2}'</code> appearing in identical accounting context windows.`;
+      } else if (w1.toLowerCase() === 'delivery' && w2.toLowerCase() === 'delivry') {
+        titleElem.innerText = "Result: FastText Subword Typo Recovery";
+        scoreText.innerText = "0.941 (Subword N-gram Match)";
+        scoreBar.style.width = "94.1%";
+        expElem.innerHTML = `FastText breaks <code>'delivry'</code> into character n-grams <code>['deli', 'eliv', 'livr']</code>, successfully recovering vector representation despite the typo!`;
+      } else {
+        titleElem.innerText = `Result: Similarity between '${w1}' and '${w2 || w3}'`;
+        scoreText.innerText = "0.142 (Low Similarity)";
+        scoreBar.style.width = "14.2%";
+        expElem.innerText = `The terms '${w1}' and '${w2 || w3}' occupy distant regions in the 300-dimensional vector space.`;
+      }
+    }
+
+    function setVectorPreset(type) {
+      if (type === 'analogy') {
+        document.getElementById('vec-word1').value = 'King';
+        document.getElementById('vec-word2').value = 'Man';
+        document.getElementById('vec-word3').value = 'Woman';
+      } else if (type === 'synonym') {
+        document.getElementById('vec-word1').value = 'Laptop';
+        document.getElementById('vec-word2').value = 'Notebook';
+        document.getElementById('vec-word3').value = '';
+      } else if (type === 'finance') {
+        document.getElementById('vec-word1').value = 'Revenue';
+        document.getElementById('vec-word2').value = 'Profit';
+        document.getElementById('vec-word3').value = '';
+      } else if (type === 'fasttext') {
+        document.getElementById('vec-word1').value = 'Delivery';
+        document.getElementById('vec-word2').value = 'Delivry';
+        document.getElementById('vec-word3').value = '';
+      } else if (type === 'unrelated') {
+        document.getElementById('vec-word1').value = 'Revenue';
+        document.getElementById('vec-word2').value = 'Banana';
+        document.getElementById('vec-word3').value = '';
+      }
+      calculateVectorSim();
+    }
+
+    // 2. BERT Simulator
+    function runBertSimulation() {
+      const text = document.getElementById('bert-input').value;
+      const title = document.getElementById('bert-output-title');
+      const attList = document.getElementById('bert-attention-list');
+      const exp = document.getElementById('bert-explanation');
+
+      if (text.includes('[MASK]')) {
+        title.innerText = "Masked LM Prediction Result for [MASK]";
+        attList.innerHTML = `
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;">Top MLM Token Probabilities:</div>
+          <div style="font-size: 0.75rem; font-family: var(--font-code); color: var(--text-white);">
+            <div>1. 'profit' -> 82.4% [||||||||||||||||||||]</div>
+            <div>2. 'revenue' -> 14.1% [|||||]</div>
+            <div>3. 'loss' -> 2.5% [|]</div>
+          </div>
+        `;
+        exp.innerText = "BERT uses surrounding context words ('CEO', 'announced', 'quarterly', '$50M') to predict the masked token with high confidence.";
+      } else if (text.toLowerCase().includes('river') || text.toLowerCase().includes('fishing')) {
+        title.innerText = "Target Entity: 'bank' -> Geographical Riverbank Vector";
+        attList.innerHTML = `
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;">Self-Attention Weights to Target Word 'bank':</div>
+          <div style="font-size: 0.75rem; font-family: var(--font-code); color: var(--text-white);">
+            <div>'fishing' -> 0.48 [||||||||||||||]</div>
+            <div>'muddy' -> 0.35 [||||||||||]</div>
+            <div>'river' -> 0.14 [||||]</div>
+          </div>
+        `;
+        exp.innerText = "BERT's self-attention mechanism attends to 'river', 'muddy', and 'fishing', shifting the contextual vector of 'bank' into the Geographical Feature cluster.";
+      } else {
+        title.innerText = "Target Entity: 'bank' -> Financial Institution Vector";
+        attList.innerHTML = `
+          <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 4px;">Self-Attention Weights to Target Word 'bank':</div>
+          <div style="font-size: 0.75rem; font-family: var(--font-code); color: var(--text-white);">
+            <div>'deposited' -> 0.42 [||||||||||||]</div>
+            <div>'cash' -> 0.38 [||||||||||]</div>
+            <div>'investment' -> 0.15 [||||]</div>
+          </div>
+        `;
+        exp.innerText = "BERT attends to 'deposited', 'cash', and 'investment', producing a 768-dimensional vector representation for 'bank' reflecting financial banking.";
+      }
+    }
+
+    function setBertPreset(type) {
+      if (type === 'bank_finance') {
+        document.getElementById('bert-input').value = "I deposited cash at the investment bank.";
+      } else if (type === 'bank_river') {
+        document.getElementById('bert-input').value = "We went fishing by the muddy river bank.";
+      } else if (type === 'mlm_profit') {
+        document.getElementById('bert-input').value = "The CEO announced a quarterly [MASK] of $50M.";
+      } else if (type === 'mlm_churn') {
+        document.getElementById('bert-input').value = "Customer service SLA breach led to high [MASK].";
+      }
+      runBertSimulation();
+    }
+
+    // 3. Chatbot Simulator
+    function runChatbotEngine() {
+      const text = document.getElementById('chatbot-input').value;
+      const intentTag = document.getElementById('chat-intent');
+      const confTag = document.getElementById('chat-confidence');
+      const entDiv = document.getElementById('chat-entities');
+      const botResp = document.getElementById('chat-bot-response');
+
+      if (text.toLowerCase().includes('resignation') || text.toLowerCase().includes('salary')) {
+        intentTag.innerText = "INTENT: HR_Attrition_Risk";
+        confTag.innerText = "CONFIDENCE: 96.2%";
+        entDiv.innerHTML = `
+          <div>ASPECT: <span style="color: var(--pink);">Compensation / Salary</span></div>
+          <div>RISK_LEVEL: <span style="color: #ef4444;">HIGH_CHURN</span></div>
+        `;
+        botResp.innerText = "HR Retention Alert: Anonymized feedback logged. Employee retention desk flagged for confidential intervention.";
+      } else if (text.toLowerCase().includes('licenses') || text.toLowerCase().includes('quote')) {
+        intentTag.innerText = "INTENT: CRM_Lead_Scoring";
+        confTag.innerText = "CONFIDENCE: 99.1%";
+        entDiv.innerHTML = `
+          <div>PRODUCT: <span style="color: var(--mint);">Software Licenses</span></div>
+          <div>QUANTITY: <span style="color: var(--yellow);">500 Units</span></div>
+        `;
+        botResp.innerText = "Sales Lead Alert: High-value enterprise lead scored (Grade A+). Routed to Senior Account Executive immediately.";
+      } else {
+        intentTag.innerText = "INTENT: Cancel_Order_Refund";
+        confTag.innerText = "CONFIDENCE: 98.4%";
+        entDiv.innerHTML = `
+          <div>ORDER_ID: <span style="color: var(--yellow);">#9421</span></div>
+          <div>MONEY: <span style="color: var(--mint);">$150</span></div>
+          <div>REASON: <span style="color: var(--pink);">Late Delivery</span></div>
+        `;
+        botResp.innerText = "I have identified your request to cancel order #9421. A refund of $150 has been initiated to your original payment method. Priority ticket #TK-882 logged.";
+      }
+    }
+
+    function setChatbotPreset(type) {
+      if (type === 'refund') {
+        document.getElementById('chatbot-input').value = "I want to cancel order #9421 and get an immediate refund of $150 due to late delivery.";
+      } else if (type === 'hr') {
+        document.getElementById('chatbot-input').value = "I am dissatisfied with my salary and submitting my resignation.";
+      } else if (type === 'crm') {
+        document.getElementById('chatbot-input').value = "We need an enterprise quote for 500 software licenses next month.";
+      } else if (type === 'finance') {
+        document.getElementById('chatbot-input').value = "Please email the Q3 earnings report for Tesla Motors.";
+      }
+      runChatbotEngine();
+    }
+
+    // 4. Fraud Scanner
+    function runFraudScanner() {
+      const text = document.getElementById('fraud-input').value;
+      const tag = document.getElementById('fraud-score-tag');
+      const flags = document.getElementById('fraud-flags');
+      const payload = document.getElementById('fraud-json-payload');
+
+      if (text.toLowerCase().includes('clean') || text.toLowerCase().includes('sync')) {
+        tag.innerText = "NORMAL: 2.1%";
+        tag.style.background = "var(--mint)";
+        flags.innerHTML = "No compliance anomalies detected.";
+        payload.innerText = `{\n  "timestamp": "${new Date().toISOString()}",\n  "anomaly_flag": false,\n  "risk_score": 0.021,\n  "category": "OPERATIONAL_COMMUNICATION",\n  "escalate_to": "NONE"\n}`;
+      } else {
+        tag.innerText = "HIGH RISK: 94.8%";
+        tag.style.background = "#ef4444";
+        flags.innerHTML = `• "offshore bank account" [FINANCIAL_COMPLIANCE_VIOLATION]<br>• "Do not log in SEC filing" [REGULATORY_EVASION_FLAG]`;
+        payload.innerText = `{\n  "timestamp": "${new Date().toISOString()}",\n  "anomaly_flag": true,\n  "risk_score": 0.948,\n  "category": "FINANCIAL_FRAUD",\n  "escalate_to": "CHIEF_COMPLIANCE_OFFICER"\n}`;
+      }
+    }
+
+    function setFraudPreset(type) {
+      if (type === 'insider') {
+        document.getElementById('fraud-input').value = "Off-the-books transfer requested before Q4 audit announcement.";
+      } else if (type === 'phishing') {
+        document.getElementById('fraud-input').value = "Urgent: Move $45,000 to offshore bank account prior to Friday's financial audit. Do not log in SEC filing system.";
+      } else if (type === 'clean') {
+        document.getElementById('fraud-input').value = "Weekly team sync scheduled for 10 AM Thursday. Clean operational status.";
+      }
+      runFraudScanner();
+    }
+
+    // Quiz Checkers
+    const answersUnit4 = { 1: 1, 2: 1, 3: 0, 4: 1, 5: 1 };
+    const explanationsUnit4 = {
+      1: "Word2Vec gives 'bank' the exact same vector in 'river bank' and 'investment bank'. BERT reads text bidirectionally to create context-aware representations.",
+      2: "CBOW takes surrounding context words to predict the center target word, whereas Skip-gram takes a target word to predict its surrounding context words.",
+      3: "FastText represents words as bags of character n-grams (e.g. 'tech', 'echn'). When an unknown word or typo appears, FastText sums subword vectors to construct an embedding.",
+      4: "Intent Recognition determines the user's core objective (e.g., 'Cancel_Subscription'), enabling dialogue management systems to trigger automated enterprise API workflows.",
+      5: "Self-attention allows every word in a sequence to attend to every other word simultaneously, calculating contextual weights regardless of positional distance."
+    };
+
+    function checkUnit4Quiz(qNum, selectedIdx) {
+      const correctIdx = answersUnit4[qNum];
+      const statusTag = document.getElementById(`q${qNum}-status`);
+      const expBox = document.getElementById(`q${qNum}-explanation`);
+
+      if (selectedIdx === correctIdx) {
+        statusTag.innerText = "CORRECT ✓";
+        statusTag.style.background = "var(--mint)";
+        statusTag.style.color = "#000";
+        expBox.style.display = "block";
+        expBox.style.borderLeftColor = "var(--mint)";
+        expBox.innerHTML = `<strong>Correct!</strong> ${explanationsUnit4[qNum]}`;
+      } else {
+        statusTag.innerText = "INCORRECT ✗";
+        statusTag.style.background = "#ef4444";
+        statusTag.style.color = "#fff";
+        expBox.style.display = "block";
+        expBox.style.borderLeftColor = "#ef4444";
+        expBox.innerHTML = `<strong>Incorrect.</strong> ${explanationsUnit4[qNum]}`;
+      }
+    }
+
+    function toggleFlashcard(card) {
+      card.style.borderColor = card.style.borderColor === 'var(--mint)' ? 'var(--border-medium)' : 'var(--mint)';
+    }
+
+    function copyMasterCode() {
+      const code = document.getElementById('python-master-code').innerText;
+      navigator.clipboard.writeText(code);
+      alert("Unit 4 Production Master Python Code copied to clipboard!");
+    }
+  </script>
+</body>
+</html>
